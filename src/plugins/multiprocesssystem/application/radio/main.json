@@ -1,0 +1,9 @@
+{
+    "Keys": [ "radio" ],
+    "Area": "content",
+    "ShowInMenu": true,
+    "LaunchAtBoot": false,
+    "ID": 104,
+    "Name": "radio",
+    "Title": "Radio"
+}

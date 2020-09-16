@@ -1,0 +1,9 @@
+{
+    "Keys": [ "weather" ],
+    "Area": "content",
+    "ShowInMenu": true,
+    "LaunchAtBoot": false,
+    "ID": 103,
+    "Name": "weather",
+    "Title": "Weather"
+}

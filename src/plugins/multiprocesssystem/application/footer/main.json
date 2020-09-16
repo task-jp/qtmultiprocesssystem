@@ -1,0 +1,8 @@
+{
+    "Keys": [ "footer" ],
+    "Area": "footer",
+    "ShowInMenu": false,
+    "LaunchAtBoot": true,
+    "ID": 2,
+    "Name": "footer"
+}

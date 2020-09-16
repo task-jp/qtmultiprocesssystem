@@ -1,0 +1,9 @@
+{
+    "Keys": [ "settings" ],
+    "Area": "content",
+    "ShowInMenu": true,
+    "LaunchAtBoot": false,
+    "ID": 110,
+    "Name": "settings",
+    "Title": "Settings"
+}

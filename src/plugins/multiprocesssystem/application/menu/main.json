@@ -1,0 +1,9 @@
+{
+    "Keys": [ "menu" ],
+    "Area": "content",
+    "ShowInMenu": false,
+    "LaunchAtBoot": true,
+    "ID": 100,
+    "Name": "menu",
+    "Title": "Menu"
+}

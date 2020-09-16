@@ -1,0 +1,9 @@
+{
+    "Keys": [ "navi" ],
+    "Area": "content",
+    "ShowInMenu": true,
+    "LaunchAtBoot": false,
+    "ID": 101,
+    "Name": "navi",
+    "Title": "Navi"
+}

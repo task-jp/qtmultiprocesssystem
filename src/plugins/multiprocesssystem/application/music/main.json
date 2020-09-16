@@ -1,0 +1,9 @@
+{
+    "Keys": [ "music" ],
+    "Area": "content",
+    "ShowInMenu": true,
+    "LaunchAtBoot": false,
+    "ID": 102,
+    "Name": "music",
+    "Title": "Music"
+}

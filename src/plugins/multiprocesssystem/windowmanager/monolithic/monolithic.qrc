@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/multiprocesssystem">
+        <file>server.qml</file>
+    </qresource>
+</RCC>
