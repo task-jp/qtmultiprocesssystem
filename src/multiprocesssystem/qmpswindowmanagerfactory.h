@@ -3,6 +3,7 @@
 
 #include "qmpsabstractmanagerfactory.h"
 
+class QObject;
 class QMpsWindowManager;
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsWindowManagerFactory : public QMpsAbstractManagerFactory

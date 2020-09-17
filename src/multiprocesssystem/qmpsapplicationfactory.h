@@ -3,6 +3,8 @@
 
 #include "multiprocesssystem_global.h"
 
+#include <QtCore/QJsonObject>
+
 class QMpsApplication;
 class QMpsApplicationManager;
 
