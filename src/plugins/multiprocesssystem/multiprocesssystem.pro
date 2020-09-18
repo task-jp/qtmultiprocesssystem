@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = applicationmanager windowmanager application
+SUBDIRS = applicationmanager windowmanager

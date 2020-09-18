@@ -1,8 +1,9 @@
 QT = multiprocesssystem
 SOURCES = main.cpp
-RESOURCES = music.qrc
+RESOURCES = main.qrc
 OTHER_FILES += main.json
 
 PLUGIN_TYPE = multiprocesssystem/application
-PLUGIN_CLASS_NAME = Music
+PLUGIN_CLASS_NAME = Radio
 load(qt_plugin)
+CONFIG += install_ok  # Do not cargo-cult this!
