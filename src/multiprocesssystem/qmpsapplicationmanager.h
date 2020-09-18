@@ -22,11 +22,11 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-public slots:
+public Q_SLOTS:
     void init();
     virtual void exec(int id, const QString &name);
 
-signals:
+Q_SIGNALS:
     void activated(int id, const QString &name);
 
 private:
