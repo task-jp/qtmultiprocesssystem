@@ -20,7 +20,7 @@ Main {
         function onActivated(id, name) {
             if (id === root.currentID)
                 return
-            if (currentID in root.apps) {
+            if (currentID in root.apps && root.isApp(id)) {
                 root.apps[currentID].enabled = false
             }
             currentID = id
