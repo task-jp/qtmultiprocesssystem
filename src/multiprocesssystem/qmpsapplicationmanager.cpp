@@ -4,27 +4,29 @@
 
 #include <QDebug>
 
-QMpsApplicationManager::QMpsApplicationManager(QObject *parent)
+QMpsApplicationManager::QMpsApplicationManager(const QString &prefix, QObject *parent)
     : QAbstractListModel(parent)
 {
     for (const auto &app: QMpsApplicationFactory::apps()) {
         const auto metaData = app.value(QLatin1String("MetaData")).toObject();
-        qDebug() << metaData;
-        apps.append(metaData);
-        if (metaData.value(QLatin1String("ShowInMenu")).toBool())
-            appsForMenu.append(metaData);
+        const auto keys = metaData.value(QLatin1String("Keys")).toArray();
+        for (const auto &key : keys) {
+            if (key.toString().startsWith(prefix)) {
+                apps.append(metaData);
+                if (metaData.value(QLatin1String("ShowInMenu")).toBool())
+                    appsForMenu.append(metaData);
+                break;
+            }
+        }
     }
 }
 
 void QMpsApplicationManager::init()
 {
-    qDebug() << "init";
     for (const auto &app : apps) {
-        qDebug() << app;
         const auto id = app.value(QLatin1String("ID")).toInt();
         const auto name = app.value(QLatin1String("Name")).toString();
         if (app.value(QLatin1String("LaunchAtBoot")).toBool()) {
-            qDebug() << id << name;
             exec(id, name);
         }
     }

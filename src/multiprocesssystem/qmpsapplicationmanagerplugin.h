@@ -16,7 +16,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManagerPlugin : public QObject
 public:
     explicit QMpsApplicationManagerPlugin(QObject *parent = nullptr);
 
-    virtual QMpsApplicationManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, QObject *parent = nullptr) = 0;
+    virtual QMpsApplicationManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, const QString &prefix, QObject *parent = nullptr) = 0;
 };
 
 #endif // QMPSAPPLICATIONMANAGERPLUGIN_H

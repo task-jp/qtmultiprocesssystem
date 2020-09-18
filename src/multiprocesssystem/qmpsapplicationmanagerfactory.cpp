@@ -19,7 +19,7 @@ QStringList QMpsApplicationManagerFactory::keys()
     return list;
 }
 
-QMpsApplicationManager *QMpsApplicationManagerFactory::create(const QString &key, Type type, QObject *parent)
+QMpsApplicationManager *QMpsApplicationManagerFactory::create(const QString &key, Type type, const QString &prefix, QObject *parent)
 {
-    return qLoadPlugin<QMpsApplicationManager, QMpsApplicationManagerPlugin>(loader(), key.toLower(), type, parent);
+    return qLoadPlugin<QMpsApplicationManager, QMpsApplicationManagerPlugin>(loader(), key.toLower(), type, prefix, parent);
 }

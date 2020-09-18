@@ -9,7 +9,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManager : public QAbstractListMod
 {
     Q_OBJECT
 public:
-    explicit QMpsApplicationManager(QObject *parent = nullptr);
+    explicit QMpsApplicationManager(const QString &prefix, QObject *parent = nullptr);
 
     enum Roles {
         ID = Qt::UserRole + 1,

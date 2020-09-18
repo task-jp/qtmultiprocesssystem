@@ -40,8 +40,8 @@ void ApplicationManager::exec(int id, const QString &name)
     }
 }
 
-RemoteObjectsApplicationManagerServer::RemoteObjectsApplicationManagerServer(QObject *parent)
-    : QMpsApplicationManager(parent)
+RemoteObjectsApplicationManagerServer::RemoteObjectsApplicationManagerServer(const QString &prefix, QObject *parent)
+    : QMpsApplicationManager(prefix, parent)
 {
     auto host = new QRemoteObjectHost(QUrl(QStringLiteral("local:app")), this);
     host->enableRemoting(&source);
@@ -54,8 +54,8 @@ void RemoteObjectsApplicationManagerServer::exec(int id, const QString &name)
     source.exec(id, name);
 }
 
-RemoteObjectsApplicationManagerClient::RemoteObjectsApplicationManagerClient(QObject *parent)
-    : QMpsApplicationManager(parent)
+RemoteObjectsApplicationManagerClient::RemoteObjectsApplicationManagerClient(const QString &prefix, QObject *parent)
+    : QMpsApplicationManager(prefix, parent)
 {
     auto node = new QRemoteObjectNode(this);
     node->connectToNode(QUrl(QStringLiteral("local:app")));

@@ -11,6 +11,7 @@
 
 int main(int argc, char *argv[])
 {
+    QString prefix = QLatin1String("example/");
     QGuiApplication app(argc, argv);
 
     QCommandLineParser parser;
@@ -34,7 +35,7 @@ int main(int argc, char *argv[])
     }
 
     if (QMpsApplicationManagerFactory::keys().contains(appManType.toLower())) {
-        context->setContextProperty("applicationManager", QMpsApplicationManagerFactory::create(appManType, type, &app));
+        context->setContextProperty("applicationManager", QMpsApplicationManagerFactory::create(appManType, type, prefix, &app));
     } else {
         qFatal("Application Manager backend '%s' not found", qUtf8Printable(appManType));
     }
@@ -58,7 +59,6 @@ int main(int argc, char *argv[])
         role = args.first();
     }
 
-    QString prefix = QLatin1String("example/");
     QUrl url;
     if (type == QMpsAbstractManagerFactory::Server) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));

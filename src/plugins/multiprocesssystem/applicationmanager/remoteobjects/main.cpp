@@ -7,14 +7,14 @@ class QRemoteObjectsApplicationManagerPlugin : public QMpsApplicationManagerPlug
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QMpsApplicationManagerFactoryInterface_iid FILE "remoteobjects.json")
 public:
-    QMpsApplicationManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, QObject *parent = nullptr) override
+    QMpsApplicationManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, const QString &prefix, QObject *parent = nullptr) override
     {
         if (!key.compare(QLatin1String("remoteobjects"), Qt::CaseInsensitive)) {
             switch (type) {
             case QMpsAbstractManagerFactory::Server:
-                return new RemoteObjectsApplicationManagerServer(parent);
+                return new RemoteObjectsApplicationManagerServer(prefix, parent);
             case QMpsAbstractManagerFactory::Client:
-                return new RemoteObjectsApplicationManagerClient(parent);
+                return new RemoteObjectsApplicationManagerClient(prefix, parent);
             default:
                 break;
             }

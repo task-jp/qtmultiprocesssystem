@@ -2,18 +2,18 @@
 
 InProcessApplicationManager *InProcessApplicationManager::server = nullptr;
 
-InProcessApplicationManager::InProcessApplicationManager(QObject *parent)
-    : QMpsApplicationManager(parent)
+InProcessApplicationManager::InProcessApplicationManager(const QString &prefix, QObject *parent)
+    : QMpsApplicationManager(prefix, parent)
 {}
 
-InProcessApplicationManagerServer::InProcessApplicationManagerServer(QObject *parent)
-    : InProcessApplicationManager(parent)
+InProcessApplicationManagerServer::InProcessApplicationManagerServer(const QString &prefix, QObject *parent)
+    : InProcessApplicationManager(prefix, parent)
 {
     server = this;
 }
 
-InProcessApplicationManagerClient::InProcessApplicationManagerClient(QObject *parent)
-    : InProcessApplicationManager(parent)
+InProcessApplicationManagerClient::InProcessApplicationManagerClient(const QString &prefix, QObject *parent)
+    : InProcessApplicationManager(prefix, parent)
 {
     connect(server, &InProcessApplicationManager::activated, this, &InProcessApplicationManager::activated);
 }

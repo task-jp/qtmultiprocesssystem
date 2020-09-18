@@ -10,7 +10,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManagerFactory : public QMpsAbstr
 {
 public:
     static QStringList keys();
-    static QMpsApplicationManager *create(const QString &key, Type type, QObject *parent = nullptr);
+    static QMpsApplicationManager *create(const QString &key, Type type, const QString &prefix, QObject *parent = nullptr);
 };
 
 #endif // QMPSAPPLICATIONMANAGERFACTORY_H

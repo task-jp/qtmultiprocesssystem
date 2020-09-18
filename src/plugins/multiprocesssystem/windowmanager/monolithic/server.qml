@@ -4,13 +4,12 @@ import QtMultiProcessSystem.Internal 1.0
 
 Main {
     id: root
+    Component.onCompleted: console.debug(this)
 
     Component {
         id: chromeComponent
         Loader {
-            id: item
             anchors.fill: parent
-            property int appId: 0
         }
     }
 
@@ -31,7 +30,7 @@ Main {
             }
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(name)
             var parent = root.findParent(currentID, name)
-            var item = chromeComponent.createObject(parent, {"source": url, "appId": id})
+            var item = chromeComponent.createObject(parent, {"source": url})
             if (root.isApp(currentID))
                 root.apps[id] = item
         }
