@@ -2,9 +2,6 @@ TEMPLATE = app
 QT = multiprocesssystem
 
 SOURCES = main.cpp
+RESOURCES = simple.qrc
 
-RESOURCES += \
-    simple.qrc
-
-target.path = $$[QT_INSTALL_EXAMPLES]/multiprocesssystem/simple
-INSTALLS += target
+CONFIG += install_ok  # Do not cargo-cult this!
