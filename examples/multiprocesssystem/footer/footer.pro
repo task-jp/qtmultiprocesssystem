@@ -1,7 +1,7 @@
 QT = multiprocesssystem
-SOURCES = main.cpp
+SOURCES = footer.cpp
 RESOURCES = footer.qrc
-OTHER_FILES += main.json
+OTHER_FILES += footer.json
 
 PLUGIN_TYPE = multiprocesssystem/application
 PLUGIN_CLASS_NAME = Footer

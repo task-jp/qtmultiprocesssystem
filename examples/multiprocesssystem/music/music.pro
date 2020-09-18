@@ -1,7 +1,7 @@
 QT = multiprocesssystem
-SOURCES = main.cpp
+SOURCES = music.cpp
 RESOURCES = music.qrc
-OTHER_FILES += main.json
+OTHER_FILES += music.json
 
 PLUGIN_TYPE = multiprocesssystem/application
 PLUGIN_CLASS_NAME = Music

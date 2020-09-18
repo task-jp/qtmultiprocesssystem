@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/multiprocesssystem/music">
-        <file>main.qml</file>
+        <file>music.qml</file>
     </qresource>
 </RCC>

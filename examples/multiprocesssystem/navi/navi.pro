@@ -1,7 +1,7 @@
 QT = multiprocesssystem location positioning
-SOURCES = main.cpp
+SOURCES = navi.cpp
 RESOURCES = navi.qrc
-OTHER_FILES += main.json
+OTHER_FILES += navi.json
 
 PLUGIN_TYPE = multiprocesssystem/application
 PLUGIN_CLASS_NAME = Navi

@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/multiprocesssystem/header">
-        <file>main.qml</file>
+        <file>header.qml</file>
     </qresource>
 </RCC>

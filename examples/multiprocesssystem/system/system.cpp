@@ -75,8 +75,7 @@ int main(int argc, char *argv[])
     qDebug() << url;
 
     qDebug() << role << appManType << winManType << type;
-    qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/main.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
-    qDebug() << QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/main.qml").arg(role));
+    qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {

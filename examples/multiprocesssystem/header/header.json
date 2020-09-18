@@ -1,5 +1,6 @@
 {
     "Keys": [ "header" ],
+    "Product": "example",
     "Area": "header",
     "ShowInMenu": false,
     "LaunchAtBoot": true,

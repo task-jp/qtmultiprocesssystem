@@ -1,14 +1,14 @@
 #include <QtMultiProcessSystem/qmpsapplicationplugin.h>
 #include <QtMultiProcessSystem/qmpsapplication.h>
 
-class Menu : public QMpsApplicationPlugin
+class Music : public QMpsApplicationPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID QMpsApplicationFactoryInterface_iid FILE "main.json")
+    Q_PLUGIN_METADATA(IID QMpsApplicationFactoryInterface_iid FILE "music.json")
 public:
     QMpsApplication *create(const QString &key, QObject *parent = nullptr) override
     {
-        if (!key.compare(QLatin1String("menu"), Qt::CaseInsensitive)) {
+        if (!key.compare(QLatin1String("music"), Qt::CaseInsensitive)) {
             return new QMpsApplication(parent);
         }
 
@@ -16,4 +16,4 @@ public:
     }
 };
 
-#include "main.moc"
+#include "music.moc"

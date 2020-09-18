@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/multiprocesssystem/menu">
-        <file>main.qml</file>
+        <file>menu.qml</file>
     </qresource>
 </RCC>

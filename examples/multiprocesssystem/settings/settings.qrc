@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/multiprocesssystem/settings">
-        <file>main.qml</file>
+        <file>settings.qml</file>
     </qresource>
 </RCC>

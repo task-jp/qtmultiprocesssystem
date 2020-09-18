@@ -4,7 +4,7 @@
 class Weather : public QMpsApplicationPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID QMpsApplicationFactoryInterface_iid FILE "main.json")
+    Q_PLUGIN_METADATA(IID QMpsApplicationFactoryInterface_iid FILE "weather.json")
 public:
     QMpsApplication *create(const QString &key, QObject *parent = nullptr) override
     {
@@ -16,4 +16,4 @@ public:
     }
 };
 
-#include "main.moc"
+#include "weather.moc"

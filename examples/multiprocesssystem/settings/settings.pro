@@ -1,7 +1,7 @@
 QT = multiprocesssystem
-SOURCES = main.cpp
+SOURCES = settings.cpp
 RESOURCES = settings.qrc
-OTHER_FILES += main.json
+OTHER_FILES += settings.json
 
 PLUGIN_TYPE = multiprocesssystem/application
 PLUGIN_CLASS_NAME = Settings

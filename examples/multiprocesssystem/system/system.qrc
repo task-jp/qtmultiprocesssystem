@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/multiprocesssystem/system">
-        <file>main.qml</file>
+        <file>system.qml</file>
         <file>smartphone_hand.png</file>
         <file>Skin.qml</file>
     </qresource>

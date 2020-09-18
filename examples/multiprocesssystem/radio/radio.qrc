@@ -1,5 +1,5 @@
 <RCC>
     <qresource prefix="/multiprocesssystem/radio">
-        <file>main.qml</file>
+        <file>radio.qml</file>
     </qresource>
 </RCC>

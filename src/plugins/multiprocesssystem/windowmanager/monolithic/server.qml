@@ -29,7 +29,7 @@ Main {
                 root.apps[currentID].enabled = true
                 return
             }
-            var url = 'qrc:/multiprocesssystem/%1/main.qml'.arg(name)
+            var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(name)
             var parent = root.findParent(currentID, name)
             var item = chromeComponent.createObject(parent, {"source": url, "appId": id})
             if (root.isApp(currentID))

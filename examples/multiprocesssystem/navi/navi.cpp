@@ -1,14 +1,14 @@
 #include <QtMultiProcessSystem/qmpsapplicationplugin.h>
 #include <QtMultiProcessSystem/qmpsapplication.h>
 
-class Settings : public QMpsApplicationPlugin
+class Navi : public QMpsApplicationPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID QMpsApplicationFactoryInterface_iid FILE "main.json")
+    Q_PLUGIN_METADATA(IID QMpsApplicationFactoryInterface_iid FILE "navi.json")
 public:
     QMpsApplication *create(const QString &key, QObject *parent = nullptr) override
     {
-        if (!key.compare(QLatin1String("settings"), Qt::CaseInsensitive)) {
+        if (!key.compare(QLatin1String("navi"), Qt::CaseInsensitive)) {
             return new QMpsApplication(parent);
         }
 
@@ -16,4 +16,4 @@ public:
     }
 };
 
-#include "main.moc"
+#include "navi.moc"
