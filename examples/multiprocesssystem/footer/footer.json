@@ -1,6 +1,5 @@
 {
-    "Keys": [ "footer" ],
-    "Product": "example",
+    "Keys": [ "example/footer" ],
     "Area": "footer",
     "ShowInMenu": false,
     "LaunchAtBoot": true,

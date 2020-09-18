@@ -1,5 +1,5 @@
 {
-    "Keys": [ "weather" ],
+    "Keys": [ "example/weather" ],
     "Area": "content",
     "ShowInMenu": true,
     "LaunchAtBoot": false,

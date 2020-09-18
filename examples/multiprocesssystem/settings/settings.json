@@ -1,5 +1,5 @@
 {
-    "Keys": [ "settings" ],
+    "Keys": [ "example/settings" ],
     "Area": "content",
     "ShowInMenu": true,
     "LaunchAtBoot": false,

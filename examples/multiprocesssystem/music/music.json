@@ -1,5 +1,5 @@
 {
-    "Keys": [ "music" ],
+    "Keys": [ "example/music" ],
     "Area": "content",
     "ShowInMenu": true,
     "LaunchAtBoot": false,

@@ -58,19 +58,20 @@ int main(int argc, char *argv[])
         role = args.first();
     }
 
+    QString prefix = QLatin1String("example/");
     QUrl url;
     if (type == QMpsAbstractManagerFactory::Server) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));
         if (appManType == QLatin1String("inprocess")) {
             for (const auto &name : QMpsApplicationFactory::keys()) {
-                qDebug() << name;
-                QMpsApplicationFactory::load(name, &app);
+                if (name.startsWith(prefix))
+                    QMpsApplicationFactory::load(name, &app);
             }
         }
     } else {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/client.qml"));
         qDebug() << role;
-        QMpsApplicationFactory::load(role, &app);
+        QMpsApplicationFactory::load(prefix + role, &app);
     }
     qDebug() << url;
 
