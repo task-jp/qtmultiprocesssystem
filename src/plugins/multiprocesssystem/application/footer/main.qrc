@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/multiprocesssystem/footer">
-        <file>main.qml</file>
-    </qresource>
-</RCC>

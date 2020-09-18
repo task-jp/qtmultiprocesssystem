@@ -1,5 +1,5 @@
 #ifndef QMPSWINDOWMANAGERPLUGIN_H
-#define QMOSWINDOWMANAGERPLUGIN_H
+#define QMPSWINDOWMANAGERPLUGIN_H
 
 #include "multiprocesssystem_global.h"
 #include <QtCore/QObject>

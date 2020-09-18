@@ -1,5 +1,0 @@
-<RCC>
-    <qresource prefix="/multiprocesssystem/weather">
-        <file>main.qml</file>
-    </qresource>
-</RCC>
