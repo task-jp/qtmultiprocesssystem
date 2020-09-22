@@ -3,8 +3,5 @@
 
     "id": 104,
     "key": "radio",
-    "name": "Radio",
-    "area": "main",
-    "auto_start": false,
-    "system_ui": false
+    "name": "Radio"
 }

@@ -4,7 +4,6 @@
     "id": 100,
     "key": "menu",
     "name": "Menu",
-    "area": "main",
-    "auto_start": true,
-    "system_ui": true
+    "autoStart": true,
+    "systemUI": true
 }

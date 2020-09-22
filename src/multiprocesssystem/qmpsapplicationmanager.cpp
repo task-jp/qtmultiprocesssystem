@@ -66,9 +66,9 @@ QHash<int, QByteArray> QMpsApplicationManager::roleNames() const
 {
     return {
         { ID, "id" },
-        { Key, "key"},
-        { Name, "name"},
-        { Icon, "icon"},
+        { Key, "key" },
+        { Name, "name" },
+        { Icon, "icon" },
     };
 }
 

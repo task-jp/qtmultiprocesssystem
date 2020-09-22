@@ -26,8 +26,8 @@ WaylandCompositor {
     }
     IviApplication {
         onIviSurfaceCreated: {
-            console.debug('onIviSurfaceCreated', iviSurface.iviId)
-            var parent = main.findParent(iviSurface.iviId)
+            var app = applicationManager.findByID(iviSurface.iviId)
+            var parent = main.findParent(app)
             var item = chromeComponent.createObject(parent, { "shellSurface": iviSurface } );
             item.handleResized();
             root.apps[iviSurface.iviId] = item
@@ -39,16 +39,17 @@ WaylandCompositor {
     Connections {
         target: applicationManager
         function onActivated(app) {
-            console.debug('onActivated', app.id, app.name)
             if (app.id === root.currentID)
                 return
-            if (currentID in root.apps) {
-                root.apps[currentID].enabled = false
-            }
-            currentID = app.id
-            if (currentID in root.apps) {
-                root.apps[currentID].enabled = true
-                return
+            if (!app.area) {
+                if (currentID in root.apps) {
+                    root.apps[currentID].enabled = false
+                }
+                currentID = app.id
+                if (currentID in root.apps) {
+                    root.apps[currentID].enabled = true
+                    return
+                }
             }
         }
     }

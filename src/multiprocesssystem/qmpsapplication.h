@@ -14,8 +14,8 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(QString name READ name WRITE setName)
     Q_PROPERTY(QUrl icon READ icon WRITE setIcon)
     Q_PROPERTY(QString area READ area WRITE setArea)
-    Q_PROPERTY(bool system_ui READ isSystemUI WRITE setSystemUI)
-    Q_PROPERTY(bool auto_start READ isAutoStart WRITE setAutoStart)
+    Q_PROPERTY(bool systemUI READ isSystemUI WRITE setSystemUI)
+    Q_PROPERTY(bool autoStart READ isAutoStart WRITE setAutoStart)
 public:
     QMpsApplication();
     QMpsApplication(const QMpsApplication &);

@@ -3,8 +3,5 @@
 
     "id": 101,
     "key": "navi",
-    "name": "Navi",
-    "area": "main",
-    "auto_start": false,
-    "system_ui": false
+    "name": "Navi"
 }

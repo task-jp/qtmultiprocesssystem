@@ -50,20 +50,11 @@ ApplicationWindow {
         }
     }
 
-    function isApp(id) {
-        switch (id) {
-        case 1:
-        case 2:
-            return false
-        }
-        return true
-    }
-
-    function findParent(id) {
-        switch (id) {
-        case 1:
+    function findParent(application) {
+        switch (application.area) {
+        case 'header':
             return header
-        case 2:
+        case 'footer':
             return footer
         default:
             break

@@ -3,8 +3,5 @@
 
     "id": 103,
     "key": "weather",
-    "name": "Weather",
-    "area": "main",
-    "auto_start": false,
-    "system_ui": false
+    "name": "Weather"
 }

@@ -7,7 +7,7 @@ public:
     QString key;
     QString name;
     QUrl icon;
-    QString area = QLatin1String("main");
+    QString area;
     bool systemUI = false;
     bool autoStart = false;
 };

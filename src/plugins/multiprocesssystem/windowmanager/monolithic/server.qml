@@ -19,7 +19,7 @@ Main {
         function onActivated(app) {
             if (app.id === root.currentID)
                 return
-            if (root.isApp(app.id)) {
+            if (!app.area) {
                 if (root.currentID in root.apps) {
                     root.apps[root.currentID].enabled = false
                 }
@@ -30,9 +30,9 @@ Main {
                 }
             }
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(app.key)
-            var parent = root.findParent(app.id)
+            var parent = root.findParent(app)
             var item = chromeComponent.createObject(parent, {"source": url})
-            if (root.isApp(app.id)) {
+            if (!app.area) {
                 root.apps[app.id] = item
                 item.item.enabled = true
             }

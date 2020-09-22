@@ -3,8 +3,5 @@
 
     "id": 110,
     "key": "settings",
-    "name": "Settings",
-    "area": "main",
-    "auto_start": false,
-    "system_ui": false
+    "name": "Settings"
 }

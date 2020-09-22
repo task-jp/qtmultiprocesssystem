@@ -22,6 +22,9 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
+    Q_INVOKABLE QMpsApplication findByID(int id) const;
+    Q_INVOKABLE QMpsApplication findByKey(const QString &key) const;
+
 public Q_SLOTS:
     void init();
     virtual void exec(const QString &key);
@@ -30,8 +33,6 @@ Q_SIGNALS:
     void activated(const QMpsApplication &application);
 
 protected:
-    QMpsApplication findByID(int id) const;
-    QMpsApplication findByKey(const QString &key) const;
     virtual void exec(const QMpsApplication &application);
 
 private:

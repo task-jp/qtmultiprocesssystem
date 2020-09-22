@@ -5,6 +5,6 @@
     "key": "footer",
     "name": "Footer",
     "area": "footer",
-    "auto_start": true,
-    "system_ui": true
+    "autoStart": true,
+    "systemUI": true
 }
