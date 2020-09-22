@@ -7,43 +7,35 @@
 QMpsApplicationManager::QMpsApplicationManager(const QString &prefix, QObject *parent)
     : QAbstractListModel(parent)
 {
-    for (const auto &app: QMpsApplicationFactory::apps()) {
-        const auto metaData = app.value(QLatin1String("MetaData")).toObject();
-        const auto keys = metaData.value(QLatin1String("Keys")).toArray();
-        for (const auto &key : keys) {
-            if (key.toString().startsWith(prefix)) {
-                apps.append(metaData);
-                if (metaData.value(QLatin1String("ShowInMenu")).toBool())
-                    appsForMenu.append(metaData);
-                break;
-            }
-        }
+    for (const auto &app : QMpsApplicationFactory::apps(prefix)) {
+        apps.append(app);
+        if (!app.isSystemUI())
+            appsForMenu.append(app);
     }
 }
 
 void QMpsApplicationManager::init()
 {
     for (const auto &app : apps) {
-        const auto id = app.value(QLatin1String("ID")).toInt();
-        const auto name = app.value(QLatin1String("Name")).toString();
-        if (app.value(QLatin1String("LaunchAtBoot")).toBool()) {
-            exec(id, name);
+        if (app.isAutoStart()) {
+            exec(app.id(), app.key());
         }
     }
 }
 
-void QMpsApplicationManager::exec(int id, const QString &name)
+void QMpsApplicationManager::exec(int id, const QString &key)
 {
-    emit activated(id, name);
+    qDebug() << id << key;
+    emit activated(id, key);
 }
 
 QHash<int, QByteArray> QMpsApplicationManager::roleNames() const
 {
     return {
         { ID, "id" },
+        { Key, "key"},
         { Name, "name"},
         { Icon, "icon"},
-        { Title, "title"},
     };
 }
 
@@ -63,20 +55,14 @@ QVariant QMpsApplicationManager::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= appsForMenu.length())
         return ret;
     const auto app = appsForMenu.at(row);
-    switch (role) {
-    case ID:
-        ret = app.value(QLatin1String("ID")).toInt();
-        break;
-    case Name:
-        ret = app.value(QLatin1String("Name")).toString();
-        break;
-    case Icon:
-        ret = app.value(QLatin1String("Icon")).toString();
-        break;
-    case Title:
-        ret = app.value(QLatin1String("Title")).toString();
-        break;
+    auto mo = app.staticMetaObject;
+    const auto role2name = roleNames();
+    for (int i = 0; i < mo.propertyCount(); i++) {
+        auto property = mo.property(i);
+        if (role2name.value(role) == property.name()) {
+            ret = property.readOnGadget(&app);
+            break;
+        }
     }
-
     return ret;
 }

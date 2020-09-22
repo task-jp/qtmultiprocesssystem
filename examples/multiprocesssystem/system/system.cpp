@@ -63,9 +63,9 @@ int main(int argc, char *argv[])
     if (type == QMpsAbstractManagerFactory::Server) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));
         if (appManType == QLatin1String("inprocess")) {
-            for (const auto &name : QMpsApplicationFactory::keys()) {
-                if (name.startsWith(prefix))
-                    QMpsApplicationFactory::load(name, &app);
+            for (const auto &keys : QMpsApplicationFactory::keys()) {
+                if (keys.startsWith(prefix))
+                    QMpsApplicationFactory::load(keys, &app);
             }
         }
     } else {

@@ -1,9 +1,10 @@
 {
     "Keys": [ "example/music" ],
-    "Area": "content",
-    "ShowInMenu": true,
-    "LaunchAtBoot": false,
-    "ID": 102,
-    "Name": "music",
-    "Title": "Music"
+
+    "id": 102,
+    "key": "music",
+    "name": "Music",
+    "area": "main",
+    "auto_start": false,
+    "system_ui": false
 }

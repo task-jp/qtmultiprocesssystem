@@ -1,9 +1,10 @@
 {
     "Keys": [ "example/menu" ],
-    "Area": "content",
-    "ShowInMenu": false,
-    "LaunchAtBoot": true,
-    "ID": 100,
-    "Name": "menu",
-    "Title": "Menu"
+
+    "id": 100,
+    "key": "menu",
+    "name": "Menu",
+    "area": "main",
+    "auto_start": true,
+    "system_ui": true
 }

@@ -2,18 +2,16 @@
 #define QMPSAPPLICATIONFACTORY_H
 
 #include "multiprocesssystem_global.h"
+#include "qmpsapplication.h"
 
-#include <QtCore/QJsonObject>
-
-class QMpsApplication;
 class QMpsApplicationManager;
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationFactory
 {
 public:
-    static QList<QJsonObject> apps();
+    static QList<QMpsApplication> apps(const QString &prefix);
     static QStringList keys();
-    static QMpsApplication *load(const QString &key, QObject *parent = nullptr);
+    static QObject *load(const QString &key, QObject *parent = nullptr);
 };
 
 #endif // QMPSAPPLICATIONFACTORY_H

@@ -1,9 +1,10 @@
 {
     "Keys": [ "example/navi" ],
-    "Area": "content",
-    "ShowInMenu": true,
-    "LaunchAtBoot": false,
-    "ID": 101,
-    "Name": "navi",
-    "Title": "Navi"
+
+    "id": 101,
+    "key": "navi",
+    "name": "Navi",
+    "area": "main",
+    "auto_start": false,
+    "system_ui": false
 }

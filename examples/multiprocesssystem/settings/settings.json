@@ -1,9 +1,10 @@
 {
     "Keys": [ "example/settings" ],
-    "Area": "content",
-    "ShowInMenu": true,
-    "LaunchAtBoot": false,
-    "ID": 110,
-    "Name": "settings",
-    "Title": "Settings"
+
+    "id": 110,
+    "key": "settings",
+    "name": "Settings",
+    "area": "main",
+    "auto_start": false,
+    "system_ui": false
 }

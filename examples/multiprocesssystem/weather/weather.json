@@ -1,9 +1,10 @@
 {
     "Keys": [ "example/weather" ],
-    "Area": "content",
-    "ShowInMenu": true,
-    "LaunchAtBoot": false,
-    "ID": 103,
-    "Name": "weather",
-    "Title": "Weather"
+
+    "id": 103,
+    "key": "weather",
+    "name": "Weather",
+    "area": "main",
+    "auto_start": false,
+    "system_ui": false
 }

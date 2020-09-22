@@ -1,9 +1,10 @@
 {
     "Keys": [ "example/radio" ],
-    "Area": "content",
-    "ShowInMenu": true,
-    "LaunchAtBoot": false,
-    "ID": 104,
-    "Name": "radio",
-    "Title": "Radio"
+
+    "id": 104,
+    "key": "radio",
+    "name": "Radio",
+    "area": "main",
+    "auto_start": false,
+    "system_ui": false
 }

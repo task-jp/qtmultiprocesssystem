@@ -1,8 +1,10 @@
 {
     "Keys": [ "example/footer" ],
-    "Area": "footer",
-    "ShowInMenu": false,
-    "LaunchAtBoot": true,
-    "ID": 2,
-    "Name": "footer"
+
+    "id": 2,
+    "key": "footer",
+    "name": "Footer",
+    "area": "footer",
+    "auto_start": true,
+    "system_ui": true
 }

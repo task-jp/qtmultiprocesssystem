@@ -4,7 +4,6 @@ import QtMultiProcessSystem.Internal 1.0
 
 Main {
     id: root
-    Component.onCompleted: console.debug(this)
 
     Component {
         id: chromeComponent
@@ -20,19 +19,23 @@ Main {
         function onActivated(id, name) {
             if (id === root.currentID)
                 return
-            if (currentID in root.apps && root.isApp(id)) {
-                root.apps[currentID].enabled = false
-            }
-            currentID = id
-            if (currentID in root.apps) {
-                root.apps[currentID].enabled = true
-                return
+            if (root.isApp(id)) {
+                if (root.currentID in root.apps) {
+                    root.apps[root.currentID].enabled = false
+                }
+                root.currentID = id
+                if (root.currentID in root.apps) {
+                    root.apps[root.currentID].enabled = true
+                    return
+                }
             }
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(name)
-            var parent = root.findParent(currentID, name)
+            var parent = root.findParent(id, name)
             var item = chromeComponent.createObject(parent, {"source": url})
-            if (root.isApp(currentID))
+            if (root.isApp(id)) {
                 root.apps[id] = item
+                item.item.enabled = true
+            }
         }
     }
 }

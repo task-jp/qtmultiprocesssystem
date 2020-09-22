@@ -1,8 +1,10 @@
 {
     "Keys": [ "example/header" ],
-    "Area": "header",
-    "ShowInMenu": false,
-    "LaunchAtBoot": true,
-    "ID": 1,
-    "Name": "header"
+
+    "id": 1,
+    "key": "header",
+    "name": "Header",
+    "area": "header",
+    "auto_start": true,
+    "system_ui": true
 }

@@ -3,7 +3,7 @@
 
 #include "multiprocesssystem_global.h"
 #include <QtCore/QAbstractListModel>
-#include <QtCore/QJsonObject>
+#include "qmpsapplication.h"
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManager : public QAbstractListModel
 {
@@ -13,9 +13,9 @@ public:
 
     enum Roles {
         ID = Qt::UserRole + 1,
+        Key,
         Name,
         Icon,
-        Title,
     };
 
     QHash<int, QByteArray> roleNames() const override;
@@ -24,14 +24,14 @@ public:
 
 public Q_SLOTS:
     void init();
-    virtual void exec(int id, const QString &name);
+    virtual void exec(int id, const QString &key);
 
 Q_SIGNALS:
-    void activated(int id, const QString &name);
+    void activated(int id, const QString &key);
 
 private:
-    QList<QJsonObject> apps;
-    QList<QJsonObject> appsForMenu;
+    QList<QMpsApplication> apps;
+    QList<QMpsApplication> appsForMenu;
 };
 
 #endif // QMPSAPPLICATIONMANAGER_H
