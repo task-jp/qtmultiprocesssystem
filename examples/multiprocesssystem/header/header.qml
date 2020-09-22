@@ -9,14 +9,12 @@ RowLayout {
     ListModel {
         id: shortcut
         ListElement {
-            appID: 100
-            appName: 'menu'
-            appTitle: 'Menu'
+            key: 'menu'
+            name: 'Menu'
         }
         ListElement {
-            appID: 101
-            appName: 'navi'
-            appTitle: 'Navi'
+            key: 'navi'
+            name: 'Navi'
         }
     }
 
@@ -25,10 +23,11 @@ RowLayout {
         Button {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            text: model.appTitle
+            text: model.name
             font.pixelSize: height / 4
+            highlighted: applicationManager.current.key === model.key
             onClicked: {
-                applicationManager.exec(model.appID, model.appName)
+                applicationManager.exec(model.key)
             }
         }
     }

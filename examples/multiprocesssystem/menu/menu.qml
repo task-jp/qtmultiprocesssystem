@@ -13,10 +13,10 @@ GridView {
     delegate: RoundButton {
         width: root.width / 3
         height: width
-        text: model.title
+        text: model.name
         font.pixelSize: height / 10
         onClicked: {
-            applicationManager.exec(model.id, model.name)
+            applicationManager.exec(model.key)
         }
     }
 }
