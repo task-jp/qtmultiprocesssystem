@@ -1,5 +1,5 @@
 class ApplicationManager
 {
-    SLOT(exec(int id, const QString &name))
-    SIGNAL(activated(int id, const QString &name))
+    SLOT(exec(int id, const QString &key))
+    SIGNAL(activated(int id, const QString &key))
 };

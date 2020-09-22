@@ -13,7 +13,7 @@ public:
     explicit ApplicationManager(QObject *parent = nullptr);
 
 public slots:
-    void exec(int id, const QString &name) override;
+    void exec(int id, const QString &key) override;
 
 private:
     QMap<int, QProcess *> apps;
@@ -25,8 +25,8 @@ class RemoteObjectsApplicationManagerServer : public QMpsApplicationManager
 public:
     explicit RemoteObjectsApplicationManagerServer(const QString &prefix, QObject *parent = nullptr);
 
-public slots:
-    void exec(int id, const QString &name) override;
+protected:
+    void exec(const QMpsApplication &application) override;
 
 private:
     ApplicationManager source;
@@ -39,7 +39,7 @@ public:
     explicit RemoteObjectsApplicationManagerClient(const QString &prefix, QObject *parent = nullptr);
 
 public slots:
-    void exec(int id, const QString &name) override;
+    void exec(const QString &key) override;
 
 private:
     ApplicationManagerReplica replica;

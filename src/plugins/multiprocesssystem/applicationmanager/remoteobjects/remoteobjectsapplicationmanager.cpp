@@ -7,14 +7,14 @@ ApplicationManager::ApplicationManager(QObject *parent)
     : ApplicationManagerSimpleSource(parent)
 {}
 
-void ApplicationManager::exec(int id, const QString &name)
+void ApplicationManager::exec(int id, const QString &key)
 {
     if (apps.contains(id)) {
-        emit activated(id, name);
+        emit activated(id, key);
     } else {
         auto process = new QProcess(this);
         process->setProgram(QCoreApplication::instance()->applicationFilePath());
-        QStringList args {name};
+        QStringList args {key};
         auto env = QProcess::systemEnvironment();
         env.append("XDG_SESSION_TYPE=wayland");
         env.append("QT_WAYLAND_SHELL_INTEGRATION=ivi-shell");
@@ -33,7 +33,7 @@ void ApplicationManager::exec(int id, const QString &name)
         connect(process, &QProcess::destroyed, [this, id]() { apps.remove(id); });
         if (process->waitForStarted()) {
             apps.insert(id, process);
-            emit activated(id, name);
+            emit activated(id, key);
         } else {
             qWarning() << process->errorString();
         }
@@ -45,13 +45,15 @@ RemoteObjectsApplicationManagerServer::RemoteObjectsApplicationManagerServer(con
 {
     auto host = new QRemoteObjectHost(QUrl(QStringLiteral("local:app")), this);
     host->enableRemoting(&source);
-    connect(&source, &ApplicationManager::activated, this, &RemoteObjectsApplicationManagerServer::activated);
+    connect(&source, &ApplicationManager::activated, this, [this](int id) {
+        emit activated(findByID(id));
+    });
 }
 
 
-void RemoteObjectsApplicationManagerServer::exec(int id, const QString &name)
+void RemoteObjectsApplicationManagerServer::exec(const QMpsApplication &application)
 {
-    source.exec(id, name);
+    source.exec(application.id(), application.key());
 }
 
 RemoteObjectsApplicationManagerClient::RemoteObjectsApplicationManagerClient(const QString &prefix, QObject *parent)
@@ -60,10 +62,13 @@ RemoteObjectsApplicationManagerClient::RemoteObjectsApplicationManagerClient(con
     auto node = new QRemoteObjectNode(this);
     node->connectToNode(QUrl(QStringLiteral("local:app")));
     replica.setNode(node);
-    connect(&replica, &ApplicationManagerReplica::activated, this, &RemoteObjectsApplicationManagerClient::activated);
+    connect(&replica, &ApplicationManagerReplica::activated, this, [this](int id) {
+        emit activated(findByID(id));
+    });
 }
 
-void RemoteObjectsApplicationManagerClient::exec(int id, const QString &name)
+void RemoteObjectsApplicationManagerClient::exec(const QString &key)
 {
-    replica.exec(id, name);
+    auto app = findByKey(key);
+    replica.exec(app.id(), app.key());
 }

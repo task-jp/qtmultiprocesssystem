@@ -18,7 +18,7 @@ InProcessApplicationManagerClient::InProcessApplicationManagerClient(const QStri
     connect(server, &InProcessApplicationManager::activated, this, &InProcessApplicationManager::activated);
 }
 
-void InProcessApplicationManagerClient::exec(int id, const QString &name)
+void InProcessApplicationManagerClient::exec(const QString &key)
 {
-    server->exec(id, name);
+    server->exec(key);
 }

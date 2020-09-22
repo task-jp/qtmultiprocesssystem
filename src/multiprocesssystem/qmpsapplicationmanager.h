@@ -24,10 +24,15 @@ public:
 
 public Q_SLOTS:
     void init();
-    virtual void exec(int id, const QString &key);
+    virtual void exec(const QString &key);
 
 Q_SIGNALS:
-    void activated(int id, const QString &key);
+    void activated(const QMpsApplication &application);
+
+protected:
+    QMpsApplication findByID(int id) const;
+    QMpsApplication findByKey(const QString &key) const;
+    virtual void exec(const QMpsApplication &application);
 
 private:
     QList<QMpsApplication> apps;

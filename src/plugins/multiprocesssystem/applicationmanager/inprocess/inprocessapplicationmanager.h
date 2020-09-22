@@ -27,7 +27,7 @@ public:
     InProcessApplicationManagerClient(const QString &prefix, QObject *parent = nullptr);
 
 public slots:
-    void exec(int id, const QString &name) override;
+    void exec(const QString &key) override;
 };
 
 #endif // INPROCESSAPPLICATIONMANAGER_H

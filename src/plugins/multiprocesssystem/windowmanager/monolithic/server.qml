@@ -16,24 +16,24 @@ Main {
     property int currentID: -1
     Connections {
         target: applicationManager
-        function onActivated(id, name) {
-            if (id === root.currentID)
+        function onActivated(app) {
+            if (app.id === root.currentID)
                 return
-            if (root.isApp(id)) {
+            if (root.isApp(app.id)) {
                 if (root.currentID in root.apps) {
                     root.apps[root.currentID].enabled = false
                 }
-                root.currentID = id
+                root.currentID = app.id
                 if (root.currentID in root.apps) {
                     root.apps[root.currentID].enabled = true
                     return
                 }
             }
-            var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(name)
-            var parent = root.findParent(id, name)
+            var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(app.key)
+            var parent = root.findParent(app.id)
             var item = chromeComponent.createObject(parent, {"source": url})
-            if (root.isApp(id)) {
-                root.apps[id] = item
+            if (root.isApp(app.id)) {
+                root.apps[app.id] = item
                 item.item.enabled = true
             }
         }

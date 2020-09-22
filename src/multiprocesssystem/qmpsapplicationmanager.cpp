@@ -18,15 +18,48 @@ void QMpsApplicationManager::init()
 {
     for (const auto &app : apps) {
         if (app.isAutoStart()) {
-            exec(app.id(), app.key());
+            exec(app);
         }
     }
 }
 
-void QMpsApplicationManager::exec(int id, const QString &key)
+void QMpsApplicationManager::exec(const QString &key)
 {
-    qDebug() << id << key;
-    emit activated(id, key);
+    for (const auto &app : apps) {
+        if (app.key() == key) {
+            exec(app);
+            return;
+        }
+    }
+}
+
+void QMpsApplicationManager::exec(const QMpsApplication &application)
+{
+    emit activated(application);
+}
+
+QMpsApplication QMpsApplicationManager::findByID(int id) const
+{
+    QMpsApplication ret;
+    for (const auto &app : apps) {
+        if (app.id() == id) {
+            ret = app;
+            break;
+        }
+    }
+    return ret;
+}
+
+QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
+{
+    QMpsApplication ret;
+    for (const auto &app : apps) {
+        if (app.key() == key) {
+            ret = app;
+            break;
+        }
+    }
+    return ret;
 }
 
 QHash<int, QByteArray> QMpsApplicationManager::roleNames() const
