@@ -45,11 +45,21 @@ RemoteObjectsApplicationManagerServer::RemoteObjectsApplicationManagerServer(con
 {
     auto host = new QRemoteObjectHost(QUrl(QStringLiteral("local:app")), this);
     host->enableRemoting(&source);
+    connect(&source, &ApplicationManager::currentChanged, this, &RemoteObjectsApplicationManagerServer::currentChanged);
     connect(&source, &ApplicationManager::activated, this, [this](int id) {
         emit activated(findByID(id));
     });
 }
 
+QMpsApplication RemoteObjectsApplicationManagerServer::current() const
+{
+    return source.current();
+}
+
+void RemoteObjectsApplicationManagerServer::setCurrent(const QMpsApplication &current)
+{
+    source.setCurrent(current);
+}
 
 void RemoteObjectsApplicationManagerServer::exec(const QMpsApplication &application)
 {
@@ -62,9 +72,20 @@ RemoteObjectsApplicationManagerClient::RemoteObjectsApplicationManagerClient(con
     auto node = new QRemoteObjectNode(this);
     node->connectToNode(QUrl(QStringLiteral("local:app")));
     replica.setNode(node);
+    connect(&replica, &ApplicationManagerReplica::currentChanged, this, &RemoteObjectsApplicationManagerClient::currentChanged);
     connect(&replica, &ApplicationManagerReplica::activated, this, [this](int id) {
         emit activated(findByID(id));
     });
+}
+
+QMpsApplication RemoteObjectsApplicationManagerClient::current() const
+{
+    return replica.current();
+}
+
+void RemoteObjectsApplicationManagerClient::setCurrent(const QMpsApplication &current)
+{
+    replica.pushCurrent(current);
 }
 
 void RemoteObjectsApplicationManagerClient::exec(const QString &key)

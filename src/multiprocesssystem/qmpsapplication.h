@@ -23,6 +23,8 @@ public:
     QMpsApplication &operator=(const QMpsApplication &);
     inline void swap(QMpsApplication &other) { return d.swap(other.d); }
     bool operator==(const QMpsApplication &other) const;
+    inline bool operator!=(const QMpsApplication &other) const
+    { return !operator==(other); }
 
     int id() const;
     void setID(int id);
@@ -51,6 +53,10 @@ private:
     class Private;
     QSharedDataPointer<Private> d;
 };
+
+MULTIPROCESSSYSTEM_EXPORT QDataStream &operator<<(QDataStream &out, const QMpsApplication &application);
+MULTIPROCESSSYSTEM_EXPORT QDataStream &operator>>(QDataStream &in, QMpsApplication &application);
+
 
 Q_DECLARE_SHARED(QMpsApplication)
 Q_DECLARE_METATYPE(QMpsApplication)

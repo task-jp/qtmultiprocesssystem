@@ -35,19 +35,19 @@ WaylandCompositor {
     }
 
     property var apps: ({})
-    property int currentID: -1
     Connections {
         target: applicationManager
         function onActivated(app) {
-            if (app.id === root.currentID)
+            var current = applicationManager.current
+            if (app.id === current.id)
                 return
             if (!app.area) {
-                if (currentID in root.apps) {
-                    root.apps[currentID].enabled = false
+                if (current.id in root.apps) {
+                    root.apps[current.id].enabled = false
                 }
-                currentID = app.id
-                if (currentID in root.apps) {
-                    root.apps[currentID].enabled = true
+                applicationManager.current = app
+                if (app.id in root.apps) {
+                    root.apps[app.id].enabled = true
                     return
                 }
             }

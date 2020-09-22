@@ -13,19 +13,19 @@ Main {
     }
 
     property var apps: ({})
-    property int currentID: -1
     Connections {
         target: applicationManager
         function onActivated(app) {
-            if (app.id === root.currentID)
+            var current = applicationManager.current
+            if (app === current)
                 return
             if (!app.area) {
-                if (root.currentID in root.apps) {
-                    root.apps[root.currentID].enabled = false
+                if (current.id in root.apps) {
+                    root.apps[current.id].enabled = false
                 }
-                root.currentID = app.id
-                if (root.currentID in root.apps) {
-                    root.apps[root.currentID].enabled = true
+                applicationManager.current = app
+                if (app.id in root.apps) {
+                    root.apps[app.id].enabled = true
                     return
                 }
             }

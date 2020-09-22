@@ -4,33 +4,52 @@
 
 #include <QDebug>
 
+class QMpsApplicationManager::Private
+{
+public:
+    QMpsApplication current;
+    QList<QMpsApplication> apps;
+    QList<QMpsApplication> appsForMenu;
+};
+
+
 QMpsApplicationManager::QMpsApplicationManager(const QString &prefix, QObject *parent)
     : QAbstractListModel(parent)
+    , d(new Private)
 {
     for (const auto &app : QMpsApplicationFactory::apps(prefix)) {
-        apps.append(app);
+        d->apps.append(app);
         if (!app.isSystemUI())
-            appsForMenu.append(app);
+            d->appsForMenu.append(app);
     }
 }
 
+QMpsApplicationManager::~QMpsApplicationManager() = default;
+
 void QMpsApplicationManager::init()
 {
-    for (const auto &app : apps) {
+    for (const auto &app : d->apps) {
         if (app.isAutoStart()) {
             exec(app);
         }
     }
 }
 
+QMpsApplication QMpsApplicationManager::current() const
+{
+    return d->current;
+}
+
+void QMpsApplicationManager::setCurrent(const QMpsApplication &current)
+{
+    if (d->current == current) return;
+    d->current = current;
+    emit currentChanged(current);
+}
+
 void QMpsApplicationManager::exec(const QString &key)
 {
-    for (const auto &app : apps) {
-        if (app.key() == key) {
-            exec(app);
-            return;
-        }
-    }
+    exec(findByKey(key));
 }
 
 void QMpsApplicationManager::exec(const QMpsApplication &application)
@@ -41,7 +60,7 @@ void QMpsApplicationManager::exec(const QMpsApplication &application)
 QMpsApplication QMpsApplicationManager::findByID(int id) const
 {
     QMpsApplication ret;
-    for (const auto &app : apps) {
+    for (const auto &app : d->apps) {
         if (app.id() == id) {
             ret = app;
             break;
@@ -53,7 +72,7 @@ QMpsApplication QMpsApplicationManager::findByID(int id) const
 QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
 {
     QMpsApplication ret;
-    for (const auto &app : apps) {
+    for (const auto &app : d->apps) {
         if (app.key() == key) {
             ret = app;
             break;
@@ -76,7 +95,7 @@ int QMpsApplicationManager::rowCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
-    return appsForMenu.length();
+    return d->appsForMenu.length();
 }
 
 QVariant QMpsApplicationManager::data(const QModelIndex &index, int role) const
@@ -85,9 +104,9 @@ QVariant QMpsApplicationManager::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return ret;
     int row = index.row();
-    if (row < 0 || row >= appsForMenu.length())
+    if (row < 0 || row >= d->appsForMenu.length())
         return ret;
-    const auto app = appsForMenu.at(row);
+    const auto app = d->appsForMenu.at(row);
     auto mo = app.staticMetaObject;
     const auto role2name = roleNames();
     for (int i = 0; i < mo.propertyCount(); i++) {

@@ -25,6 +25,11 @@ class RemoteObjectsApplicationManagerServer : public QMpsApplicationManager
 public:
     explicit RemoteObjectsApplicationManagerServer(const QString &prefix, QObject *parent = nullptr);
 
+    QMpsApplication current() const override;
+
+public slots:
+    void setCurrent(const QMpsApplication &current) override;
+
 protected:
     void exec(const QMpsApplication &application) override;
 
@@ -38,7 +43,10 @@ class RemoteObjectsApplicationManagerClient : public QMpsApplicationManager
 public:
     explicit RemoteObjectsApplicationManagerClient(const QString &prefix, QObject *parent = nullptr);
 
+    QMpsApplication current() const override;
+
 public slots:
+    void setCurrent(const QMpsApplication &current) override;
     void exec(const QString &key) override;
 
 private:

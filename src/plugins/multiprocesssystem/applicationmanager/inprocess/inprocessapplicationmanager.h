@@ -26,7 +26,10 @@ class InProcessApplicationManagerClient : public InProcessApplicationManager
 public:
     InProcessApplicationManagerClient(const QString &prefix, QObject *parent = nullptr);
 
+    QMpsApplication current() const override;
+
 public slots:
+    void setCurrent(const QMpsApplication &current) override;
     void exec(const QString &key) override;
 };
 

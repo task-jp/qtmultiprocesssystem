@@ -145,3 +145,28 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
     }
     return ret;
 }
+
+QDataStream &operator<<(QDataStream &out, const QMpsApplication &application)
+{
+    const auto mo = application.staticMetaObject;
+    for (int i = 0; i < mo.propertyCount(); i++) {
+        auto property = mo.property(i);
+        auto key = QString::fromLatin1(property.name());
+        auto value = property.readOnGadget(&application);
+        out << value;
+    }
+    return out;
+}
+
+QDataStream &operator>>(QDataStream &in, QMpsApplication &application)
+{
+    const auto mo = application.staticMetaObject;
+    for (int i = 0; i < mo.propertyCount(); i++) {
+        auto property = mo.property(i);
+        auto key = QString::fromLatin1(property.name());
+        QVariant value;
+        in >> value;
+        property.writeOnGadget(&application, value);
+    }
+    return in;
+}
