@@ -2,7 +2,8 @@
 
 #include "qmpsapplicationfactory.h"
 
-#include <QDebug>
+#include <QtCore/QDebug>
+#include <QtCore/QMetaProperty>
 
 class QMpsApplicationManager::Private
 {

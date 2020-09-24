@@ -1,5 +1,7 @@
 #include "qmpsapplication.h"
 
+#include <QtCore/QMetaProperty>
+
 class QMpsApplication::Private : public QSharedData
 {
 public:

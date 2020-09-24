@@ -4,6 +4,7 @@
 #include "qmpsapplicationmanager.h"
 #include "qmpsapplication.h"
 
+#include <QtCore/QJsonArray>
 #include <QtCore/private/qfactoryloader_p.h>
 
 Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
