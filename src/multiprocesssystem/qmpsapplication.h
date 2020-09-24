@@ -47,6 +47,8 @@ public:
     bool isAutoStart() const;
     void setAutoStart(bool autoStart);
 
+    bool isValid() const;
+
     static QMpsApplication fromJson(const QJsonObject &json);
 
 private:

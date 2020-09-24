@@ -55,7 +55,8 @@ void QMpsApplicationManager::exec(const QString &key)
 
 void QMpsApplicationManager::exec(const QMpsApplication &application)
 {
-    emit activated(application);
+    if (application.isValid())
+        emit activated(application);
 }
 
 QMpsApplication QMpsApplicationManager::findByID(int id) const

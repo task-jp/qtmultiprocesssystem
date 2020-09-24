@@ -47,7 +47,9 @@ RemoteObjectsApplicationManagerServer::RemoteObjectsApplicationManagerServer(con
     host->enableRemoting(&source);
     connect(&source, &ApplicationManager::currentChanged, this, &RemoteObjectsApplicationManagerServer::currentChanged);
     connect(&source, &ApplicationManager::activated, this, [this](int id) {
-        emit activated(findByID(id));
+        const auto app = findByID(id);
+        if (app.isValid())
+            emit activated(app);
     });
 }
 
@@ -74,7 +76,9 @@ RemoteObjectsApplicationManagerClient::RemoteObjectsApplicationManagerClient(con
     replica.setNode(node);
     connect(&replica, &ApplicationManagerReplica::currentChanged, this, &RemoteObjectsApplicationManagerClient::currentChanged);
     connect(&replica, &ApplicationManagerReplica::activated, this, [this](int id) {
-        emit activated(findByID(id));
+        const auto app = findByID(id);
+        if (app.isValid())
+            emit activated(app);
     });
 }
 

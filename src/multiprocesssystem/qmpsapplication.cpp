@@ -5,7 +5,7 @@
 class QMpsApplication::Private : public QSharedData
 {
 public:
-    int id = -1;
+    int id = 0;
     QString key;
     QString name;
     QUrl icon;
@@ -110,6 +110,11 @@ void QMpsApplication::setAutoStart(bool autoStart)
 {
     if (this->isAutoStart() == autoStart) return;
     d->autoStart = autoStart;
+}
+
+bool QMpsApplication::isValid() const
+{
+    return d->id > 0;
 }
 
 QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
