@@ -22,10 +22,20 @@ void ApplicationManager::exec(int id, const QString &key)
         process->setArguments(args);
         process->setEnvironment(env);
         connect(process, &QProcess::readyReadStandardOutput, [process]() {
-            qDebug() << process->readAllStandardOutput();
+            auto message = process->readAllStandardOutput();
+            if (message.endsWith('\n'))
+                message.chop(1);
+            if (message.isEmpty())
+                return;
+            qDebug().noquote() << message;
         });
         connect(process, &QProcess::readyReadStandardError, [process]() {
-            qWarning() << process->readAllStandardError();
+            auto message = process->readAllStandardOutput();
+            if (message.endsWith('\n'))
+                message.chop(1);
+            if (message.isEmpty())
+                return;
+            qWarning().noquote() << message;
         });
         process->start();
         connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), process, &QProcess::deleteLater);
