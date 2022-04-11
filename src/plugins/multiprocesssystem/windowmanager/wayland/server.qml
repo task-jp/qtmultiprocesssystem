@@ -28,8 +28,8 @@ WaylandCompositor {
         onIviSurfaceCreated: {
             var app = applicationManager.findByID(iviSurface.iviId)
             var parent = main.findParent(app)
-            var item = chromeComponent.createObject(parent, { "shellSurface": iviSurface } );
-            item.handleResized();
+            var item = chromeComponent.createObject(parent, { "shellSurface": iviSurface } )
+            item.handleResized()
             root.apps[iviSurface.iviId] = item
         }
     }
