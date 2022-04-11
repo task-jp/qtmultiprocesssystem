@@ -6,6 +6,12 @@ ApplicationWindow {
     id: root
     visible: true
     Main {
-        anchors.fill: parent
+        id: main
+    }
+    Binding {
+        target: main
+        property: 'anchors.fill'
+        value: root
+        when: main instanceof Item
     }
 }
