@@ -4,20 +4,10 @@ import QtMultiProcessSystem.Internal 1.0
 
 ApplicationWindow {
     id: root
-    color: 'transparent'
+    visible: true
+
     Main {
         id: main
-    }
-    Binding {
-        target: root
-        property: 'visible'
-        value: true
-        when: main instanceof Item
-    }
-    Binding {
-        target: main
-        property: 'anchors.fill'
-        value: root
-        when: main instanceof Item
+        anchors.fill: parent
     }
 }

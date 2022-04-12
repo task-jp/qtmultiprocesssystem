@@ -29,7 +29,6 @@ WaylandCompositor {
         var app = applicationManager.findByKey(key)
         var parent = main.findParent(app)
         var item = chromeComponent.createObject(parent, { "shellSurface": surface } )
-        console.debug(key)
         root.apps[key] = item
         return item
     }
