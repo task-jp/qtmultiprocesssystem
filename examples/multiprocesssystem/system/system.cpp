@@ -2,6 +2,7 @@
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
 #include <QtQml/QQmlContext>
+#include <QtQuick/QQuickWindow>
 #include <QtMultiProcessSystem/QMpsApplicationManagerFactory>
 #include <QtMultiProcessSystem/QMpsApplicationManager>
 #include <QtMultiProcessSystem/QMpsWindowManagerFactory>
@@ -78,9 +79,13 @@ int main(int argc, char *argv[])
     qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-                     &app, [url](QObject *obj, const QUrl &objUrl) {
+                     &app, [&](QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
             QCoreApplication::exit(-1);
+        auto window = qobject_cast<QQuickWindow *>(obj);
+        if (window) {
+            window->setTitle(role);
+        }
     }, Qt::QueuedConnection);
     engine.load(url);
 

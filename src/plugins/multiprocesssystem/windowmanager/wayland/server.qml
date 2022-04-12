@@ -1,5 +1,5 @@
 ﻿import QtQuick 2.15
-import QtWayland.Compositor 1.0
+import QtWayland.Compositor 1.15
 import QtMultiProcessSystem.Internal 1.0
 
 WaylandCompositor {
@@ -17,27 +17,48 @@ WaylandCompositor {
             anchors.fill: parent
             visible: enabled
             onSurfaceDestroyed: destroy()
-            onWidthChanged: handleResized()
-            onHeightChanged: handleResized()
-            function handleResized() {
-                if (width < 0 || height < 0)
-                    return
-                shellSurface.sendConfigure(Qt.size(width, height), WlShellSurface.NoneEdge);
-            }
+            onWidthChanged: handleResized(width, height)
+            onHeightChanged: handleResized(width, height)
+            signal handleResized(real width, real height)
         }
     }
+
+    function add(key, surface) {
+        if (key === Qt.application.name) // QPA changes title once with its name
+            return
+        var app = applicationManager.findByKey(key)
+        var parent = main.findParent(app)
+        var item = chromeComponent.createObject(parent, { "shellSurface": surface } )
+        root.apps[key] = item
+        return item
+    }
+
     WlShell {
         onWlShellSurfaceCreated: {
             shellSurface.titleChanged.connect(function() {
-                var key = shellSurface.title
-                console.debug(key)
-                if (key === Qt.application.name) // QPA changes title once with its name
+                var item = root.add(shellSurface.title, shellSurface)
+                if (!item)
                     return
-                var app = applicationManager.findByKey(key)
-                var parent = main.findParent(app)
-                var item = chromeComponent.createObject(parent, { "shellSurface": shellSurface } )
-                item.handleResized()
-                root.apps[key] = item
+                item.handleResized.connect(function(width, height) {
+                    if (width < 0 || height < 0)
+                        return
+                    shellSurface.sendConfigure(Qt.size(width, height), WlShellSurface.NoneEdge);
+                })
+            })
+        }
+    }
+
+    XdgShell {
+        onToplevelCreated: {
+            toplevel.titleChanged.connect(function() {
+                var item = root.add(toplevel.title, xdgSurface)
+                if (!item)
+                    return
+                item.handleResized.connect(function(width, height) {
+                    if (width < 0 || height < 0)
+                        return
+                    toplevel.sendConfigure(Qt.size(width, height), []);
+                })
             })
         }
     }
