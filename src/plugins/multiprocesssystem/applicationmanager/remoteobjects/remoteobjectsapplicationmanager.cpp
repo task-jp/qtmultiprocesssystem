@@ -13,6 +13,7 @@ void ApplicationManager::exec(int id, const QString &key)
         emit activated(id, key);
     } else {
         auto process = new QProcess(this);
+        process->setObjectName(key);
         process->setProgram(QCoreApplication::instance()->applicationFilePath());
         QStringList args {key};
         auto env = QProcess::systemEnvironment();
@@ -21,21 +22,23 @@ void ApplicationManager::exec(int id, const QString &key)
         env.append(QStringLiteral("QT_IVI_SURFACE_ID=%1").arg(id));
         process->setArguments(args);
         process->setEnvironment(env);
-        connect(process, &QProcess::readyReadStandardOutput, [process]() {
+        connect(process, &QProcess::readyReadStandardOutput, this, [this]() {
+            auto process = qobject_cast<QProcess *>(sender());
             auto message = process->readAllStandardOutput();
             if (message.endsWith('\n'))
                 message.chop(1);
             if (message.isEmpty())
                 return;
-            qDebug().noquote() << message;
+            qDebug().noquote() << process->objectName() << message;
         });
-        connect(process, &QProcess::readyReadStandardError, [process]() {
-            auto message = process->readAllStandardOutput();
+        connect(process, &QProcess::readyReadStandardError, this, [this]() {
+            auto process = qobject_cast<QProcess *>(sender());
+            auto message = process->readAllStandardError();
             if (message.endsWith('\n'))
                 message.chop(1);
             if (message.isEmpty())
                 return;
-            qWarning().noquote() << message;
+            qWarning().noquote() << process->objectName() << message;
         });
         process->start();
         connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), process, &QProcess::deleteLater);
