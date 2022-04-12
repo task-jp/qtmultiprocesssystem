@@ -85,12 +85,13 @@ QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
 
 QHash<int, QByteArray> QMpsApplicationManager::roleNames() const
 {
-    return {
-        { ID, "id" },
-        { Key, "key" },
-        { Name, "name" },
-        { Icon, "icon" },
-    };
+    QHash<int, QByteArray> ret;
+    const auto mo = &QMpsApplication::staticMetaObject;
+    for (int i = 0; i < mo->propertyCount(); i++) {
+        const auto mp = mo->property(i);
+        ret.insert(Qt::UserRole + i, mp.name());
+    }
+    return ret;
 }
 
 int QMpsApplicationManager::rowCount(const QModelIndex &parent) const
@@ -109,12 +110,12 @@ QVariant QMpsApplicationManager::data(const QModelIndex &index, int role) const
     if (row < 0 || row >= d->appsForMenu.length())
         return ret;
     const auto app = d->appsForMenu.at(row);
-    auto mo = app.staticMetaObject;
+    const auto mo = &QMpsApplication::staticMetaObject;
     const auto role2name = roleNames();
-    for (int i = 0; i < mo.propertyCount(); i++) {
-        auto property = mo.property(i);
-        if (role2name.value(role) == property.name()) {
-            ret = property.readOnGadget(&app);
+    for (int i = 0; i < mo->propertyCount(); i++) {
+        const auto mp = mo->property(i);
+        if (role2name.value(role) == mp.name()) {
+            ret = mp.readOnGadget(&app);
             break;
         }
     }

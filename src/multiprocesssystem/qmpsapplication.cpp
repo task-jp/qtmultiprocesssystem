@@ -8,6 +8,7 @@ public:
     int id = 0;
     QString key;
     QString name;
+    QColor theme;
     QUrl icon;
     QString area;
     bool systemUI = false;
@@ -66,6 +67,17 @@ void QMpsApplication::setName(const QString &name)
 {
     if (this->name() == name) return;
     d->name = name;
+}
+
+QColor QMpsApplication::theme() const
+{
+    return d->theme;
+}
+
+void QMpsApplication::setTheme(const QColor &theme)
+{
+    if (this->theme() == theme) return;
+    d->theme = theme;
 }
 
 QUrl QMpsApplication::icon() const
@@ -135,6 +147,9 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
                 break;
             case QVariant::String:
                 property.writeOnGadget(&ret, value.toString());
+                break;
+            case QVariant::Color:
+                property.writeOnGadget(&ret, QColor(value.toString()));
                 break;
             case QVariant::Url:
                 property.writeOnGadget(&ret, QUrl(value.toString()));

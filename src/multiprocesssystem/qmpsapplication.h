@@ -5,6 +5,7 @@
 #include <QtCore/QJsonObject>
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
+#include <QtGui/QColor>
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
 {
@@ -12,6 +13,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(int id READ id WRITE setID)
     Q_PROPERTY(QString key READ key WRITE setKey)
     Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(QColor theme READ theme WRITE setTheme)
     Q_PROPERTY(QUrl icon READ icon WRITE setIcon)
     Q_PROPERTY(QString area READ area WRITE setArea)
     Q_PROPERTY(bool systemUI READ isSystemUI WRITE setSystemUI)
@@ -34,6 +36,9 @@ public:
 
     QString name() const;
     void setName(const QString &name);
+
+    QColor theme() const;
+    void setTheme(const QColor &theme);
 
     QUrl icon() const;
     void setIcon(const QUrl &icon);
