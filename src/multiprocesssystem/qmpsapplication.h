@@ -10,6 +10,7 @@
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
 {
     Q_GADGET
+    Q_PROPERTY(bool valid READ isValid)
     Q_PROPERTY(int id READ id WRITE setID)
     Q_PROPERTY(QString key READ key WRITE setKey)
     Q_PROPERTY(QString name READ name WRITE setName)

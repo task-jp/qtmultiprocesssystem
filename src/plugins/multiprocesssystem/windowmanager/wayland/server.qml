@@ -74,15 +74,17 @@ WaylandCompositor {
             var current = applicationManager.current
             if (app.id === current.id)
                 return
-            if (!app.area) {
-                if (current.key in root.apps) {
-                    root.apps[current.key].enabled = false
-                }
-                applicationManager.current = app
-                if (app.key in root.apps) {
-                    root.apps[app.key].enabled = true
-                }
-            }
+            if (app.area)
+                return
+
+            if (!current.valid && !app.systemUI)
+                return
+
+            if (current.key in root.apps)
+                root.apps[current.key].enabled = false
+            applicationManager.current = app
+            if (app.key in root.apps)
+                root.apps[app.key].enabled = true
         }
     }
 }
