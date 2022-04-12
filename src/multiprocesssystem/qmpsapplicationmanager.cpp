@@ -18,7 +18,11 @@ QMpsApplicationManager::QMpsApplicationManager(const QString &prefix, QObject *p
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    for (const auto &app : QMpsApplicationFactory::apps(prefix)) {
+    auto apps = QMpsApplicationFactory::apps(prefix);
+    std::sort(apps.begin(), apps.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
+        return a.id() < b.id();
+    });
+    for (const auto &app : qAsConst(apps)) {
         d->apps.append(app);
         if (!app.isSystemUI())
             d->appsForMenu.append(app);
