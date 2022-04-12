@@ -18,6 +18,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(QString area READ area WRITE setArea)
     Q_PROPERTY(bool systemUI READ isSystemUI WRITE setSystemUI)
     Q_PROPERTY(bool autoStart READ isAutoStart WRITE setAutoStart)
+    Q_PROPERTY(bool daemon READ isDaemon WRITE setDaemon)
 public:
     QMpsApplication();
     QMpsApplication(const QMpsApplication &);
@@ -51,6 +52,9 @@ public:
 
     bool isAutoStart() const;
     void setAutoStart(bool autoStart);
+
+    bool isDaemon() const;
+    void setDaemon(bool daemon);
 
     bool isValid() const;
 

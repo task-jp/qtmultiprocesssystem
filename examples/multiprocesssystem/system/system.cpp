@@ -69,14 +69,21 @@ int main(int argc, char *argv[])
                     QMpsApplicationFactory::load(keys, &app);
             }
         }
+        qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
     } else {
-        url = QUrl(QStringLiteral("qrc:/multiprocesssystem/client.qml"));
+        const auto apps = QMpsApplicationFactory::apps(prefix + role);
+        Q_ASSERT(apps.count() == 1);
+        if (apps.first().isDaemon()) {
+            url = QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role));
+        } else {
+            url = QUrl(QStringLiteral("qrc:/multiprocesssystem/client.qml"));
+            qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
+        }
         QMpsApplicationFactory::load(prefix + role, &app);
     }
     qDebug() << url;
 
     qDebug() << role << appManType << winManType << type;
-    qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [&](QObject *obj, const QUrl &objUrl) {

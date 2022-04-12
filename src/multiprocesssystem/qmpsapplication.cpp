@@ -13,6 +13,7 @@ public:
     QString area;
     bool systemUI = false;
     bool autoStart = false;
+    bool daemon = false;
 };
 
 QMpsApplication::QMpsApplication() : d(new Private)
@@ -124,6 +125,17 @@ void QMpsApplication::setAutoStart(bool autoStart)
     d->autoStart = autoStart;
 }
 
+bool QMpsApplication::isDaemon() const
+{
+    return d->daemon;
+}
+
+void QMpsApplication::setDaemon(bool daemon)
+{
+    if (this->isDaemon() == daemon) return;
+    d->daemon = daemon;
+}
+
 bool QMpsApplication::isValid() const
 {
     return d->id > 0;
@@ -161,8 +173,8 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
                 qWarning() << type << key << value << "not supported";
                 break;
             }
-        } else {
-            qWarning() << key << "not found in json";
+//        } else {
+//            qWarning() << key << "not found in json";
         }
     }
     return ret;
