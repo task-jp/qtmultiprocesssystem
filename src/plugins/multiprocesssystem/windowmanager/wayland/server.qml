@@ -30,6 +30,10 @@ WaylandCompositor {
         var parent = main.findParent(app)
         var item = chromeComponent.createObject(parent, { "shellSurface": surface } )
         root.apps[key] = item
+        if (!app.systemUI) {
+            item.enabled = (applicationManager.current.key === key)
+        }
+
         return item
     }
 

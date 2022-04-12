@@ -18,12 +18,11 @@ QMpsApplicationManager::QMpsApplicationManager(const QString &prefix, QObject *p
     : QAbstractListModel(parent)
     , d(new Private)
 {
-    auto apps = QMpsApplicationFactory::apps(prefix);
-    std::sort(apps.begin(), apps.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
+    d->apps = QMpsApplicationFactory::apps(prefix);
+    std::sort(d->apps.begin(), d->apps.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
         return a.id() < b.id();
     });
-    for (const auto &app : qAsConst(apps)) {
-        d->apps.append(app);
+    for (const auto &app : qAsConst(d->apps)) {
         if (!app.isSystemUI())
             d->appsForMenu.append(app);
     }
