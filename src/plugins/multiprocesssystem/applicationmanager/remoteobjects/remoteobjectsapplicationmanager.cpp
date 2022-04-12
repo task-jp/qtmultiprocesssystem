@@ -18,8 +18,7 @@ void ApplicationManager::exec(int id, const QString &key)
         QStringList args {key};
         auto env = QProcess::systemEnvironment();
         env.append("XDG_SESSION_TYPE=wayland");
-        env.append("QT_WAYLAND_SHELL_INTEGRATION=ivi-shell");
-        env.append(QStringLiteral("QT_IVI_SURFACE_ID=%1").arg(id));
+        env.append("QT_WAYLAND_DISABLE_WINDOWDECORATION=1");
         process->setArguments(args);
         process->setEnvironment(env);
         connect(process, &QProcess::readyReadStandardOutput, this, [this]() {

@@ -70,7 +70,6 @@ int main(int argc, char *argv[])
         }
     } else {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/client.qml"));
-        qDebug() << role;
         QMpsApplicationFactory::load(prefix + role, &app);
     }
     qDebug() << url;

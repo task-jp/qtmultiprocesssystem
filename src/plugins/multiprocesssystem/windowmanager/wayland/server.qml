@@ -20,17 +20,25 @@ WaylandCompositor {
             onWidthChanged: handleResized()
             onHeightChanged: handleResized()
             function handleResized() {
-                shellSurface.sendConfigure(Qt.size(width, height));
+                if (width < 0 || height < 0)
+                    return
+                shellSurface.sendConfigure(Qt.size(width, height), WlShellSurface.NoneEdge);
             }
         }
     }
-    IviApplication {
-        onIviSurfaceCreated: {
-            var app = applicationManager.findByID(iviSurface.iviId)
-            var parent = main.findParent(app)
-            var item = chromeComponent.createObject(parent, { "shellSurface": iviSurface } )
-            item.handleResized()
-            root.apps[iviSurface.iviId] = item
+    WlShell {
+        onWlShellSurfaceCreated: {
+            shellSurface.titleChanged.connect(function() {
+                var key = shellSurface.title
+                console.debug(key)
+                if (key === Qt.application.name) // QPA changes title once with its name
+                    return
+                var app = applicationManager.findByKey(key)
+                var parent = main.findParent(app)
+                var item = chromeComponent.createObject(parent, { "shellSurface": shellSurface } )
+                item.handleResized()
+                root.apps[key] = item
+            })
         }
     }
 
