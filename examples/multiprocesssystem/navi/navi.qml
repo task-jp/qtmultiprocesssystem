@@ -5,6 +5,8 @@ import '../system'
 
 AbstractMain {
     id: root
+    name: 'navi'
+
     Map {
         anchors.fill: parent
 

@@ -4,6 +4,8 @@ import '../system'
 
 AbstractMain {
     id: root
+    name: 'radio'
+
     Label {
         anchors.centerIn: parent
         text: 'Radio'

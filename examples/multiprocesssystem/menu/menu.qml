@@ -5,6 +5,8 @@ import '../system'
 
 AbstractMain {
     id: root
+    name: 'menu'
+
     GridView {
         anchors.fill: parent
         cellWidth: root.width / 3

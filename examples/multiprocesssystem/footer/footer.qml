@@ -4,6 +4,7 @@ import '../system'
 
 AbstractMain {
     id: root
+    name: 'footer'
 
     Label {
         id: clock

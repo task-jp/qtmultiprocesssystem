@@ -5,6 +5,7 @@ import '../system'
 
 AbstractMain {
     id: root
+    name: 'header'
 
     RowLayout {
         anchors.fill: parent

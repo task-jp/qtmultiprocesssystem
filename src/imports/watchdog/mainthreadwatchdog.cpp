@@ -1,5 +1,6 @@
 #include "mainthreadwatchdog.h"
 #include <QtCore/QTimer>
+#include <QtMultiProcessSystem/QMpsWatchDogManager>
 
 class MainThreadWatchDog::Private
 {
@@ -11,12 +12,14 @@ MainThreadWatchDog::MainThreadWatchDog(QObject *parent)
     : QMpsWatchDog(parent)
     , d(new Private)
 {
-    auto timer = new QTimer(this);
-    connect(timer, &QTimer::timeout, this, [this]() {
-        if (d->application.isValid())
-            pang();
-    });
-    timer->start(1000);
+    if (QMpsWatchDogManager::instance()) {
+        auto timer = new QTimer(this);
+        connect(timer, &QTimer::timeout, this, [this]() {
+            if (d->application.isValid())
+                pang();
+        });
+        timer->start(1000);
+    }
 }
 
 MainThreadWatchDog::~MainThreadWatchDog() = default;
