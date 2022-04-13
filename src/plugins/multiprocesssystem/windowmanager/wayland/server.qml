@@ -1,4 +1,5 @@
 ﻿import QtQuick 2.15
+import QtQuick.Controls 2.15
 import QtWayland.Compositor 1.15
 import QtMultiProcessSystem.Internal 1.0
 import QtMultiProcessSystem.XdgShell 1.15
@@ -21,6 +22,22 @@ WaylandCompositor {
             onWidthChanged: handleResized(width, height)
             onHeightChanged: handleResized(width, height)
             signal handleResized(real width, real height)
+
+            property alias busy: busy.visible
+            MouseArea {
+                id: busy
+                anchors.fill: parent
+                visible: false
+                Rectangle {
+                    anchors.fill: parent
+                    opacity: 0.25
+                    color: 'white'
+                }
+                BusyIndicator {
+                    anchors.centerIn: parent
+                    running: parent.visible
+                }
+            }
         }
     }
 
@@ -86,6 +103,15 @@ WaylandCompositor {
                 var serial = shell.ping(client)
                 watchDog.pingSent(applicationManager.findByID(id), serial)
             }
+        }
+    }
+
+    Connections {
+        enabled: typeof watchDogManager !== 'undefined'
+        target: watchDogManager
+        function onInactiveChanged(method, application, inactive, msecs) {
+            var item = root.apps[application.id]
+            item.busy = inactive
         }
     }
 

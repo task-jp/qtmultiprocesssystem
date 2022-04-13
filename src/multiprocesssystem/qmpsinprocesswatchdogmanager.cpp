@@ -9,12 +9,13 @@ public:
     struct Ping {
         QString method;
         QMpsApplication application;
-        uint serial;
+        uint serial = 0;
         QDateTime dateTime = QDateTime::currentDateTime();
     };
     QReadWriteLock lock;
     QList<Ping> database;
     QTimer timer;
+    QHash<QMpsApplication, QDateTime> sleeping;
 };
 
 
@@ -30,7 +31,11 @@ QMpsInProcessWatchDogManager::QMpsInProcessWatchDogManager(QObject *parent)
             const auto &ping = d->database.at(i);
             const auto diff = ping.dateTime.msecsTo(now);
             if (diff > 1000) {
-                qWarning() << ping.application.key() << ping.method << diff << ping.serial;
+                if (!d->sleeping.contains(ping.application)) {
+                    d->sleeping.insert(ping.application, ping.dateTime);
+                    emit inactiveChanged(ping.method, ping.application, true, ping.dateTime.msecsTo(now));
+                    qWarning() << ping.application.key() << ping.method << diff << ping.serial;
+                }
             }
         }
     });
@@ -71,6 +76,10 @@ void QMpsInProcessWatchDogManager::pong(const QString &method, const QMpsApplica
         d->database.removeAt(i);
         if (d->database.isEmpty())
             d->timer.stop();
+
+        if (d->sleeping.contains(application)) {
+            emit inactiveChanged(method, application, false, d->sleeping.take(application).msecsTo(QDateTime::currentDateTime()));
+        }
         return;
     }
     qWarning() << method << serial << "not found";
