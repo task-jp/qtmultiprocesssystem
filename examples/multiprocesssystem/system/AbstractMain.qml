@@ -6,20 +6,24 @@ Item {
     anchors.fill: parent
     visible: enabled
 
-    property string name
+    property var application: applicationManager.findByKey(Qt.application.name)
+    SystemdWatchDog {
+        id: systemd
+    }
     MainThreadWatchDog {
         id: main
-        application: applicationManager.findByKey(root.name)
+        application: root.application
     }
     RenderThreadWatchDog {
         id: render
-        application: applicationManager.findByKey(root.name)
+        application: root.application
     }
     Timer {
         interval: 100 // TODO: settable
         repeat: true
-        running: typeof watchDogManager !== 'undefined'
+        running: typeof watchDogManager !== 'undefined' && Qt.application.name !== 'system'
         onTriggered: {
+            systemd.pang()
             main.pang()
             render.pang()
         }

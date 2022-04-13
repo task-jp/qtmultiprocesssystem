@@ -7,11 +7,13 @@ QT = quick multiprocesssystem
 SOURCES += \
         mainthreadwatchdog.cpp \
         renderthreadwatchdog.cpp \
+        systemdwatchdog.cpp \
         watchdog_plugin.cpp
 
 HEADERS += \
         mainthreadwatchdog.h \
         renderthreadwatchdog.h \
+        systemdwatchdog.h \
         watchdog_plugin.h
 
 qtHaveModule(waylandcompositor) {
@@ -19,6 +21,15 @@ qtHaveModule(waylandcompositor) {
     SOURCES += xdgshellwatchdog.cpp
     HEADERS += xdgshellwatchdog.h
 }
+
+config_systemd_watchdog {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += libsystemd
+    DEFINES += QT_FEATURE_systemd_watchdog=1
+} else {
+    DEFINES += QT_FEATURE_systemd_watchdog=-1
+}
+
 
 CONFIG += qmltypes install_qmltypes
 load(qml_plugin)

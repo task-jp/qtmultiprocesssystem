@@ -29,14 +29,7 @@ QList<QMpsApplication> QMpsApplicationFactory::apps(const QString &prefix)
 
 QStringList QMpsApplicationFactory::keys()
 {
-    QStringList list;
-
-    const auto keyMap = loader()->keyMap();
-    const auto cend = keyMap.constEnd();
-    for (auto it = keyMap.constBegin(); it != cend; ++it)
-        if (!list.contains(it.value()))
-            list += it.value();
-    return list;
+    return loader()->keyMap().values();
 }
 
 QObject *QMpsApplicationFactory::load(const QString &key, QObject *parent)

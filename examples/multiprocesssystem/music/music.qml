@@ -6,7 +6,6 @@ import '../system'
 
 AbstractMain {
     id: root
-    name: 'music'
 
     Label {
         anchors.centerIn: parent

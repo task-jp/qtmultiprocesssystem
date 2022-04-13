@@ -4,7 +4,6 @@ import '../system'
 
 AbstractMain {
     id: root
-    name: 'weather'
 
     Label {
         anchors.centerIn: parent

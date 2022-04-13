@@ -4,7 +4,6 @@ import '../system'
 
 AbstractMain {
     id: root
-    name: 'settings'
 
     Label {
         anchors.centerIn: parent

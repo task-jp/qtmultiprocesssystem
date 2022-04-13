@@ -72,7 +72,7 @@ WaylandCompositor {
 
     XdgShell {
         id: shell
-        onPong: watchDog.pong(serial)
+        onPong: xdgWatchDog.pong(serial)
         onToplevelCreated: {
             toplevel.titleChanged.connect(function() {
                 var item = root.add(toplevel.title, xdgSurface)
@@ -88,19 +88,22 @@ WaylandCompositor {
     }
 
     XdgShellWatchDog {
-        id: watchDog
+        id: xdgWatchDog
     }
-
+    SystemdWatchDog {
+        id: systemdWatchDog
+    }
     Timer {
         interval: 100 // TODO: settable
         repeat: true
         running: typeof watchDogManager !== 'undefined'
         onTriggered: {
+            systemdWatchDog.pang()
             for (var id in apps) {
                 var item = root.apps[id]
                 var client = item.shellSurface.surface.client
                 var serial = shell.ping(client)
-                watchDog.ping(applicationManager.findByID(id), serial)
+                xdgWatchDog.ping(applicationManager.findByID(id), serial)
             }
         }
     }

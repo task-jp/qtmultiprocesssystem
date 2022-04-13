@@ -6,7 +6,7 @@ class QMpsApplication::Private : public QSharedData
 {
 public:
     int id = 0;
-    QString key;
+    QString key = QLatin1String("main");
     QString name;
     QColor theme;
     QUrl icon;

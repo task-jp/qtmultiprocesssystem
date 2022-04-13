@@ -76,6 +76,7 @@ int main(int argc, char *argv[])
     if (!args.isEmpty()) {
         role = args.first();
     }
+    app.setApplicationName(role);
 
     QUrl url;
     if (type == QMpsAbstractManagerFactory::Server) {

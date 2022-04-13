@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtMultiProcessSystem.Internal 1.0
+import QtMultiProcessSystem.WatchDog 1.15
 
 Main {
     id: root
@@ -8,6 +9,34 @@ Main {
         id: chromeComponent
         Loader {
             anchors.fill: parent
+        }
+    }
+
+    property var application: applicationManager.findByKey('main')
+    SystemdWatchDog {
+        id: systemd
+    }
+    MainThreadWatchDog {
+        id: main
+        application: root.application
+    }
+    RenderThreadWatchDog {
+        id: render
+        application: root.application
+    }
+    Timer {
+        running: true
+        repeat: true
+        interval: 100 // TODO: settable
+        onTriggered: systemd.pang()
+    }
+    Timer {
+        interval: 100 // TODO: settable
+        repeat: true
+        running: typeof watchDogManager !== 'undefined'
+        onTriggered: {
+            main.pang()
+            render.pang()
         }
     }
 

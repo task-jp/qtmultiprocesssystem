@@ -5,7 +5,6 @@ import '../system'
 
 AbstractMain {
     id: root
-    name: 'menu'
 
     GridView {
         anchors.fill: parent
