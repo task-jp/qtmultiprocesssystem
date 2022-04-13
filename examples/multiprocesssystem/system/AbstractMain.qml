@@ -8,7 +8,11 @@ Item {
 
     property string name
     MainThreadWatchDog {
-        id: watchDog
+        id: main
+        application: applicationManager.findByKey(root.name)
+    }
+    RenderThreadWatchDog {
+        id: render
         application: applicationManager.findByKey(root.name)
     }
     Timer {
@@ -16,7 +20,8 @@ Item {
         repeat: true
         running: typeof watchDogManager !== 'undefined'
         onTriggered: {
-            watchDog.pang()
+            main.pang()
+            render.pang()
         }
     }
 }

@@ -93,6 +93,9 @@ void WatchDogManager::pang(const QString &method, const QMpsApplication &applica
         if (ping.application != application) continue;
         if (ping.serial > 0) continue;
         d->database[i].dateTime = QDateTime::currentDateTime();
+        if (d->sleeping.contains(application)) {
+            emit inactiveChanged(method, application, false, d->sleeping.take(application).msecsTo(QDateTime::currentDateTime()));
+        }
         return;
     }
 
