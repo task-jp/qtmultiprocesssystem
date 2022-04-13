@@ -19,6 +19,8 @@ MainThreadWatchDog::MainThreadWatchDog(QObject *parent)
                 pang();
         });
         timer->start(1000);
+    } else {
+        qWarning() << "watch dog manager is disabled";
     }
 }
 

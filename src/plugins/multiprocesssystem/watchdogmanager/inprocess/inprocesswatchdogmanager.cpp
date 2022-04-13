@@ -109,33 +109,39 @@ void InProcessWatchDogManagerServer::pang(const QString &method, const QMpsAppli
         d->timer.start();
 }
 
-
 InProcessWatchDogManagerClient::InProcessWatchDogManagerClient(QObject *parent)
     : InProcessWatchDogManager(parent)
 {
+    if (!server)
+        qWarning() << "in-process watchdog doesn't support current setup";
 }
 
 void InProcessWatchDogManagerClient::started(const QMpsApplication &application)
 {
+    if (!server) return;
     emit server->started(application);
 }
 
 void InProcessWatchDogManagerClient::finished(const QMpsApplication &application)
 {
+    if (!server) return;
     emit server->finished(application);
 }
 
 void InProcessWatchDogManagerClient::ping(const QString &method, const QMpsApplication &application, uint serial)
 {
+    if (!server) return;
     emit server->ping(method, application, serial);
 }
 
 void InProcessWatchDogManagerClient::pong(const QString &method, const QMpsApplication &application, uint serial)
 {
+    if (!server) return;
     emit server->pong(method, application, serial);
 }
 
 void InProcessWatchDogManagerClient::pang(const QString &method, const QMpsApplication &application)
 {
+    if (!server) return;
     emit server->pang(method, application);
 }
