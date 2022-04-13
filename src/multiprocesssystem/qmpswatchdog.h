@@ -13,12 +13,9 @@ public:
     virtual QString method() const = 0;
 
 public Q_SLOTS:
-    virtual void pingSent(const QMpsApplication &app, uint serial) = 0;
-    virtual void pongReceived(uint serial) = 0;
-
-protected:
-    void pingSentImpl(const QMpsApplication &app, uint serial);
-    void pongReceivedImpl(uint serial);
+    void ping(const QMpsApplication &app, uint serial);
+    void pong(const QMpsApplication &app, uint serial);
+    void pang(const QMpsApplication &app);
 };
 
 #endif // QMPSWATCHDOG_H

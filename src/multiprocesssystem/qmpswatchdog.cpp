@@ -5,12 +5,17 @@ QMpsWatchDog::QMpsWatchDog(QObject *parent)
     : QObject(parent)
 {}
 
-void QMpsWatchDog::pingSentImpl(const QMpsApplication &app, uint serial)
+void QMpsWatchDog::ping(const QMpsApplication &app, uint serial)
 {
-    QMpsWatchDogManager::instance()->pingSent(method(), app, serial);
+    QMpsWatchDogManager::instance()->ping(method(), app, serial);
 }
 
-void QMpsWatchDog::pongReceivedImpl(uint serial)
+void QMpsWatchDog::pong(const QMpsApplication &app, uint serial)
 {
-    QMpsWatchDogManager::instance()->pongReceived(method(), serial);
+    QMpsWatchDogManager::instance()->pong(method(), app, serial);
+}
+
+void QMpsWatchDog::pang(const QMpsApplication &app)
+{
+    QMpsWatchDogManager::instance()->pang(method(), app);
 }

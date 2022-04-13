@@ -204,3 +204,8 @@ QDataStream &operator>>(QDataStream &in, QMpsApplication &application)
     }
     return in;
 }
+
+uint qHash(const QMpsApplication &application, uint seed)
+{
+    return qHash(application.id(), seed);
+}

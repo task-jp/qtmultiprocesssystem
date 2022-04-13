@@ -15,8 +15,9 @@ public:
 public Q_SLOTS:
     virtual void started(const QMpsApplication &application) = 0;
     virtual void finished(const QMpsApplication &application) = 0;
-    virtual void pingSent(const QString &method, const QMpsApplication &application, uint serial) = 0;
-    virtual void pongReceived(const QString &method, uint serial) = 0;
+    virtual void ping(const QString &method, const QMpsApplication &application, uint serial) = 0;
+    virtual void pong(const QString &method, const QMpsApplication &application, uint serial) = 0;
+    virtual void pang(const QString &method, const QMpsApplication &application) = 0;
 };
 
 #endif // QMPSWATCHDOGMANAGER_H

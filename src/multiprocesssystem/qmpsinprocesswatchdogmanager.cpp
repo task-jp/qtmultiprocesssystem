@@ -26,7 +26,6 @@ QMpsInProcessWatchDogManager::QMpsInProcessWatchDogManager(QObject *parent)
     connect(&d->timer, &QTimer::timeout, [this]() {
         QReadLocker locker(&d->lock);
         const auto now = QDateTime::currentDateTime();
-        qDebug() << d->database.length();
         for (int i = 0; i < d->database.length(); i++) {
             const auto &ping = d->database.at(i);
             const auto diff = ping.dateTime.msecsTo(now);
@@ -53,7 +52,7 @@ void QMpsInProcessWatchDogManager::finished(const QMpsApplication &application)
     }
 }
 
-void QMpsInProcessWatchDogManager::pingSent(const QString &method, const QMpsApplication &application, uint serial)
+void QMpsInProcessWatchDogManager::ping(const QString &method, const QMpsApplication &application, uint serial)
 {
     QWriteLocker locker(&d->lock);
     d->database.append({method, application, serial});
@@ -61,20 +60,35 @@ void QMpsInProcessWatchDogManager::pingSent(const QString &method, const QMpsApp
         d->timer.start();
 }
 
-void QMpsInProcessWatchDogManager::pongReceived(const QString &method, uint serial)
+void QMpsInProcessWatchDogManager::pong(const QString &method, const QMpsApplication &application, uint serial)
 {
     QWriteLocker locker(&d->lock);
     for (int i = 0; i < d->database.length(); i++) {
         const auto &ping = d->database.at(i);
         if (ping.method != method) continue;
+        if (ping.application != application) continue;
         if (ping.serial != serial) continue;
-        const auto diff = ping.dateTime.msecsTo(QDateTime::currentDateTime());
-        qDebug() << ping.application.key() << method << diff;
         d->database.removeAt(i);
         if (d->database.isEmpty())
             d->timer.stop();
         return;
     }
-    locker.unlock();
     qWarning() << method << serial << "not found";
+}
+
+void QMpsInProcessWatchDogManager::pang(const QString &method, const QMpsApplication &application)
+{
+    QWriteLocker locker(&d->lock);
+    for (int i = 0; i < d->database.length(); i++) {
+        const auto &ping = d->database.at(i);
+        if (ping.method != method) continue;
+        if (ping.application != application) continue;
+        if (ping.serial > 0) continue;
+        d->database[i].dateTime = QDateTime::currentDateTime();
+        return;
+    }
+
+    d->database.append({method, application});
+    if (!d->timer.isActive())
+        d->timer.start();
 }

@@ -1,6 +1,7 @@
 ﻿import QtQuick 2.15
 import QtWayland.Compositor 1.15
 import QtMultiProcessSystem.Internal 1.0
+import QtMultiProcessSystem.XdgShell 1.15
 
 WaylandCompositor {
     id: root
@@ -29,7 +30,7 @@ WaylandCompositor {
         var app = applicationManager.findByKey(key)
         var parent = main.findParent(app)
         var item = chromeComponent.createObject(parent, { "shellSurface": surface } )
-        root.apps[key] = item
+        root.apps[app.id] = item
         if (!app.systemUI) {
             item.enabled = (applicationManager.current.key === key)
         }
@@ -53,6 +54,8 @@ WaylandCompositor {
     }
 
     XdgShell {
+        id: shell
+        onPong: watchDog.pongReceived(serial)
         onToplevelCreated: {
             toplevel.titleChanged.connect(function() {
                 var item = root.add(toplevel.title, xdgSurface)
@@ -64,6 +67,25 @@ WaylandCompositor {
                     toplevel.sendConfigure(Qt.size(width, height), []);
                 })
             })
+        }
+    }
+
+    XdgShellWatchDog {
+        id: watchDog
+    }
+
+    Timer {
+        id: watchDogTimer
+        interval: 1000 // TODO: settable
+        repeat: true
+        running: typeof watchDogManager !== 'undefined'
+        onTriggered: {
+            for (var id in apps) {
+                var item = root.apps[id]
+                var client = item.shellSurface.surface.client
+                var serial = shell.ping(client)
+                watchDog.pingSent(applicationManager.findByID(id), serial)
+            }
         }
     }
 
@@ -80,11 +102,11 @@ WaylandCompositor {
             if (!current.valid && !app.systemUI)
                 return
 
-            if (current.key in root.apps)
-                root.apps[current.key].enabled = false
+            if (current.id in root.apps)
+                root.apps[current.id].enabled = false
             applicationManager.current = app
-            if (app.key in root.apps)
-                root.apps[app.key].enabled = true
+            if (app.id in root.apps)
+                root.apps[app.id].enabled = true
         }
     }
 }

@@ -14,8 +14,9 @@ public:
 public Q_SLOTS:
     void started(const QMpsApplication &application) override;
     void finished(const QMpsApplication &application) override;
-    void pingSent(const QString &method, const QMpsApplication &application, uint serial) override;
-    void pongReceived(const QString &method, uint serial) override;
+    void ping(const QString &method, const QMpsApplication &application, uint serial) override;
+    void pong(const QString &method, const QMpsApplication &application, uint serial) override;
+    void pang(const QString &method, const QMpsApplication &application) override;
 
 private:
     class Private;
