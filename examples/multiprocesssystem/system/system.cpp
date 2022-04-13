@@ -7,9 +7,10 @@
 #include <QtMultiProcessSystem/QMpsApplicationManager>
 #include <QtMultiProcessSystem/QMpsWindowManagerFactory>
 #include <QtMultiProcessSystem/QMpsWindowManager>
+#include <QtMultiProcessSystem/QMpsWatchDogManagerFactory>
+#include <QtMultiProcessSystem/QMpsWatchDogManager>
 #include <QtMultiProcessSystem/QMpsApplicationFactory>
 #include <QtMultiProcessSystem/QMpsApplication>
-#include <QtMultiProcessSystem/QMpsInProcessWatchDogManager>
 
 int main(int argc, char *argv[])
 {
@@ -19,8 +20,10 @@ int main(int argc, char *argv[])
     QCommandLineParser parser;
     QCommandLineOption appManOption({{"a", "application-manager"}, "Application Manager Backend", "inprocess"});
     parser.addOption(appManOption);
-    QCommandLineOption winManOption({{"w", "window-manager"}, "Window Manager Backend", "native"});
+    QCommandLineOption winManOption({{"w", "window-manager"}, "Window Manager Backend", "monolithic"});
     parser.addOption(winManOption);
+    QCommandLineOption watManOption({{"d", "watchdog-manager"}, "WatchDogManager Backend", "none"});
+    parser.addOption(watManOption);
     parser.addPositionalArgument("app", "application to launch");
     parser.process(app);
     auto args = parser.positionalArguments();
@@ -39,7 +42,7 @@ int main(int argc, char *argv[])
     if (QMpsApplicationManagerFactory::keys().contains(appManType.toLower())) {
         context->setContextProperty("applicationManager", QMpsApplicationManagerFactory::create(appManType, type, prefix, &app));
     } else {
-        qFatal("Application Manager backend '%s' not found", qUtf8Printable(appManType));
+        qFatal("Application Manager backend '%s' not found in %s", qUtf8Printable(appManType), qUtf8Printable(QMpsApplicationManagerFactory::keys().join(", ")));
     }
     qputenv("QT_MULTIPROCESSSYSTEM_APPLICATIONMANAGER", appManType.toUtf8());
 
@@ -52,12 +55,22 @@ int main(int argc, char *argv[])
     if (QMpsWindowManagerFactory::keys().contains(winManType.toLower())) {
         QMpsWindowManagerFactory::create(winManType, type, &app);
     } else {
-        qFatal("Window Manager backend '%s' not found", qUtf8Printable(winManType));
+        qFatal("Window Manager backend '%s' not found in %s", qUtf8Printable(winManType), qUtf8Printable(QMpsWindowManagerFactory::keys().join(", ")));
     }
     qputenv("QT_MULTIPROCESSSYSTEM_WINDOWMANAGER", winManType.toUtf8());
 
-    QMpsInProcessWatchDogManager wdm;
-    context->setContextProperty("watchDogManager", &wdm);
+    QString watManType = QLatin1String("none");
+    if (parser.isSet(watManOption)) {
+        watManType = parser.value(watManOption);
+    } else if (qEnvironmentVariableIsSet("QT_MULTIPROCESSSYSTEM_WATCHDOGMANAGER")) {
+        watManType = qEnvironmentVariable("QT_MULTIPROCESSSYSTEM_WATCHDOGMANAGER");
+    }
+    if (QMpsWatchDogManagerFactory::keys().contains(watManType.toLower())) {
+        context->setContextProperty("watchDogManager", QMpsWatchDogManagerFactory::create(watManType, type, &app));
+    } else if (watManType.toLower() != "none") {
+        qFatal("WatchDog Manager backend '%s' not found in %s", qUtf8Printable(watManType), qUtf8Printable(QMpsWatchDogManagerFactory::keys().join(", ")));
+    }
+    qputenv("QT_MULTIPROCESSSYSTEM_WATCHDOGMANAGER", watManType.toUtf8());
 
     QString role = QLatin1String("system");
     if (!args.isEmpty()) {

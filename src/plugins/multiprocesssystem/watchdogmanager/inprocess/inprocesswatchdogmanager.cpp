@@ -1,9 +1,15 @@
-#include "qmpsinprocesswatchdogmanager.h"
+#include "inprocesswatchdogmanager.h"
 
 #include <QtCore/QReadWriteLock>
 #include <QtCore/QTimer>
 
-class QMpsInProcessWatchDogManager::Private
+InProcessWatchDogManager *InProcessWatchDogManager::server = nullptr;
+
+InProcessWatchDogManager::InProcessWatchDogManager(QObject *parent)
+    : QMpsWatchDogManager(parent)
+{}
+
+class InProcessWatchDogManagerServer::Private
 {
 public:
     struct Ping {
@@ -18,11 +24,12 @@ public:
     QHash<QMpsApplication, QDateTime> sleeping;
 };
 
-
-QMpsInProcessWatchDogManager::QMpsInProcessWatchDogManager(QObject *parent)
-    : QMpsWatchDogManager(parent)
+InProcessWatchDogManagerServer::InProcessWatchDogManagerServer(QObject *parent)
+    : InProcessWatchDogManager(parent)
     , d(new Private)
 {
+    server = this;
+
     d->timer.setInterval(250);
     connect(&d->timer, &QTimer::timeout, [this]() {
         QReadLocker locker(&d->lock);
@@ -41,14 +48,14 @@ QMpsInProcessWatchDogManager::QMpsInProcessWatchDogManager(QObject *parent)
     });
 }
 
-QMpsInProcessWatchDogManager::~QMpsInProcessWatchDogManager() = default;
+InProcessWatchDogManagerServer::~InProcessWatchDogManagerServer() = default;
 
-void QMpsInProcessWatchDogManager::started(const QMpsApplication &application)
+void InProcessWatchDogManagerServer::started(const QMpsApplication &application)
 {
     Q_UNUSED(application);
 }
 
-void QMpsInProcessWatchDogManager::finished(const QMpsApplication &application)
+void InProcessWatchDogManagerServer::finished(const QMpsApplication &application)
 {
     QWriteLocker locker(&d->lock);
     for (int i = d->database.length() - 1; i >= 0 ; i--) {
@@ -57,7 +64,7 @@ void QMpsInProcessWatchDogManager::finished(const QMpsApplication &application)
     }
 }
 
-void QMpsInProcessWatchDogManager::ping(const QString &method, const QMpsApplication &application, uint serial)
+void InProcessWatchDogManagerServer::ping(const QString &method, const QMpsApplication &application, uint serial)
 {
     QWriteLocker locker(&d->lock);
     d->database.append({method, application, serial});
@@ -65,7 +72,7 @@ void QMpsInProcessWatchDogManager::ping(const QString &method, const QMpsApplica
         d->timer.start();
 }
 
-void QMpsInProcessWatchDogManager::pong(const QString &method, const QMpsApplication &application, uint serial)
+void InProcessWatchDogManagerServer::pong(const QString &method, const QMpsApplication &application, uint serial)
 {
     QWriteLocker locker(&d->lock);
     for (int i = 0; i < d->database.length(); i++) {
@@ -85,7 +92,7 @@ void QMpsInProcessWatchDogManager::pong(const QString &method, const QMpsApplica
     qWarning() << method << serial << "not found";
 }
 
-void QMpsInProcessWatchDogManager::pang(const QString &method, const QMpsApplication &application)
+void InProcessWatchDogManagerServer::pang(const QString &method, const QMpsApplication &application)
 {
     QWriteLocker locker(&d->lock);
     for (int i = 0; i < d->database.length(); i++) {
@@ -100,4 +107,35 @@ void QMpsInProcessWatchDogManager::pang(const QString &method, const QMpsApplica
     d->database.append({method, application});
     if (!d->timer.isActive())
         d->timer.start();
+}
+
+
+InProcessWatchDogManagerClient::InProcessWatchDogManagerClient(QObject *parent)
+    : InProcessWatchDogManager(parent)
+{
+}
+
+void InProcessWatchDogManagerClient::started(const QMpsApplication &application)
+{
+    emit server->started(application);
+}
+
+void InProcessWatchDogManagerClient::finished(const QMpsApplication &application)
+{
+    emit server->finished(application);
+}
+
+void InProcessWatchDogManagerClient::ping(const QString &method, const QMpsApplication &application, uint serial)
+{
+    emit server->ping(method, application, serial);
+}
+
+void InProcessWatchDogManagerClient::pong(const QString &method, const QMpsApplication &application, uint serial)
+{
+    emit server->pong(method, application, serial);
+}
+
+void InProcessWatchDogManagerClient::pang(const QString &method, const QMpsApplication &application)
+{
+    emit server->pang(method, application);
 }

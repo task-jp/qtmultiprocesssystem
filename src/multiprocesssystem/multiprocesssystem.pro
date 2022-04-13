@@ -9,9 +9,10 @@ HEADERS += \
     qmpsapplicationmanagerfactory.h \
     qmpsapplicationmanagerplugin.h \
     qmpsapplicationplugin.h \
-    qmpsinprocesswatchdogmanager.h \
     qmpswatchdog.h \
     qmpswatchdogmanager.h \
+    qmpswatchdogmanagerfactory.h \
+    qmpswatchdogmanagerplugin.h \
     qmpswindowmanager.h \
     qmpswindowmanagerfactory.h \
     qmpswindowmanagerplugin.h
@@ -23,14 +24,15 @@ SOURCES += \
     qmpsapplicationmanagerfactory.cpp \
     qmpsapplicationmanagerplugin.cpp \
     qmpsapplicationplugin.cpp \
-    qmpsinprocesswatchdogmanager.cpp \
     qmpswatchdog.cpp \
     qmpswatchdogmanager.cpp \
+    qmpswatchdogmanagerfactory.cpp \
+    qmpswatchdogmanagerplugin.cpp \
     qmpswindowmanager.cpp \
     qmpswindowmanagerfactory.cpp \
     qmpswindowmanagerplugin.cpp
 
 QT = core-private quick
 CONFIG += git_build
-MODULE_PLUGIN_TYPES = multiprocesssystem/applicationmanager multiprocesssystem/windowmanager multiprocesssystem/application
+MODULE_PLUGIN_TYPES = multiprocesssystem/applicationmanager multiprocesssystem/windowmanager multiprocesssystem/watchdogmanager multiprocesssystem/application
 load(qt_module)

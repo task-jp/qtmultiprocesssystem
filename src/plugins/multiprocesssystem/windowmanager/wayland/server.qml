@@ -108,7 +108,7 @@ WaylandCompositor {
 
     Connections {
         enabled: typeof watchDogManager !== 'undefined'
-        target: watchDogManager
+        target: enabled ? watchDogManager : null
         function onInactiveChanged(method, application, inactive, msecs) {
             var item = root.apps[application.id]
             item.busy = inactive
