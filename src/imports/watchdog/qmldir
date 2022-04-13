@@ -1,0 +1,2 @@
+module QtMultiProcessSystem.WatchDog
+plugin declarative_qtmultiprocesssystem_watchdog

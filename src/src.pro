@@ -5,7 +5,5 @@ SUBDIRS += multiprocesssystem
 SUBDIRS += plugins
 plugins.depends += multiprocesssystem
 
-qtHaveModule(qml) {
-    SUBDIRS += imports
-    imports.depends += multiprocesssystem
-}
+SUBDIRS += imports
+imports.depends += multiprocesssystem

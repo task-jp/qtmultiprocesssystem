@@ -2,7 +2,7 @@
 import QtQuick.Controls 2.15
 import QtWayland.Compositor 1.15
 import QtMultiProcessSystem.Internal 1.0
-import QtMultiProcessSystem.XdgShell 1.15
+import QtMultiProcessSystem.WatchDog 1.15
 
 WaylandCompositor {
     id: root
