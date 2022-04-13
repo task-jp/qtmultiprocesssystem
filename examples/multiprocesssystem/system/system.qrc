@@ -3,6 +3,7 @@
         <file>system.qml</file>
         <file>smartphone_hand.png</file>
         <file>Skin.qml</file>
+        <file>AbstractMain.qml</file>
     </qresource>
     <qresource prefix="/">
         <file>qtquickcontrols2.conf</file>

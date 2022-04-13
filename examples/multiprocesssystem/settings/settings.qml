@@ -1,10 +1,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import '../system'
 
-Item {
+AbstractMain {
     id: root
-    anchors.fill: parent
-    visible: enabled
     Label {
         anchors.centerIn: parent
         text: 'Settings'

@@ -1,17 +1,19 @@
 import QtQuick 2.15
 import QtLocation 5.15
 import QtPositioning 5.15
+import '../system'
 
-Map {
+AbstractMain {
     id: root
-    anchors.fill: parent
-    visible: enabled
+    Map {
+        anchors.fill: parent
 
-    plugin: Plugin {
-        id: mapPlugin
-        name: "osm"
+        plugin: Plugin {
+            id: mapPlugin
+            name: "osm"
+        }
+
+        center: QtPositioning.coordinate(59.91, 10.75) // Oslo
+        zoomLevel: 19
     }
-
-    center: QtPositioning.coordinate(59.91, 10.75) // Oslo
-    zoomLevel: 19
 }
