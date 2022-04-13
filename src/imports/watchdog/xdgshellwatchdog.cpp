@@ -1,25 +1,27 @@
 #include "xdgshellwatchdog.h"
+#include <QtMultiProcessSystem/QMpsWatchDog>
 
 class XdgShellWatchDog::Private
 {
 public:
+    QMpsWatchDog watchDog = QMpsWatchDog("xdg-shell");
     QMap<uint, QMpsApplication> data;
 };
 
 XdgShellWatchDog::XdgShellWatchDog(QObject *parent)
-    : QMpsWatchDog(parent)
+    : QObject(parent)
     , d(new Private)
 {}
 
 XdgShellWatchDog::~XdgShellWatchDog() = default;
 
-void XdgShellWatchDog::pingSent(const QMpsApplication &application, uint serial)
+void XdgShellWatchDog::ping(const QMpsApplication &application, uint serial)
 {
     d->data.insert(serial, application);
-    ping(application, serial);
+    d->watchDog.ping(application, serial);
 }
 
-void XdgShellWatchDog::pongReceived(uint serial)
+void XdgShellWatchDog::pong(uint serial)
 {
-    pong(d->data.take(serial), serial);
+    d->watchDog.pong(d->data.take(serial), serial);
 }

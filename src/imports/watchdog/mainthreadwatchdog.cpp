@@ -1,14 +1,15 @@
 #include "mainthreadwatchdog.h"
-#include <QtMultiProcessSystem/QMpsWatchDogManager>
+#include <QtMultiProcessSystem/QMpsWatchDog>
 
 class MainThreadWatchDog::Private
 {
 public:
+    QMpsWatchDog watchDog = QMpsWatchDog("main-thread");
     QMpsApplication application;
 };
 
 MainThreadWatchDog::MainThreadWatchDog(QObject *parent)
-    : QMpsWatchDog(parent)
+    : QObject(parent)
     , d(new Private)
 {}
 
@@ -28,5 +29,5 @@ void MainThreadWatchDog::setApplication(const QMpsApplication &application)
 
 void MainThreadWatchDog::pang()
 {
-    QMpsWatchDog::pang(d->application);
+    d->watchDog.pang(d->application);
 }

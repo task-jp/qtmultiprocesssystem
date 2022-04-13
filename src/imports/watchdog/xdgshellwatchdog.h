@@ -4,9 +4,8 @@
 #include <QtCore/QObject>
 #include <QtQml/qqml.h>
 #include <QtMultiProcessSystem/QMpsApplication>
-#include <QtMultiProcessSystem/QMpsWatchDog>
 
-class XdgShellWatchDog : public QMpsWatchDog
+class XdgShellWatchDog : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
@@ -15,11 +14,9 @@ public:
     explicit XdgShellWatchDog(QObject *parent = nullptr);
     ~XdgShellWatchDog() override;
 
-    QString method() const override { return QStringLiteral("xdgshell"); }
-
 public slots:
-    void pingSent(const QMpsApplication &application, uint serial);
-    void pongReceived(uint serial);
+    void ping(const QMpsApplication &application, uint serial);
+    void pong(uint serial);
 
 private:
     class Private;

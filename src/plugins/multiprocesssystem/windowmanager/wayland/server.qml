@@ -72,7 +72,7 @@ WaylandCompositor {
 
     XdgShell {
         id: shell
-        onPong: watchDog.pongReceived(serial)
+        onPong: watchDog.pong(serial)
         onToplevelCreated: {
             toplevel.titleChanged.connect(function() {
                 var item = root.add(toplevel.title, xdgSurface)
@@ -100,7 +100,7 @@ WaylandCompositor {
                 var item = root.apps[id]
                 var client = item.shellSurface.surface.client
                 var serial = shell.ping(client)
-                watchDog.pingSent(applicationManager.findByID(id), serial)
+                watchDog.ping(applicationManager.findByID(id), serial)
             }
         }
     }

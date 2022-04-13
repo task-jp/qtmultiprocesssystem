@@ -4,9 +4,8 @@
 #include <QtCore/QObject>
 #include <QtQml/qqml.h>
 #include <QtMultiProcessSystem/QMpsApplication>
-#include <QtMultiProcessSystem/QMpsWatchDog>
 
-class MainThreadWatchDog : public QMpsWatchDog
+class MainThreadWatchDog : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
@@ -15,8 +14,6 @@ class MainThreadWatchDog : public QMpsWatchDog
 public:
     explicit MainThreadWatchDog(QObject *parent = nullptr);
     ~MainThreadWatchDog() override;
-
-    QString method() const override { return QStringLiteral("mainthread"); }
 
     QMpsApplication application() const;
 
