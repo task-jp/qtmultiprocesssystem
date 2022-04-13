@@ -8,6 +8,15 @@ Item {
 
     property string name
     MainThreadWatchDog {
+        id: watchDog
         application: applicationManager.findByKey(root.name)
+    }
+    Timer {
+        interval: 100 // TODO: settable
+        repeat: true
+        running: typeof watchDogManager !== 'undefined'
+        onTriggered: {
+            watchDog.pang()
+        }
     }
 }

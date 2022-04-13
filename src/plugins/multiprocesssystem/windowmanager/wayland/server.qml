@@ -92,8 +92,7 @@ WaylandCompositor {
     }
 
     Timer {
-        id: watchDogTimer
-        interval: 1000 // TODO: settable
+        interval: 100 // TODO: settable
         repeat: true
         running: typeof watchDogManager !== 'undefined'
         onTriggered: {
