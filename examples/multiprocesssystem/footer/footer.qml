@@ -1,7 +1,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import '../system'
 
-Item {
+AbstractMain {
+    id: root
+
     Label {
         id: clock
         anchors.centerIn: parent
