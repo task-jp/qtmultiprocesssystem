@@ -41,6 +41,14 @@ void ApplicationManager::exec(int id, const QString &key)
         });
         process->start();
         connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), process, &QProcess::deleteLater);
+        connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this](int exitCode, QProcess::ExitStatus exitStatus) {
+            const auto process = qobject_cast<QProcess *>(sender());
+            if (exitStatus == QProcess::NormalExit) {
+                qDebug() << process->objectName() << "exited with" << exitCode;
+            } else {
+                qWarning() << process->objectName() << "crashed with" << exitCode;
+            }
+        });
         connect(process, &QProcess::destroyed, process, &QProcess::terminate);
         connect(process, &QProcess::destroyed, [this, id]() { apps.remove(id); });
         if (process->waitForStarted()) {
