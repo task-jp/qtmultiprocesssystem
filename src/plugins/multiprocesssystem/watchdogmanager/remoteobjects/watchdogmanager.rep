@@ -1,0 +1,11 @@
+#include "qmpsapplication.h"
+
+class WatchDogManager
+{
+    SLOT(void started(const QMpsApplication &application))
+    SLOT(void finished(const QMpsApplication &application))
+    SLOT(void ping(const QString &method, const QMpsApplication &application, uint serial))
+    SLOT(void pong(const QString &method, const QMpsApplication &application, uint serial))
+    SLOT(void pang(const QString &method, const QMpsApplication &application))
+    SIGNAL(inactiveChanged(const QString &method, const QMpsApplication &application, bool inactive, int msecs))
+};

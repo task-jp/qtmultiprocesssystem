@@ -3,6 +3,6 @@
 class ApplicationManager
 {
     PROP(QMpsApplication current)
-    SLOT(exec(int id, const QString &key))
+    SLOT(void exec(int id, const QString &key))
     SIGNAL(activated(int id, const QString &key))
 };

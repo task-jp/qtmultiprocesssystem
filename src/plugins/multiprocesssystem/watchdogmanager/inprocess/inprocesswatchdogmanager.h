@@ -7,7 +7,7 @@ class InProcessWatchDogManager : public QMpsWatchDogManager
 {
     Q_OBJECT
 public:
-    InProcessWatchDogManager(QObject *parent = nullptr);
+    explicit InProcessWatchDogManager(QObject *parent = nullptr);
 
 protected:
     static InProcessWatchDogManager *server;
@@ -17,7 +17,7 @@ class InProcessWatchDogManagerServer : public InProcessWatchDogManager
 {
     Q_OBJECT
 public:
-    InProcessWatchDogManagerServer(QObject *parent = nullptr);
+    explicit InProcessWatchDogManagerServer(QObject *parent = nullptr);
     ~InProcessWatchDogManagerServer() override;
 
 public Q_SLOTS:
@@ -36,7 +36,7 @@ class InProcessWatchDogManagerClient : public InProcessWatchDogManager
 {
     Q_OBJECT
 public:
-    InProcessWatchDogManagerClient(QObject *parent = nullptr);
+    explicit InProcessWatchDogManagerClient(QObject *parent = nullptr);
 
 public Q_SLOTS:
     void started(const QMpsApplication &application) override;
