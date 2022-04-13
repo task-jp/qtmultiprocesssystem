@@ -9,6 +9,9 @@ HEADERS += \
     qmpsapplicationmanagerfactory.h \
     qmpsapplicationmanagerplugin.h \
     qmpsapplicationplugin.h \
+    qmpsinprocesswatchdogmanager.h \
+    qmpswatchdog.h \
+    qmpswatchdogmanager.h \
     qmpswindowmanager.h \
     qmpswindowmanagerfactory.h \
     qmpswindowmanagerplugin.h
@@ -20,6 +23,9 @@ SOURCES += \
     qmpsapplicationmanagerfactory.cpp \
     qmpsapplicationmanagerplugin.cpp \
     qmpsapplicationplugin.cpp \
+    qmpsinprocesswatchdogmanager.cpp \
+    qmpswatchdog.cpp \
+    qmpswatchdogmanager.cpp \
     qmpswindowmanager.cpp \
     qmpswindowmanagerfactory.cpp \
     qmpswindowmanagerplugin.cpp

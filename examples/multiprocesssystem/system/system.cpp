@@ -9,6 +9,7 @@
 #include <QtMultiProcessSystem/QMpsWindowManager>
 #include <QtMultiProcessSystem/QMpsApplicationFactory>
 #include <QtMultiProcessSystem/QMpsApplication>
+#include <QtMultiProcessSystem/QMpsInProcessWatchDogManager>
 
 int main(int argc, char *argv[])
 {
@@ -54,6 +55,9 @@ int main(int argc, char *argv[])
         qFatal("Window Manager backend '%s' not found", qUtf8Printable(winManType));
     }
     qputenv("QT_MULTIPROCESSSYSTEM_WINDOWMANAGER", winManType.toUtf8());
+
+    QMpsInProcessWatchDogManager wdm;
+    context->setContextProperty("watchDogManager", &wdm);
 
     QString role = QLatin1String("system");
     if (!args.isEmpty()) {
