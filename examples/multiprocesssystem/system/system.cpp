@@ -14,7 +14,7 @@
 
 int main(int argc, char *argv[])
 {
-    QString prefix = QLatin1String("example/");
+    QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QGuiApplication app(argc, argv);
 
     QCommandLineParser parser;
@@ -39,6 +39,7 @@ int main(int argc, char *argv[])
         appManType = qEnvironmentVariable("QT_MULTIPROCESSSYSTEM_APPLICATIONMANAGER");
     }
 
+    QString prefix = QLatin1String("example/");
     if (QMpsApplicationManagerFactory::keys().contains(appManType.toLower())) {
         context->setContextProperty("applicationManager", QMpsApplicationManagerFactory::create(appManType, type, prefix, &app));
     } else {

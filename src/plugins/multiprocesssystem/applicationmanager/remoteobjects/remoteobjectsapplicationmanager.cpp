@@ -17,8 +17,7 @@ void ApplicationManager::exec(int id, const QString &key)
         process->setProgram(QCoreApplication::instance()->applicationFilePath());
         QStringList args {key};
         auto env = QProcess::systemEnvironment();
-        env.append("XDG_SESSION_TYPE=wayland");
-        env.append("QT_WAYLAND_DISABLE_WINDOWDECORATION=1");
+        env.append("QT_QPA_PLATFORM=wayland");
         process->setArguments(args);
         process->setEnvironment(env);
         connect(process, &QProcess::readyReadStandardOutput, this, [this]() {
