@@ -1,11 +1,10 @@
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 import '../system'
 
 AbstractMain {
     id: root
 
-    Label {
+    Text {
         id: clock
         anchors.centerIn: parent
         font.pixelSize: 60

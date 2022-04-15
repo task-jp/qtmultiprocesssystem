@@ -1,6 +1,5 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
-import QtQuick.Controls 2.15
 import '../system'
 
 AbstractMain {
@@ -19,6 +18,10 @@ AbstractMain {
                 key: 'navi'
                 name: 'Navi'
             }
+            ListElement {
+                key: 'music'
+                name: 'Music'
+            }
         }
 
         Repeater {
@@ -34,7 +37,7 @@ AbstractMain {
                 }
             }
         }
-        Label {
+        Text {
             Layout.fillWidth: true
             Layout.fillHeight: true
             rotation: 20
