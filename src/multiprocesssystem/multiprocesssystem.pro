@@ -2,6 +2,7 @@ TARGET = QtMultiProcessSystem
 
 HEADERS += \
     multiprocesssystem_global.h \
+    qmpsabstractipcinterface.h \
     qmpsabstractmanagerfactory.h \
     qmpsapplication.h \
     qmpsapplicationfactory.h \
@@ -18,6 +19,7 @@ HEADERS += \
     qmpswindowmanagerplugin.h
 
 SOURCES += \
+    qmpsabstractipcinterface.cpp \
     qmpsapplication.cpp \
     qmpsapplicationfactory.cpp \
     qmpsapplicationmanager.cpp \
@@ -33,6 +35,13 @@ SOURCES += \
     qmpswindowmanagerplugin.cpp
 
 QT = core-private quick
+
+qtHaveModule(dbus) {
+    QT += dbus
+    HEADERS += qmpsabstractdbusinterface.h
+    SOURCES += qmpsabstractdbusinterface.cpp
+}
+
 CONFIG += git_build
 MODULE_PLUGIN_TYPES = multiprocesssystem/applicationmanager multiprocesssystem/windowmanager multiprocesssystem/watchdogmanager multiprocesssystem/application
 load(qt_module)
