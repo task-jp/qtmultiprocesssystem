@@ -21,5 +21,6 @@ QStringList QMpsWatchDogManagerFactory::keys()
 
 QMpsWatchDogManager *QMpsWatchDogManagerFactory::create(const QString &key, Type type, QObject *parent)
 {
+    qputenv("QT_MULTIPROCESSSYSTEM_WATCHDOGMANAGER", key.toUtf8());
     return qLoadPlugin<QMpsWatchDogManager, QMpsWatchDogManagerPlugin>(loader(), key.toLower(), type, parent);
 }

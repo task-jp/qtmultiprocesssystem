@@ -74,7 +74,6 @@ int main(int argc, char *argv[])
     } else {
         qFatal("Window Manager backend '%s' not found in %s", qUtf8Printable(winManType), qUtf8Printable(QMpsWindowManagerFactory::keys().join(", ")));
     }
-    qputenv("QT_MULTIPROCESSSYSTEM_WINDOWMANAGER", winManType.toUtf8());
 
     QString watManType = QLatin1String("none");
     if (parser.isSet(watManOption)) {
@@ -87,7 +86,6 @@ int main(int argc, char *argv[])
     } else if (watManType.toLower() != "none") {
         qFatal("WatchDog Manager backend '%s' not found in %s", qUtf8Printable(watManType), qUtf8Printable(QMpsWatchDogManagerFactory::keys().join(", ")));
     }
-    qputenv("QT_MULTIPROCESSSYSTEM_WATCHDOGMANAGER", watManType.toUtf8());
 
     QString role = QLatin1String("system");
     if (!args.isEmpty()) {

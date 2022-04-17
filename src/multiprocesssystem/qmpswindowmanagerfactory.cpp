@@ -21,5 +21,6 @@ QStringList QMpsWindowManagerFactory::keys()
 
 QMpsWindowManager *QMpsWindowManagerFactory::create(const QString &key, Type type, QObject *parent)
 {
+    qputenv("QT_MULTIPROCESSSYSTEM_WINDOWMANAGER", key.toUtf8());
     return qLoadPlugin<QMpsWindowManager, QMpsWindowManagerPlugin>(loader(), key.toLower(), type, parent);
 }
