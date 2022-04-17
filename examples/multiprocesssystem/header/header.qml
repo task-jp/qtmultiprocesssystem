@@ -33,7 +33,8 @@ AbstractMain {
                 font.pixelSize: height / 4
                 highlighted: applicationManager.current.key === model.key
                 onClicked: {
-                    applicationManager.exec(model.key)
+                    var application = applicationManager.findByKey(model.key)
+                    applicationManager.exec(application)
                 }
             }
         }

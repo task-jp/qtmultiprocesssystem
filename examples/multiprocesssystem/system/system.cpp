@@ -14,6 +14,7 @@
 
 int main(int argc, char *argv[])
 {
+    qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}] %{function}:%{line} - %{message}");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QGuiApplication app(argc, argv);
 
@@ -39,9 +40,25 @@ int main(int argc, char *argv[])
         appManType = qEnvironmentVariable("QT_MULTIPROCESSSYSTEM_APPLICATIONMANAGER");
     }
 
+    QMpsApplicationManager *applicationManager = nullptr;
     QString prefix = QLatin1String("example/");
     if (QMpsApplicationManagerFactory::keys().contains(appManType.toLower())) {
-        context->setContextProperty("applicationManager", QMpsApplicationManagerFactory::create(appManType, type, prefix, &app));
+        switch (type) {
+        case QMpsAbstractManagerFactory::Server:
+            applicationManager = QMpsApplicationManagerFactory::create(appManType, &app, type);
+            break;
+        case QMpsAbstractManagerFactory::Client:
+            applicationManager = new QMpsApplicationManager(&app, type);
+        }
+        applicationManager->init();
+        if (type == QMpsAbstractManagerFactory::Server) {
+            auto apps = QMpsApplicationFactory::apps(prefix);
+            std::sort(apps.begin(), apps.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
+                return a.id() < b.id();
+            });
+            applicationManager->setApplications(apps);
+        }
+        context->setContextProperty("applicationManager", applicationManager);
     } else {
         qFatal("Application Manager backend '%s' not found in %s", qUtf8Printable(appManType), qUtf8Printable(QMpsApplicationManagerFactory::keys().join(", ")));
     }
@@ -82,10 +99,9 @@ int main(int argc, char *argv[])
     QUrl url;
     if (type == QMpsAbstractManagerFactory::Server) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));
-        if (appManType == QLatin1String("inprocess")) {
-            for (const auto &keys : QMpsApplicationFactory::keys()) {
-                if (keys.startsWith(prefix))
-                    QMpsApplicationFactory::load(keys, &app);
+        if (winManType == QLatin1String("monolithic")) {
+            for (const auto &application : applicationManager->applications()) {
+                QMpsApplicationFactory::load(prefix + application.key(), &app);
             }
         }
         qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
@@ -112,6 +128,8 @@ int main(int argc, char *argv[])
         if (window) {
             window->setTitle(role);
         }
+        if (type == QMpsAbstractManagerFactory::Server)
+            applicationManager->start();
     }, Qt::QueuedConnection);
     engine.load(url);
 

@@ -60,6 +60,7 @@ Main {
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(application.key)
             var parent = root.findParent(application)
             var item = chromeComponent.createObject(parent, {"source": url})
+            console.debug(application.key, url, item)
             if (!application.area) {
                 root.apps[application.id] = item
                 item.item.enabled = true

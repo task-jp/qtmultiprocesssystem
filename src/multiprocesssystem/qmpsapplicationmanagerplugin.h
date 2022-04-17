@@ -3,7 +3,7 @@
 
 #include "multiprocesssystem_global.h"
 #include <QtCore/QObject>
-#include "qmpsabstractmanagerfactory.h"
+#include "qmpsabstractipcinterface.h"
 
 class QMpsApplicationManager;
 
@@ -16,7 +16,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManagerPlugin : public QObject
 public:
     explicit QMpsApplicationManagerPlugin(QObject *parent = nullptr);
 
-    virtual QMpsApplicationManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, const QString &prefix, QObject *parent = nullptr) = 0;
+    virtual QMpsApplicationManager *create(const QString &key, QObject *parent = nullptr, QMpsAbstractIpcInterface::Type type = QMpsAbstractIpcInterface::Client) = 0;
 };
 
 #endif // QMPSAPPLICATIONMANAGERPLUGIN_H

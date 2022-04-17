@@ -5,67 +5,67 @@
 #include <QtCore/QDebug>
 #include <QtCore/QMetaProperty>
 
+#if defined(QT_DBUS_LIB)
+#include <QtDBus/QDBusMetaType>
+#endif
+
 class QMpsApplicationManager::Private
 {
 public:
+    QList<QMpsApplication> applications;
     QMpsApplication current;
-    QList<QMpsApplication> apps;
-    QList<QMpsApplication> appsForMenu;
+    static QMpsApplicationManager *server;
 };
 
+QMpsApplicationManager *QMpsApplicationManager::Private::server = nullptr;
 
-QMpsApplicationManager::QMpsApplicationManager(const QString &prefix, QObject *parent)
-    : QAbstractListModel(parent)
+QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
+    : QMpsIpcInterface(parent, type)
     , d(new Private)
 {
-    d->apps = QMpsApplicationFactory::apps(prefix);
-    std::sort(d->apps.begin(), d->apps.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
-        return a.id() < b.id();
-    });
-    for (const auto &app : qAsConst(d->apps)) {
-        if (!app.isSystemUI())
-            d->appsForMenu.append(app);
+#if defined(QT_DBUS_LIB)
+    qDBusRegisterMetaType<QMpsApplication>();
+    qDBusRegisterMetaType<QList<QMpsApplication>>();
+#endif
+
+    switch (type) {
+    case Server:
+        Private::server = this;
+        break;
+    case Client:
+        break;
     }
+    connect(this, &QMpsApplicationManager::doExec, this, [](const QMpsApplication &application) {
+        qDebug() << application.key();
+    });
 }
 
 QMpsApplicationManager::~QMpsApplicationManager() = default;
 
-void QMpsApplicationManager::init()
+QList<QMpsApplication> QMpsApplicationManager::applications() const
 {
-    for (const auto &app : d->apps) {
-        if (app.isAutoStart()) {
-            exec(app);
-        }
-    }
+    return QMpsIpcInterfaceGetter(QList<QMpsApplication>, QList<QMpsApplication>(), applications);
+}
+
+void QMpsApplicationManager::setApplications(const QList<QMpsApplication> &applications)
+{
+    QMpsIpcInterfaceSetter(applications);
 }
 
 QMpsApplication QMpsApplicationManager::current() const
 {
-    return d->current;
+    return QMpsIpcInterfaceGetter(QMpsApplication, QMpsApplication(), current);
 }
 
 void QMpsApplicationManager::setCurrent(const QMpsApplication &current)
 {
-    if (d->current == current) return;
-    d->current = current;
-    emit currentChanged(current);
-}
-
-void QMpsApplicationManager::exec(const QString &key)
-{
-    exec(findByKey(key));
-}
-
-void QMpsApplicationManager::exec(const QMpsApplication &application)
-{
-    if (application.isValid())
-        emit activated(application);
+    QMpsIpcInterfaceSetter(current);
 }
 
 QMpsApplication QMpsApplicationManager::findByID(int id) const
 {
     QMpsApplication ret;
-    for (const auto &app : d->apps) {
+    for (const auto &app : applications()) {
         if (app.id() == id) {
             ret = app;
             break;
@@ -77,7 +77,7 @@ QMpsApplication QMpsApplicationManager::findByID(int id) const
 QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
 {
     QMpsApplication ret;
-    for (const auto &app : d->apps) {
+    for (const auto &app : applications()) {
         if (app.key() == key) {
             ret = app;
             break;
@@ -86,6 +86,27 @@ QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
     return ret;
 }
 
+void QMpsApplicationManager::exec(const QMpsApplication &application)
+{
+    auto arg1 = Q_ARG(QMpsApplication, application);
+    QMpsAbstractIpcInterfaceCall(doExec, exec, arg1);
+}
+
+void QMpsApplicationManager::start()
+{
+    for (const auto &app : applications()) {
+        if (app.isAutoStart()) {
+            exec(app);
+        }
+    }
+}
+
+QMpsAbstractIpcInterface *QMpsApplicationManager::server() const
+{
+    return Private::server;
+}
+
+#if 0
 QHash<int, QByteArray> QMpsApplicationManager::roleNames() const
 {
     QHash<int, QByteArray> ret;
@@ -124,3 +145,4 @@ QVariant QMpsApplicationManager::data(const QModelIndex &index, int role) const
     }
     return ret;
 }
+#endif

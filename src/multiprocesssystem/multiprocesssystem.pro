@@ -10,6 +10,7 @@ HEADERS += \
     qmpsapplicationmanagerfactory.h \
     qmpsapplicationmanagerplugin.h \
     qmpsapplicationplugin.h \
+    qmpsipcinterface.h \
     qmpswatchdog.h \
     qmpswatchdogmanager.h \
     qmpswatchdogmanagerfactory.h \

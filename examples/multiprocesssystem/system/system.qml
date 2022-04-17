@@ -44,10 +44,6 @@ Window {
             Layout.preferredHeight: 200
             clip: true
         }
-
-        Component.onCompleted: {
-            applicationManager.init()
-        }
     }
 
     function findParent(application) {

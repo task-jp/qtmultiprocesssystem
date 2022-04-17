@@ -145,11 +145,11 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
 {
     QMpsApplication ret;
     for (int i = 0; i < ret.staticMetaObject.propertyCount(); i++) {
-        auto property = ret.staticMetaObject.property(i);
-        auto key = QString::fromLatin1(property.name());
+        const auto property = ret.staticMetaObject.property(i);
+        const auto key = QString::fromLatin1(property.name());
         if (json.contains(key)) {
-            auto type = property.type();
-            auto value = json.value(key);
+            const auto type = property.type();
+            const auto value = json.value(key);
             switch (type) {
             case QVariant::Bool:
                 property.writeOnGadget(&ret, value.toBool());
@@ -184,9 +184,9 @@ QDataStream &operator<<(QDataStream &out, const QMpsApplication &application)
 {
     const auto mo = application.staticMetaObject;
     for (int i = 0; i < mo.propertyCount(); i++) {
-        auto property = mo.property(i);
-        auto key = QString::fromLatin1(property.name());
-        auto value = property.readOnGadget(&application);
+        const auto property = mo.property(i);
+        const auto key = QString::fromLatin1(property.name());
+        const auto value = property.readOnGadget(&application);
         out << value;
     }
     return out;
@@ -196,8 +196,8 @@ QDataStream &operator>>(QDataStream &in, QMpsApplication &application)
 {
     const auto mo = application.staticMetaObject;
     for (int i = 0; i < mo.propertyCount(); i++) {
-        auto property = mo.property(i);
-        auto key = QString::fromLatin1(property.name());
+        const auto property = mo.property(i);
+        const auto key = QString::fromLatin1(property.name());
         QVariant value;
         in >> value;
         property.writeOnGadget(&application, value);
@@ -209,3 +209,17 @@ uint qHash(const QMpsApplication &application, uint seed)
 {
     return qHash(application.id(), seed);
 }
+
+#if defined(QT_DBUS_LIB)
+#include "qmpsabstractdbusinterface.h"
+
+QDBusArgument &operator<<(QDBusArgument &argument, const QMpsApplication &application)
+{
+    return QMpsAbstractDBusInterface::fromGadget(argument, application);
+}
+
+const QDBusArgument &operator>>(const QDBusArgument &argument, QMpsApplication &application)
+{
+    return QMpsAbstractDBusInterface::toGadget(argument, application);
+}
+#endif

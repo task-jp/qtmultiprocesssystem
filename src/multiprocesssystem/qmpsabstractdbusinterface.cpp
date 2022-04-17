@@ -5,6 +5,7 @@
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusConnectionInterface>
 #include <QtDBus/QDBusInterface>
+#include <QtDBus/QDBusMetaType>
 
 class QMpsAbstractDBusInterface::Private
 {
@@ -23,8 +24,7 @@ private:
 QMpsAbstractDBusInterface::Private::Private(QMpsAbstractDBusInterface *parent)
     : q(parent)
     , service(QString::fromLatin1("com.github.task-jp.qtmultiprocesssystem"))
-{
-}
+{}
 
 bool QMpsAbstractDBusInterface::Private::init()
 {
@@ -52,10 +52,6 @@ bool QMpsAbstractDBusInterface::Private::init()
     }
 
     switch (q->type()) {
-    case Unknown:
-        qWarning() << "Cannot init object with type=Unknown";
-        return false;
-        break;
     case Server: {
         const auto registeredServiceNames = connection.interface()->registeredServiceNames();
         if (!registeredServiceNames.isValid()) {
@@ -74,6 +70,7 @@ bool QMpsAbstractDBusInterface::Private::init()
             qWarning() << "registering" << mo->className() << "failed";
             return false;
         }
+        q->setProxy(q);
         break; }
     case Client:
         if (q->proxy())
@@ -99,7 +96,6 @@ bool QMpsAbstractDBusInterface::Private::init()
             if (signal2.methodType() != QMetaMethod::Signal)
                 continue;
             auto findSignal = [this](const QByteArray &methodSignature) {
-//                qDebug() << methodSignature;
                 const auto mo = q->proxy()->metaObject();
                 for (int i = mo->methodOffset(); i < mo->methodCount(); i++) {
                     const auto mm = mo->method(i);
@@ -112,6 +108,7 @@ bool QMpsAbstractDBusInterface::Private::init()
                 return QMetaMethod();
             };
             const auto signal1 = findSignal(signal2.methodSignature());
+            qDebug() << signal1.isValid() << signal2.isValid() << signal2.methodSignature();
             if (signal1.isValid()) {
                 connect(q->proxy(), signal1, q, signal2, Qt::UniqueConnection);
             }

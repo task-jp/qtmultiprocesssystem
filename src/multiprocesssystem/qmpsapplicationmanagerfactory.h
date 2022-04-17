@@ -1,16 +1,15 @@
 #ifndef QMPSAPPLICATIONMANAGERFACTORY_H
 #define QMPSAPPLICATIONMANAGERFACTORY_H
 
-#include "qmpsabstractmanagerfactory.h"
-
-class QObject;
+#include <QtCore/QObject>
+#include "qmpsabstractipcinterface.h"
 class QMpsApplicationManager;
 
-class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManagerFactory : public QMpsAbstractManagerFactory
+class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManagerFactory : public QObject
 {
 public:
     static QStringList keys();
-    static QMpsApplicationManager *create(const QString &key, Type type, const QString &prefix, QObject *parent = nullptr);
+    static QMpsApplicationManager *create(const QString &key, QObject *parent = nullptr, QMpsAbstractManagerFactory::Type type = QMpsAbstractManagerFactory::Client);
 };
 
 #endif // QMPSAPPLICATIONMANAGERFACTORY_H

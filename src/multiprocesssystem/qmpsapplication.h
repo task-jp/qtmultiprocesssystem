@@ -73,5 +73,12 @@ MULTIPROCESSSYSTEM_EXPORT uint qHash(const QMpsApplication &application, uint se
 
 Q_DECLARE_SHARED(QMpsApplication)
 Q_DECLARE_METATYPE(QMpsApplication)
+Q_DECLARE_METATYPE(QList<QMpsApplication>)
+
+#if defined(QT_DBUS_LIB)
+#include <QtDBus/QDBusArgument>
+QDBusArgument &operator<<(QDBusArgument &argument, const QMpsApplication &application);
+const QDBusArgument &operator>>(const QDBusArgument &argument, QMpsApplication &application);
+#endif
 
 #endif // QMPSAPPLICATION_H

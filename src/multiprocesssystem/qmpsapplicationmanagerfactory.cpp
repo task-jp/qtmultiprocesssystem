@@ -19,7 +19,10 @@ QStringList QMpsApplicationManagerFactory::keys()
     return list;
 }
 
-QMpsApplicationManager *QMpsApplicationManagerFactory::create(const QString &key, Type type, const QString &prefix, QObject *parent)
+QMpsApplicationManager *QMpsApplicationManagerFactory::create(const QString &key, QObject *parent, QMpsAbstractManagerFactory::Type type)
 {
-    return qLoadPlugin<QMpsApplicationManager, QMpsApplicationManagerPlugin>(loader(), key.toLower(), type, prefix, parent);
+    auto *ret = qLoadPlugin<QMpsApplicationManager, QMpsApplicationManagerPlugin>(loader(), key.toLower(), parent, type);
+    if (!ret)
+        qFatal("Application manager %s not found\navaialble managers: %s", qPrintable(key), qPrintable(keys().join(", ")));
+    return ret;
 }

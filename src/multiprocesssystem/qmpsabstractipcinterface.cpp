@@ -10,7 +10,7 @@ private:
     QMpsAbstractIpcInterface *q = nullptr;
 
 public:
-    Type type = Unknown;
+    Type type;
     QObject *proxy = nullptr;
 };
 
