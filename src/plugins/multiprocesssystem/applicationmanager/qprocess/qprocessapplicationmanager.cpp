@@ -22,10 +22,7 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
             process->setObjectName(application.key());
             process->setProgram(QCoreApplication::instance()->applicationFilePath());
             QStringList args {application.key()};
-            auto env = QProcess::systemEnvironment();
-            env.append("QT_QPA_PLATFORM=wayland"); // MOVE to the plugin
             process->setArguments(args);
-            process->setEnvironment(env);
             connect(process, &QProcess::readyReadStandardOutput, this, [this]() {
                 auto process = qobject_cast<QProcess *>(sender());
                 auto message = process->readAllStandardOutput();
