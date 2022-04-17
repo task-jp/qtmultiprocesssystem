@@ -23,6 +23,7 @@ QMpsApplicationManager *QMpsApplicationManagerFactory::create(const QString &key
 {
     auto *ret = qLoadPlugin<QMpsApplicationManager, QMpsApplicationManagerPlugin>(loader(), key.toLower(), parent, type);
     if (!ret)
-        qFatal("Application manager %s not found\navaialble managers: %s", qPrintable(key), qPrintable(keys().join(", ")));
+        qFatal("Application manager %s not found\navaialble managers: %s", qPrintable(key), qPrintable(keys().join(QStringLiteral(", "))));
+    qputenv("QT_MULTIPROCESSSYSTEM_APPLICATIONMANAGER", qPrintable(key));
     return ret;
 }

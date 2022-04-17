@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     } else {
         qFatal("Application Manager backend '%s' not found in %s", qUtf8Printable(appManType), qUtf8Printable(QMpsApplicationManagerFactory::keys().join(", ")));
     }
-    qputenv("QT_MULTIPROCESSSYSTEM_APPLICATIONMANAGER", appManType.toUtf8());
 
     QString winManType = QLatin1String("monolithic");
     if (parser.isSet(winManOption)) {
