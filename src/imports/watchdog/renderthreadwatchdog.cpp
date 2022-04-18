@@ -4,7 +4,7 @@
 class RenderThreadWatchDog::Private
 {
 public:
-    QMpsWatchDog watchDog = QMpsWatchDog("render-thread");
+    QMpsWatchDog watchDog;
     QMpsApplication application;
 };
 
@@ -12,10 +12,23 @@ RenderThreadWatchDog::RenderThreadWatchDog(QQuickItem *parent)
     : QQuickItem(parent)
     , d(new Private)
 {
+    d->watchDog.setMethod("render-thread");
+    connect(&d->watchDog, &QMpsWatchDog::watchDogManagerChanged, this, &RenderThreadWatchDog::watchDogManagerChanged);
     setFlag(ItemHasContents);
 }
 
 RenderThreadWatchDog::~RenderThreadWatchDog() = default;
+
+
+QMpsWatchDogManager *RenderThreadWatchDog::watchDogManager() const
+{
+    return d->watchDog.watchDogManager();
+}
+
+void RenderThreadWatchDog::setWatchDogManager(QMpsWatchDogManager *watchDogManager)
+{
+    d->watchDog.setWatchDogManager(watchDogManager);
+}
 
 QMpsApplication RenderThreadWatchDog::application() const
 {

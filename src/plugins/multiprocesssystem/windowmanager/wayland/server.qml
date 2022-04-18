@@ -89,6 +89,7 @@ WaylandCompositor {
 
     XdgShellWatchDog {
         id: xdgWatchDog
+        manager: typeof watchDogManager === 'undefined' ? null : watchDogManager
     }
     SystemdWatchDog {
         id: systemdWatchDog

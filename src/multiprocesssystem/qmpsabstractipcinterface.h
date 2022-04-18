@@ -30,11 +30,9 @@ private:
     [this, __VA_ARGS__]() { \
         switch (type()) { \
         case Server: \
-            qDebug() << #s << proxy(); \
             QMetaObject::invokeMethod(this, #s, __VA_ARGS__); \
             break; \
         case Client: \
-            qDebug() << #c; \
             QMetaObject::invokeMethod(proxy(), #c, __VA_ARGS__); \
             break; \
         } \

@@ -3,13 +3,7 @@
 #include <QtCore/QReadWriteLock>
 #include <QtCore/QTimer>
 
-InProcessWatchDogManager *InProcessWatchDogManager::server = nullptr;
-
-InProcessWatchDogManager::InProcessWatchDogManager(QObject *parent)
-    : QMpsWatchDogManager(parent)
-{}
-
-class InProcessWatchDogManagerServer::Private
+class InProcessWatchDogManager::Private
 {
 public:
     struct Ping {
@@ -24,12 +18,10 @@ public:
     QHash<QMpsApplication, QDateTime> sleeping;
 };
 
-InProcessWatchDogManagerServer::InProcessWatchDogManagerServer(QObject *parent)
-    : InProcessWatchDogManager(parent)
+InProcessWatchDogManager::InProcessWatchDogManager(QObject *parent, Type type)
+    : QMpsWatchDogManager(parent, type)
     , d(new Private)
 {
-    server = this;
-
     d->timer.setInterval(250);
     connect(&d->timer, &QTimer::timeout, [this]() {
         QReadLocker locker(&d->lock);
@@ -46,102 +38,56 @@ InProcessWatchDogManagerServer::InProcessWatchDogManagerServer(QObject *parent)
             }
         }
     });
-}
 
-InProcessWatchDogManagerServer::~InProcessWatchDogManagerServer() = default;
-
-void InProcessWatchDogManagerServer::started(const QMpsApplication &application)
-{
-    Q_UNUSED(application);
-}
-
-void InProcessWatchDogManagerServer::finished(const QMpsApplication &application)
-{
-    QWriteLocker locker(&d->lock);
-    for (int i = d->database.length() - 1; i >= 0 ; i--) {
-        if (d->database.at(i).application == application)
-            d->database.removeAt(i);
-    }
-}
-
-void InProcessWatchDogManagerServer::ping(const QString &method, const QMpsApplication &application, uint serial)
-{
-    QWriteLocker locker(&d->lock);
-    d->database.append({method, application, serial});
-    if (!d->timer.isActive())
-        d->timer.start();
-}
-
-void InProcessWatchDogManagerServer::pong(const QString &method, const QMpsApplication &application, uint serial)
-{
-    QWriteLocker locker(&d->lock);
-    for (int i = 0; i < d->database.length(); i++) {
-        const auto &ping = d->database.at(i);
-        if (ping.method != method) continue;
-        if (ping.application != application) continue;
-        if (ping.serial != serial) continue;
-        d->database.removeAt(i);
-        if (d->database.isEmpty())
-            d->timer.stop();
-
-        if (d->sleeping.contains(application)) {
-            emit inactiveChanged(method, application, false, d->sleeping.take(application).msecsTo(QDateTime::currentDateTime()));
+    connect(this, &InProcessWatchDogManager::finished, this, [this](const QMpsApplication &application) {
+        QWriteLocker locker(&d->lock);
+        for (int i = d->database.length() - 1; i >= 0 ; i--) {
+            if (d->database.at(i).application == application)
+                d->database.removeAt(i);
         }
-        return;
-    }
-    qWarning() << method << serial << "not found";
+    });
+
+    connect(this, &InProcessWatchDogManager::pingReceived, this, [this](const QString &method, const QMpsApplication &application, uint serial) {
+        QWriteLocker locker(&d->lock);
+        d->database.append({method, application, serial});
+        if (!d->timer.isActive())
+            d->timer.start();
+    });
+
+    connect(this, &InProcessWatchDogManager::pongReceived, this, [this](const QString &method, const QMpsApplication &application, uint serial) {
+        QWriteLocker locker(&d->lock);
+        for (int i = 0; i < d->database.length(); i++) {
+            const auto &ping = d->database.at(i);
+            if (ping.method != method) continue;
+            if (ping.application != application) continue;
+            if (ping.serial != serial) continue;
+            d->database.removeAt(i);
+            if (d->database.isEmpty())
+                d->timer.stop();
+
+            if (d->sleeping.contains(application)) {
+                emit inactiveChanged(method, application, false, d->sleeping.take(application).msecsTo(QDateTime::currentDateTime()));
+            }
+            return;
+        }
+        qWarning() << method << serial << "not found";
+    });
+
+    connect(this, &InProcessWatchDogManager::pangReceived, this, [this](const QString &method, const QMpsApplication &application) {
+        QWriteLocker locker(&d->lock);
+        for (int i = 0; i < d->database.length(); i++) {
+            const auto &ping = d->database.at(i);
+            if (ping.method != method) continue;
+            if (ping.application != application) continue;
+            if (ping.serial > 0) continue;
+            d->database[i].dateTime = QDateTime::currentDateTime();
+            return;
+        }
+
+        d->database.append({method, application});
+        if (!d->timer.isActive())
+            d->timer.start();
+    });
 }
 
-void InProcessWatchDogManagerServer::pang(const QString &method, const QMpsApplication &application)
-{
-    QWriteLocker locker(&d->lock);
-    for (int i = 0; i < d->database.length(); i++) {
-        const auto &ping = d->database.at(i);
-        if (ping.method != method) continue;
-        if (ping.application != application) continue;
-        if (ping.serial > 0) continue;
-        d->database[i].dateTime = QDateTime::currentDateTime();
-        return;
-    }
-
-    d->database.append({method, application});
-    if (!d->timer.isActive())
-        d->timer.start();
-}
-
-InProcessWatchDogManagerClient::InProcessWatchDogManagerClient(QObject *parent)
-    : InProcessWatchDogManager(parent)
-{
-    if (!server)
-        qWarning() << "in-process watchdog doesn't support current setup";
-}
-
-void InProcessWatchDogManagerClient::started(const QMpsApplication &application)
-{
-    if (!server) return;
-    emit server->started(application);
-}
-
-void InProcessWatchDogManagerClient::finished(const QMpsApplication &application)
-{
-    if (!server) return;
-    emit server->finished(application);
-}
-
-void InProcessWatchDogManagerClient::ping(const QString &method, const QMpsApplication &application, uint serial)
-{
-    if (!server) return;
-    emit server->ping(method, application, serial);
-}
-
-void InProcessWatchDogManagerClient::pong(const QString &method, const QMpsApplication &application, uint serial)
-{
-    if (!server) return;
-    emit server->pong(method, application, serial);
-}
-
-void InProcessWatchDogManagerClient::pang(const QString &method, const QMpsApplication &application)
-{
-    if (!server) return;
-    emit server->pang(method, application);
-}
+InProcessWatchDogManager::~InProcessWatchDogManager() = default;

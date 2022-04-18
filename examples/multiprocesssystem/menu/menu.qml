@@ -6,14 +6,13 @@ import '../system'
 AbstractMain {
     id: root
 
-    property var am: applicationManager
     GridView {
         anchors.fill: parent
         cellWidth: root.width / 3
         cellHeight: cellWidth
 
         model: ApplicationManagerModel {
-            applicationManager: root.am
+            manager: applicationManager
         }
 
         delegate: Button {

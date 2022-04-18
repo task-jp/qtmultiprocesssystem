@@ -2,25 +2,35 @@
 #define QMPSWATCHDOGMANAGER_H
 
 #include "multiprocesssystem_global.h"
-#include <QtCore/QObject>
+#include "qmpsipcinterface.h"
 #include "qmpsapplication.h"
 
-class MULTIPROCESSSYSTEM_EXPORT QMpsWatchDogManager : public QObject
+class MULTIPROCESSSYSTEM_EXPORT QMpsWatchDogManager : public QMpsIpcInterface
 {
     Q_OBJECT
 public:
-    static QMpsWatchDogManager *instance();
-    explicit QMpsWatchDogManager(QObject *parent = nullptr);
+    explicit QMpsWatchDogManager(QObject *parent = nullptr, Type type = Client);
+    ~QMpsWatchDogManager() override;
 
 public Q_SLOTS:
-    virtual void started(const QMpsApplication &application) = 0;
-    virtual void finished(const QMpsApplication &application) = 0;
-    virtual void ping(const QString &method, const QMpsApplication &application, uint serial) = 0;
-    virtual void pong(const QString &method, const QMpsApplication &application, uint serial) = 0;
-    virtual void pang(const QString &method, const QMpsApplication &application) = 0;
+    void ping(const QString &method, const QMpsApplication &application, uint serial);
+    void pong(const QString &method, const QMpsApplication &application, uint serial);
+    void pang(const QString &method, const QMpsApplication &application);
 
 Q_SIGNALS:
+    void started(const QMpsApplication &application);
+    void finished(const QMpsApplication &application);
+    void pingReceived(const QString &method, const QMpsApplication &application, uint serial);
+    void pongReceived(const QString &method, const QMpsApplication &application, uint serial);
+    void pangReceived(const QString &method, const QMpsApplication &application);
     void inactiveChanged(const QString &method, const QMpsApplication &application, bool inactive, int msecs);
+
+protected:
+    QMpsAbstractIpcInterface *server() const override;
+
+private:
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif // QMPSWATCHDOGMANAGER_H

@@ -3,7 +3,7 @@
 
 #include "multiprocesssystem_global.h"
 #include <QtCore/QObject>
-#include "qmpsabstractmanagerfactory.h"
+#include "qmpsabstractipcinterface.h"
 
 class QMpsWatchDogManager;
 
@@ -16,7 +16,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsWatchDogManagerPlugin : public QObject
 public:
     explicit QMpsWatchDogManagerPlugin(QObject *parent = nullptr);
 
-    virtual QMpsWatchDogManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, QObject *parent = nullptr) = 0;
+    virtual QMpsWatchDogManager *create(const QString &key, QObject *parent = nullptr, QMpsAbstractIpcInterface::Type type = QMpsAbstractIpcInterface::Client) = 0;
 };
 
 #endif // QMPSWATCHDOGMANAGERPLUGIN_H

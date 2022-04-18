@@ -81,8 +81,17 @@ int main(int argc, char *argv[])
     } else if (qEnvironmentVariableIsSet("QT_MULTIPROCESSSYSTEM_WATCHDOGMANAGER")) {
         watManType = qEnvironmentVariable("QT_MULTIPROCESSSYSTEM_WATCHDOGMANAGER");
     }
+    QMpsWatchDogManager *watchDogManager = nullptr;
     if (QMpsWatchDogManagerFactory::keys().contains(watManType.toLower())) {
-        context->setContextProperty("watchDogManager", QMpsWatchDogManagerFactory::create(watManType, type, &app));
+        switch (type) {
+        case QMpsAbstractManagerFactory::Server:
+            watchDogManager = QMpsWatchDogManagerFactory::create(watManType, &app, type);
+            break;
+        case QMpsAbstractManagerFactory::Client:
+            watchDogManager = new QMpsWatchDogManager(&app, type);
+        }
+        watchDogManager->init();
+        context->setContextProperty("watchDogManager", watchDogManager);
     } else if (watManType.toLower() != "none") {
         qFatal("WatchDog Manager backend '%s' not found in %s", qUtf8Printable(watManType), qUtf8Printable(QMpsWatchDogManagerFactory::keys().join(", ")));
     }

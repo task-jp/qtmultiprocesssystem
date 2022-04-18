@@ -12,10 +12,12 @@ Item {
     }
     MainThreadWatchDog {
         id: main
+        manager: typeof watchDogManager === 'undefined' ? null : watchDogManager
         application: root.application
     }
     RenderThreadWatchDog {
         id: render
+        manager: typeof watchDogManager === 'undefined' ? null : watchDogManager
         application: root.application
     }
     Timer {

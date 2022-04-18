@@ -10,7 +10,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsWatchDogManagerFactory : public QMpsAbstract
 {
 public:
     static QStringList keys();
-    static QMpsWatchDogManager *create(const QString &key, Type type, QObject *parent = nullptr);
+    static QMpsWatchDogManager *create(const QString &key, QObject *parent = nullptr, Type type = Client);
 };
 
 #endif // QMPSWATCHDOGMANAGERFACTORY_H
