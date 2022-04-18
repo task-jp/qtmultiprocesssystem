@@ -52,8 +52,8 @@ void RenderThreadWatchDog::pangInternal()
     d->watchDog.pang(d->application);
 }
 
-QSGNode *RenderThreadWatchDog::updatePaintNode(QSGNode *node, UpdatePaintNodeData *)
+QSGNode *RenderThreadWatchDog::updatePaintNode(QSGNode *node, UpdatePaintNodeData *data)
 {
     QMetaObject::invokeMethod(this, "pangInternal", Qt::QueuedConnection);
-    return node;
+    return QQuickItem::updatePaintNode(node, data);
 }
