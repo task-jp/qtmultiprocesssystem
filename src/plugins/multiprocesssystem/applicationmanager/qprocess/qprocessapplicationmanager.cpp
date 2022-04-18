@@ -31,7 +31,8 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
                 if (message.isEmpty())
                     return;
 
-                std::cerr << process->objectName().toStdString() << " " << message.toStdString() << std::endl;
+                for (const auto & line : message.split('\n'))
+                    std::cerr << process->objectName().toStdString() << " " << line.toStdString() << std::endl;
             });
             connect(process, &QProcess::readyReadStandardError, this, [this]() {
                 auto process = qobject_cast<QProcess *>(sender());
@@ -40,7 +41,8 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
                     message.chop(1);
                 if (message.isEmpty())
                     return;
-                std::cerr << process->objectName().toStdString() << " " << message.toStdString() << std::endl;
+                for (const auto & line : message.split('\n'))
+                    std::cerr << process->objectName().toStdString() << " " << line.toStdString() << std::endl;
             });
             qDebug() << "starting" << application.key();
             process->start();
