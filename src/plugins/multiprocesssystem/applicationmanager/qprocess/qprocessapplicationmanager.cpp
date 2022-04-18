@@ -2,13 +2,13 @@
 
 #include <QtCore/QCoreApplication>
 #include <QtCore/QProcess>
+#include <iostream>
 
 class QProcessApplicationManager::Private
 {
 public:
     QHash<QMpsApplication, QProcess *> processMap;
 };
-
 
 QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type type)
     : QMpsApplicationManager(parent, type)
@@ -30,7 +30,8 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
                     message.chop(1);
                 if (message.isEmpty())
                     return;
-                qDebug().noquote() << process->objectName() << message;
+
+                std::cerr << process->objectName().toStdString() << " " << message.toStdString() << std::endl;
             });
             connect(process, &QProcess::readyReadStandardError, this, [this]() {
                 auto process = qobject_cast<QProcess *>(sender());
@@ -39,7 +40,7 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
                     message.chop(1);
                 if (message.isEmpty())
                     return;
-                qWarning().noquote() << process->objectName() << message;
+                std::cerr << process->objectName().toStdString() << " " << message.toStdString() << std::endl;
             });
             qDebug() << "starting" << application.key();
             process->start();

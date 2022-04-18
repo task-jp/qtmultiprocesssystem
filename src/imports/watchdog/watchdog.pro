@@ -13,8 +13,7 @@ SOURCES += \
 HEADERS += \
         mainthreadwatchdog.h \
         renderthreadwatchdog.h \
-        systemdwatchdog.h \
-        watchdog_plugin.h
+        systemdwatchdog.h
 
 qtHaveModule(waylandcompositor) {
     QT += waylandcompositor

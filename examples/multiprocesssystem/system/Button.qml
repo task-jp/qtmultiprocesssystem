@@ -6,6 +6,7 @@ MouseArea {
     height: 40
     property alias text: text.text
     property alias font: text.font
+    property alias color: background.color
     property bool highlighted: false
 
     Rectangle {
@@ -13,12 +14,23 @@ MouseArea {
         anchors.fill: parent
         anchors.margins: 10
         radius: 10
-        color: root.highlighted ? 'blue' : 'lightgray'
+        color: 'lightgray'
     }
 
     Text {
         id: text
         anchors.centerIn: parent
-        color: root.highlighted ? 'white' : 'black'
+    }
+
+    states: State {
+        when: root.highlighted
+        PropertyChanges {
+            target: background
+            color: 'blue'
+        }
+        PropertyChanges {
+            target: text
+            color: 'white'
+        }
     }
 }

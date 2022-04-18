@@ -35,7 +35,7 @@ QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
     case Client:
         break;
     }
-    connect(this, &QMpsApplicationManager::doExec, this, [](const QMpsApplication &application) {
+    connect(this, &QMpsApplicationManager::currentChanged, this, [](const QMpsApplication &application) {
         qDebug() << application.key();
     });
 }
@@ -59,6 +59,7 @@ QMpsApplication QMpsApplicationManager::current() const
 
 void QMpsApplicationManager::setCurrent(const QMpsApplication &current)
 {
+    qDebug() << current.key();
     QMpsIpcInterfaceSetter(current);
 }
 
@@ -105,44 +106,3 @@ QMpsAbstractIpcInterface *QMpsApplicationManager::server() const
 {
     return Private::server;
 }
-
-#if 0
-QHash<int, QByteArray> QMpsApplicationManager::roleNames() const
-{
-    QHash<int, QByteArray> ret;
-    const auto mo = &QMpsApplication::staticMetaObject;
-    for (int i = 0; i < mo->propertyCount(); i++) {
-        const auto mp = mo->property(i);
-        ret.insert(Qt::UserRole + i, mp.name());
-    }
-    return ret;
-}
-
-int QMpsApplicationManager::rowCount(const QModelIndex &parent) const
-{
-    if (parent.isValid())
-        return 0;
-    return d->appsForMenu.length();
-}
-
-QVariant QMpsApplicationManager::data(const QModelIndex &index, int role) const
-{
-    QVariant ret;
-    if (!index.isValid())
-        return ret;
-    int row = index.row();
-    if (row < 0 || row >= d->appsForMenu.length())
-        return ret;
-    const auto app = d->appsForMenu.at(row);
-    const auto mo = &QMpsApplication::staticMetaObject;
-    const auto role2name = roleNames();
-    for (int i = 0; i < mo->propertyCount(); i++) {
-        const auto mp = mo->property(i);
-        if (role2name.value(role) == mp.name()) {
-            ret = mp.readOnGadget(&app);
-            break;
-        }
-    }
-    return ret;
-}
-#endif

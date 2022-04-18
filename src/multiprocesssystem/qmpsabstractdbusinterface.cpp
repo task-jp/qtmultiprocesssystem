@@ -108,7 +108,6 @@ bool QMpsAbstractDBusInterface::Private::init()
                 return QMetaMethod();
             };
             const auto signal1 = findSignal(signal2.methodSignature());
-            qDebug() << signal1.isValid() << signal2.isValid() << signal2.methodSignature();
             if (signal1.isValid()) {
                 connect(q->proxy(), signal1, q, signal2, Qt::UniqueConnection);
             }
