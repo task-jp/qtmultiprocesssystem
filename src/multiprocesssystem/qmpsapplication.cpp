@@ -246,7 +246,7 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
             break;
         }
     }
-    debug << "}";
+    debug << " }";
 
     return debug;
 }
