@@ -205,6 +205,52 @@ QDataStream &operator>>(QDataStream &in, QMpsApplication &application)
     return in;
 }
 
+QDebug operator<<(QDebug debug, const QMpsApplication &application)
+{
+    QDebugStateSaver saver(debug);
+    debug.nospace() << "QMpsApplication {";
+    const auto mo = application.staticMetaObject;
+    for (int i = 0; i < mo.propertyCount(); i++) {
+        const auto property = mo.property(i);
+        const auto type = property.type();
+        const auto key = QString::fromLatin1(property.name());
+        const auto value = property.readOnGadget(&application);
+        if (i > 0)
+            debug << ";";
+        debug.noquote() << " " << key << ": ";
+        debug.quote();
+        switch (type) {
+        case QVariant::Bool:
+            debug << value.toBool();
+            break;
+        case QVariant::Int:
+            debug << value.toInt();
+            break;
+        case QVariant::String:
+            debug << value.toString();
+            break;
+        case QVariant::Color:
+            debug << QColor(value.toString());
+            break;
+        case QVariant::Url: {
+            auto str = value.toString();
+            if (str.length() > 15)
+                str = str.left(12) + "...";
+            debug << QUrl(str);
+            break; }
+        case QVariant::DateTime:
+            debug << QDateTime::fromString(value.toString(), Qt::ISODateWithMs);
+            break;
+        default:
+            debug << value;
+            break;
+        }
+    }
+    debug << "}";
+
+    return debug;
+}
+
 uint qHash(const QMpsApplication &application, uint seed)
 {
     return qHash(application.id(), seed);

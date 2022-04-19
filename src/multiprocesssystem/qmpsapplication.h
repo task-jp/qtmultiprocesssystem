@@ -68,6 +68,7 @@ private:
 
 MULTIPROCESSSYSTEM_EXPORT QDataStream &operator<<(QDataStream &out, const QMpsApplication &application);
 MULTIPROCESSSYSTEM_EXPORT QDataStream &operator>>(QDataStream &in, QMpsApplication &application);
+MULTIPROCESSSYSTEM_EXPORT QDebug operator<<(QDebug debug, const QMpsApplication &application);
 
 MULTIPROCESSSYSTEM_EXPORT uint qHash(const QMpsApplication &application, uint seed = 0);
 
