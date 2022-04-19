@@ -210,12 +210,17 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
     QDebugStateSaver saver(debug);
     debug.nospace() << "QMpsApplication {";
     const auto mo = application.staticMetaObject;
+    bool first = true;
     for (int i = 0; i < mo.propertyCount(); i++) {
         const auto property = mo.property(i);
+        if (!property.isWritable())
+            continue;
         const auto type = property.type();
         const auto key = QString::fromLatin1(property.name());
         const auto value = property.readOnGadget(&application);
-        if (i > 0)
+        if (first)
+            first = false;
+        else
             debug << ";";
         debug.noquote() << " " << key << ": ";
         debug.quote();
