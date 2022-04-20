@@ -61,10 +61,11 @@ WaylandCompositor {
                 var item = root.add(shellSurface.title, shellSurface)
                 if (!item)
                     return
+                shellSurface.sendConfigure(Qt.size(item.width, item.height), WlShellSurface.NoneEdge)
                 item.handleResized.connect(function(width, height) {
                     if (width < 0 || height < 0)
                         return
-                    shellSurface.sendConfigure(Qt.size(width, height), WlShellSurface.NoneEdge);
+                    shellSurface.sendConfigure(Qt.size(width, height), WlShellSurface.NoneEdge)
                 })
             })
         }
@@ -78,10 +79,11 @@ WaylandCompositor {
                 var item = root.add(toplevel.title, xdgSurface)
                 if (!item)
                     return
+                toplevel.sendConfigure(Qt.size(item.width, item.height), [])
                 item.handleResized.connect(function(width, height) {
                     if (width < 0 || height < 0)
                         return
-                    toplevel.sendConfigure(Qt.size(width, height), []);
+                    toplevel.sendConfigure(Qt.size(width, height), [])
                 })
             })
         }
