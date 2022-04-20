@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
     } else if (qEnvironmentVariableIsSet("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY")) {
         category = qEnvironmentVariable("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY");
     }
+    if (!category.endsWith('/'))
+        category.append('/');
     qputenv("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY", category.toUtf8());
 
     QString role = QLatin1String("system");
@@ -49,8 +51,6 @@ int main(int argc, char *argv[])
         role = args.first();
     }
 
-    if (!category.endsWith('/'))
-        category.append('/');
     auto applications = QMpsApplicationFactory::apps(category);
     std::sort(applications.begin(), applications.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
         return a.id() < b.id();
@@ -135,13 +135,6 @@ int main(int argc, char *argv[])
     }
     QMpsApplicationFactory::load(category + role, &app);
 
-    if (type == QMpsAbstractManagerFactory::Server) {
-        if (winManType == QLatin1String("monolithic")) {
-            for (const auto &application : applicationManager->applications()) {
-                QMpsApplicationFactory::load(category + application.key(), &app);
-            }
-        }
-    }
     qDebug() << url;
 
     qDebug() << role << appManType << winManType << type;
