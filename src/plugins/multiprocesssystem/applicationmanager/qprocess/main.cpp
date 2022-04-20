@@ -2,7 +2,7 @@
 
 #include "qprocessapplicationmanager.h"
 
-class QQProcessApplicationManagerPlugin : public QMpsApplicationManagerPlugin
+class QProcessApplicationManagerPlugin : public QMpsApplicationManagerPlugin
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QMpsApplicationManagerFactoryInterface_iid FILE "qprocess.json")

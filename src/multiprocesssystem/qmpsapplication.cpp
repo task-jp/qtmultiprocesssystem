@@ -5,7 +5,7 @@
 class QMpsApplication::Private : public QSharedData
 {
 public:
-    int id = 0;
+    int id = -1;
     QString key = QLatin1String("main");
     QString name;
     QColor theme;
@@ -138,7 +138,7 @@ void QMpsApplication::setDaemon(bool daemon)
 
 bool QMpsApplication::isValid() const
 {
-    return d->id > 0;
+    return d->id > -1;
 }
 
 QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)

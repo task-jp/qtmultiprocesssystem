@@ -87,6 +87,7 @@ WaylandCompositor {
                 if (!item)
                     return
                 toplevel.sendConfigure(Qt.size(item.width, item.height), [])
+                activator.onActivated(applicationManager.findByKey(toplevel.title))
                 item.handleResized.connect(function(width, height) {
                     if (width < 0 || height < 0)
                         return
@@ -129,6 +130,7 @@ WaylandCompositor {
 
     property var apps: ({})
     Connections {
+        id: activator
         target: applicationManager
         function onActivated(app) {
             var current = applicationManager.current

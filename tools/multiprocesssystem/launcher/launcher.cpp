@@ -42,8 +42,6 @@ int main(int argc, char *argv[])
     } else if (qEnvironmentVariableIsSet("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY")) {
         category = qEnvironmentVariable("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY");
     }
-    if (!category.endsWith('/'))
-        category.append('/');
     qputenv("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY", category.toUtf8());
 
     QString role = QLatin1String("system");
@@ -51,7 +49,9 @@ int main(int argc, char *argv[])
         role = args.first();
     }
 
-    auto applications = QMpsApplicationFactory::apps(category);
+    auto applications = QMpsApplicationFactory::apps(category + "/");
+    if (applications.isEmpty())
+        qFatal("no application found in %s", qUtf8Printable(category));
     qDebug() << category << "contains applications below.";
     QMpsApplication application;
     for (const auto &a : qAsConst(applications)) {
@@ -59,6 +59,9 @@ int main(int argc, char *argv[])
         if (a.key() == role) {
             application = a;
         }
+    }
+    if (!application.isValid()) {
+        qFatal("%s not found in %s", qUtf8Printable(role), qUtf8Printable(category));
     }
     app.setApplicationName(role);
 
@@ -130,7 +133,7 @@ int main(int argc, char *argv[])
         }
         qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
     }
-    QMpsApplicationFactory::load(category + role, &app);
+    QMpsApplicationFactory::load(category + "/" + role, &app);
 
     qDebug() << url;
 
