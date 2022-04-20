@@ -18,7 +18,14 @@ WaylandCompositor {
             id: item
             anchors.fill: parent
             visible: enabled
-            onSurfaceDestroyed: destroy()
+            property var application
+            onSurfaceDestroyed: {
+                if (applicationManager.current.id === item.application.id) {
+                    applicationManager.exec(applicationManager.findByKey('home'))
+                }
+                delete root.apps[item.application.id]
+                destroy()
+            }
             onWidthChanged: handleResized(width, height)
             onHeightChanged: handleResized(width, height)
             signal handleResized(real width, real height)
@@ -46,7 +53,7 @@ WaylandCompositor {
             return
         var app = applicationManager.findByKey(key)
         var parent = main.findParent(app)
-        var item = chromeComponent.createObject(parent, { "shellSurface": surface } )
+        var item = chromeComponent.createObject(parent, { "shellSurface": surface, "application": app } )
         root.apps[app.id] = item
         if (!app.systemUI) {
             item.enabled = (applicationManager.current.key === key)
