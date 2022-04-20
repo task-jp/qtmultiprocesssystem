@@ -1,8 +1,9 @@
-TEMPLATE = app
 QT = multiprocesssystem
-
 SOURCES = system.cpp
 RESOURCES = system.qrc
+OTHER_FILES += settings.json
 
-target.path = $$[QT_INSTALL_EXAMPLES]/multiprocesssystem/system
-INSTALLS += target
+PLUGIN_TYPE = multiprocesssystem/application
+PLUGIN_CLASS_NAME = System
+load(qt_plugin)
+CONFIG += install_ok  # Do not cargo-cult this!

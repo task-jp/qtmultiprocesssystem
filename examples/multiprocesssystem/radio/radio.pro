@@ -1,6 +1,6 @@
 QT = multiprocesssystem
 SOURCES = radio.cpp
-RESOURCES = radio.qrc
+RESOURCES = radio.qrc ../common/common.qrc
 OTHER_FILES += main.json
 
 PLUGIN_TYPE = multiprocesssystem/application

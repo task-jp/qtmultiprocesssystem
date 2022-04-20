@@ -1,6 +1,6 @@
 QT = multiprocesssystem
 SOURCES = header.cpp
-RESOURCES = header.qrc
+RESOURCES = header.qrc ../common/common.qrc
 OTHER_FILES += header.json
 
 PLUGIN_TYPE = multiprocesssystem/application

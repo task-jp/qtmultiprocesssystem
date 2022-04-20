@@ -1,5 +1,4 @@
 #include <QtMultiProcessSystem/qmpsapplicationplugin.h>
-#include <QtMultiProcessSystem/qmpsapplication.h>
 
 class Settings : public QMpsApplicationPlugin
 {

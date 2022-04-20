@@ -1,6 +1,6 @@
 QT = multiprocesssystem
 SOURCES = music.cpp
-RESOURCES = music.qrc
+RESOURCES = music.qrc ../common/common.qrc
 OTHER_FILES += music.json
 
 PLUGIN_TYPE = multiprocesssystem/application

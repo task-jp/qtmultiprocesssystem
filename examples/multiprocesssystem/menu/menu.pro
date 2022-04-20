@@ -1,6 +1,6 @@
 QT = multiprocesssystem
 SOURCES = menu.cpp
-RESOURCES = menu.qrc
+RESOURCES = menu.qrc ../common/common.qrc
 OTHER_FILES += menu.json
 
 PLUGIN_TYPE = multiprocesssystem/application

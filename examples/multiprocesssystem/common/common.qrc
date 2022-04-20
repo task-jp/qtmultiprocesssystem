@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/multiprocesssystem/common">
+        <file>AbstractMain.qml</file>
+        <file>Button.qml</file>
+    </qresource>
+</RCC>

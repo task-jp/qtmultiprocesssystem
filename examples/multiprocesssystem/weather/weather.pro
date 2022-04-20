@@ -1,6 +1,6 @@
 QT = multiprocesssystem
 SOURCES = weather.cpp
-RESOURCES = weather.qrc
+RESOURCES = weather.qrc ../common/common.qrc
 OTHER_FILES += weather.json
 
 PLUGIN_TYPE = multiprocesssystem/application
