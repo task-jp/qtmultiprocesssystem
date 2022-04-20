@@ -58,7 +58,6 @@ int main(int argc, char *argv[])
         qDebug() << a;
         if (a.key() == role) {
             application = a;
-            break;
         }
     }
     app.setApplicationName(role);
@@ -123,6 +122,7 @@ int main(int argc, char *argv[])
     if (application.isDaemon()) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role));
     } else {
+        qDebug() << application;
         if (application.area() == QStringLiteral("compositor")) {
             url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));
         } else {
