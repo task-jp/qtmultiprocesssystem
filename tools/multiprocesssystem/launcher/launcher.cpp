@@ -44,6 +44,11 @@ int main(int argc, char *argv[])
     }
     qputenv("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY", category.toUtf8());
 
+    QString role = QLatin1String("system");
+    if (!args.isEmpty()) {
+        role = args.first();
+    }
+
     if (!category.endsWith('/'))
         category.append('/');
     auto applications = QMpsApplicationFactory::apps(category);
@@ -51,9 +56,15 @@ int main(int argc, char *argv[])
         return a.id() < b.id();
     });
     qDebug() << category << "contains applications below.";
-    for (const auto &application : qAsConst(applications)) {
-        qDebug() << application;
+    QMpsApplication application;
+    for (const auto &a : qAsConst(applications)) {
+        qDebug() << a;
+        if (a.key() == role) {
+            application = a;
+            break;
+        }
     }
+    app.setApplicationName(role);
 
     QString appManType = QLatin1String("inprocess");
     if (parser.isSet(appManOption)) {
@@ -111,33 +122,19 @@ int main(int argc, char *argv[])
         qFatal("WatchDog Manager backend '%s' not found in %s", qUtf8Printable(watManType), qUtf8Printable(QMpsWatchDogManagerFactory::keys().join(", ")));
     }
 
-    QString role = QLatin1String("system");
-    if (!args.isEmpty()) {
-        role = args.first();
-    }
-    app.setApplicationName(role);
-
     QUrl url;
-    {
-        QMpsApplication application;
-        for (const auto &a : applications) {
-            if (a.key() == role) {
-                application = a;
-                break;
-            }
-        }
-        if (application.isDaemon()) {
-            url = QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role));
+    if (application.isDaemon()) {
+        url = QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role));
+    } else {
+        if (application.area() == QStringLiteral("compositor")) {
+            url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));
         } else {
-            if (application.area() == QStringLiteral("compositor")) {
-                url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));
-            } else {
-                url = QUrl(QStringLiteral("qrc:/multiprocesssystem/client.qml"));
-            }
-            qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
+            url = QUrl(QStringLiteral("qrc:/multiprocesssystem/client.qml"));
         }
-        QMpsApplicationFactory::load(category + role, &app);
+        qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
     }
+    QMpsApplicationFactory::load(category + role, &app);
+
     if (type == QMpsAbstractManagerFactory::Server) {
         if (winManType == QLatin1String("monolithic")) {
             for (const auto &application : applicationManager->applications()) {
