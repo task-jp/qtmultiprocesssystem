@@ -24,6 +24,9 @@ QList<QMpsApplication> QMpsApplicationFactory::apps(const QString &prefix)
             }
         }
     }
+    std::sort(ret.begin(), ret.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
+        return a.id() < b.id();
+    });
     return ret;
 }
 

@@ -52,9 +52,6 @@ int main(int argc, char *argv[])
     }
 
     auto applications = QMpsApplicationFactory::apps(category);
-    std::sort(applications.begin(), applications.end(), [](const QMpsApplication &a, const QMpsApplication &b) {
-        return a.id() < b.id();
-    });
     qDebug() << category << "contains applications below.";
     QMpsApplication application;
     for (const auto &a : qAsConst(applications)) {
