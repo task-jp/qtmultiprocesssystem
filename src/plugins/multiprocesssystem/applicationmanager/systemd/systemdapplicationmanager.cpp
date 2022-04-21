@@ -8,7 +8,7 @@ public:
     Private();
     QDBusInterface manager;
     const QString category;
-    QHash<QMpsApplication, QDBusObjectPath> processMap;
+    QHash<QMpsApplication, QDBusInterface *> processMap;
 };
 
 SystemdApplicationManager::Private::Private()
@@ -41,13 +41,22 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
             }
             qDebug() << path.path();
             reply = d->manager.call("RestartUnit", name, "replace");
-            if (reply.isValid()) {
-                path = reply.value();
-            } else {
+            if (!reply.isValid()) {
                 qWarning() << d->category << name << reply.error();
                 return;
             }
-            d->processMap.insert(application, path);
+
+            auto unit = new QDBusInterface("org.freedesktop.systemd1", path.path(), "org.freedesktop.systemd1.Unit");
+            qDebug() << unit->isValid();
+            d->processMap.insert(application, unit);
+#if 0
+            const auto mo = unit->metaObject();
+            for (int i = mo->propertyOffset(); i < mo->propertyCount(); i++)
+                qDebug() << mo->property(i).name();
+            for (int i = mo->methodOffset(); i < mo->methodCount(); i++)
+                qDebug() << mo->method(i).name();
+#endif
+            qDebug() << unit->property("LoadState") << unit->property("ActiveState") << unit->property("SubState");
             emit activated(application);
         }
     });
