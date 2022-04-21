@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
     }
     qputenv("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY", category.toUtf8());
 
-    QString role = QLatin1String("system");
+    QString role;
     if (!args.isEmpty()) {
         role = args.first();
     }
@@ -57,6 +57,9 @@ int main(int argc, char *argv[])
     for (const auto &a : qAsConst(applications)) {
         qDebug() << a;
         if (a.key() == role) {
+            application = a;
+        } else if (a.id() == 0 && role.isEmpty()) {
+            role = a.key();
             application = a;
         }
     }
