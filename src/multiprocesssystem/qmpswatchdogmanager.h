@@ -8,6 +8,7 @@
 class MULTIPROCESSSYSTEM_EXPORT QMpsWatchDogManager : public QMpsIpcInterface
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "local.WatchDogManager")
 public:
     explicit QMpsWatchDogManager(QObject *parent = nullptr, Type type = Client);
     ~QMpsWatchDogManager() override;

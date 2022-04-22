@@ -8,6 +8,7 @@
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManager : public QMpsIpcInterface
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "local.ApplicationManager")
     Q_PROPERTY(QList<QMpsApplication> applications READ applications WRITE setApplications NOTIFY applicationsChanged)
     Q_PROPERTY(QMpsApplication current READ current WRITE setCurrent NOTIFY currentChanged)
 public:
