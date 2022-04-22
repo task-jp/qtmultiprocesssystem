@@ -6,6 +6,7 @@
 class QProcessApplicationManager : public QMpsApplicationManager
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "local.ApplicationManager")
 public:
     explicit QProcessApplicationManager(QObject *parent, Type type);
     ~QProcessApplicationManager() override;

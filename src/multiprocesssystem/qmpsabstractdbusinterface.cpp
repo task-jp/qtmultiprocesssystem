@@ -35,21 +35,22 @@ bool QMpsAbstractDBusInterface::Private::init()
     }
 
     mo = q->metaObject();
+    for (int i = mo->classInfoOffset(); i < mo->classInfoCount(); i++) {
+        const auto classInfo = mo->classInfo(i);
+        if (QByteArray("D-Bus Interface") == classInfo.name()) {
+            interface = QString::fromUtf8(classInfo.value());
+            break;
+        }
+    }
+    if (interface.isNull()) {
+        qFatal("D-Bus Interface not found in %s", mo->className());
+        return false;
+    }
+
     while (mo->superClass()->className() != q->staticMetaObject.className()) {
         mo = mo->superClass();
     }
     path = QStringLiteral("/%1").arg(QString::fromLatin1(mo->className()).mid(1 /* Q */));
-    for (int i = 0; i < mo->classInfoCount(); i++) {
-        const auto classInfo = mo->classInfo(i);
-        if (QByteArray("D-Bus Interface") == classInfo.name()) {
-            interface = QString::fromUtf8(classInfo.value());
-        }
-    }
-
-    if (interface.isNull()) {
-        qWarning() << "D-Bus Interface not found";
-        return false;
-    }
 
     switch (q->type()) {
     case Server: {

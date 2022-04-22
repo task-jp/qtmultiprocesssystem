@@ -6,6 +6,7 @@
 class InProcessApplicationManager : public QMpsApplicationManager
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "local.ApplicationManager")
 public:
     InProcessApplicationManager(QObject *parent, Type type);
     ~InProcessApplicationManager() override;
