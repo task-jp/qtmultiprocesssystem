@@ -1,5 +1,6 @@
 #include "qmpsapplication.h"
 
+#include <QtCore/QJsonDocument>
 #include <QtCore/QMetaProperty>
 
 class QMpsApplication::Private : public QSharedData
@@ -148,7 +149,7 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
         const auto property = ret.staticMetaObject.property(i);
         const auto key = QString::fromLatin1(property.name());
         if (json.contains(key)) {
-            const auto type = property.type();
+            const int type = property.type();
             const auto value = json.value(key);
             switch (type) {
             case QVariant::Bool:
@@ -168,6 +169,9 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
                 break;
             case QVariant::DateTime:
                 property.writeOnGadget(&ret, QDateTime::fromString(value.toString(), Qt::ISODateWithMs));
+                break;
+            case QMetaType::QJsonObject:
+                property.writeOnGadget(&ret, value.toObject());
                 break;
             default:
                 qWarning() << type << key << value << "not supported";
@@ -215,7 +219,7 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
         const auto property = mo.property(i);
         if (!property.isWritable())
             continue;
-        const auto type = property.type();
+        const int type = property.type();
         const auto key = QString::fromLatin1(property.name());
         const auto value = property.readOnGadget(&application);
         if (first)
@@ -245,6 +249,9 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
             break; }
         case QVariant::DateTime:
             debug << QDateTime::fromString(value.toString(), Qt::ISODateWithMs);
+            break;
+        case QMetaType::QJsonObject:
+            debug << QJsonDocument(value.toJsonObject()).toJson(QJsonDocument::Compact);
             break;
         default:
             debug << value;

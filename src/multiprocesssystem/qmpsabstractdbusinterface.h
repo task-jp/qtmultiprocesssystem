@@ -4,6 +4,7 @@
 #include "qmpsabstractipcinterface.h"
 
 #include <QtCore/QDateTime>
+#include <QtCore/QJsonDocument>
 #include <QtCore/QMetaProperty>
 #include <QtCore/QMetaType>
 #include <QtDBus/QDBusArgument>
@@ -23,9 +24,9 @@ public:
         const auto mo = gadget.staticMetaObject;
         for (int i = 0; i < mo.propertyCount(); i++) {
             auto property = mo.property(i);
-            const auto type = property.type();
-            auto key = QString::fromLatin1(property.name());
-            auto value = property.readOnGadget(&gadget);
+            const int type = property.type();
+            const auto key = QString::fromLatin1(property.name());
+            const auto value = property.readOnGadget(&gadget);
             switch (type) {
             case QVariant::Bool:
                 argument << value.toBool();
@@ -38,6 +39,9 @@ public:
             case QVariant::Url:
             case QVariant::DateTime:
                 argument << value.toString();
+                break;
+            case QMetaType::QJsonObject:
+                argument << QJsonDocument(value.toJsonObject()).toJson(QJsonDocument::Compact);
                 break;
             default:
                 qWarning() << type << key << value << "not supported";
@@ -55,8 +59,8 @@ public:
         const auto mo = gadget.staticMetaObject;
         for (int i = 0; i < mo.propertyCount(); i++) {
             const auto property = mo.property(i);
-            const auto type = property.type();
-            auto key = QString::fromLatin1(property.name());
+            const int type = property.type();
+            const auto key = QString::fromLatin1(property.name());
             QVariant value;
             switch (type) {
             case QVariant::Bool:
@@ -76,6 +80,9 @@ public:
                 break;
             case QVariant::DateTime:
                 value = QDateTime::fromString(qdbus_cast<QString>(argument), Qt::ISODateWithMs);
+                break;
+            case QMetaType::QJsonObject:
+                value = QJsonDocument::fromJson(qdbus_cast<QString>(argument).toUtf8()).object();
                 break;
             default:
                 qWarning() << type << key << value << "not supported";
