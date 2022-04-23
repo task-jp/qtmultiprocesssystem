@@ -11,6 +11,7 @@ HEADERS += \
     qmpsapplicationmanagerplugin.h \
     qmpsapplicationplugin.h \
     qmpsipcinterface.h \
+    qmpsurihandler.h \
     qmpswatchdog.h \
     qmpswatchdogmanager.h \
     qmpswatchdogmanagerfactory.h \
@@ -27,6 +28,7 @@ SOURCES += \
     qmpsapplicationmanagerfactory.cpp \
     qmpsapplicationmanagerplugin.cpp \
     qmpsapplicationplugin.cpp \
+    qmpsurihandler.cpp \
     qmpswatchdog.cpp \
     qmpswatchdogmanager.cpp \
     qmpswatchdogmanagerfactory.cpp \
@@ -44,5 +46,9 @@ qtHaveModule(dbus) {
 }
 
 CONFIG += git_build
-MODULE_PLUGIN_TYPES = multiprocesssystem/applicationmanager multiprocesssystem/windowmanager multiprocesssystem/watchdogmanager multiprocesssystem/application
+MODULE_PLUGIN_TYPES = \
+    multiprocesssystem/applicationmanager \
+    multiprocesssystem/windowmanager \
+    multiprocesssystem/watchdogmanager \
+    multiprocesssystem/application
 load(qt_module)

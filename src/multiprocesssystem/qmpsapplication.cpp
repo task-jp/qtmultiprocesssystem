@@ -15,6 +15,7 @@ public:
     bool systemUI = false;
     bool autoStart = false;
     bool daemon = false;
+    QJsonObject uriHandlers;
 };
 
 QMpsApplication::QMpsApplication() : d(new Private)
@@ -137,6 +138,17 @@ void QMpsApplication::setDaemon(bool daemon)
     d->daemon = daemon;
 }
 
+QJsonObject QMpsApplication::uriHandlers() const
+{
+    return d->uriHandlers;
+}
+
+void QMpsApplication::setUriHandlers(const QJsonObject &uriHandlers)
+{
+    if (this->uriHandlers() == uriHandlers) return;
+    d->uriHandlers = uriHandlers;
+}
+
 bool QMpsApplication::isValid() const
 {
     return d->id > -1;
@@ -244,7 +256,7 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
         case QVariant::Url: {
             auto str = value.toString();
             if (str.length() > 15)
-                str = str.left(12) + "...";
+                str = str.left(12) + QStringLiteral("...");
             debug << QUrl(str);
             break; }
         case QVariant::DateTime:

@@ -20,6 +20,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(bool systemUI READ isSystemUI WRITE setSystemUI)
     Q_PROPERTY(bool autoStart READ isAutoStart WRITE setAutoStart)
     Q_PROPERTY(bool daemon READ isDaemon WRITE setDaemon)
+    Q_PROPERTY(QJsonObject uri_handlers READ uriHandlers WRITE setUriHandlers)
 public:
     QMpsApplication();
     QMpsApplication(const QMpsApplication &);
@@ -56,6 +57,9 @@ public:
 
     bool isDaemon() const;
     void setDaemon(bool daemon);
+
+    QJsonObject uriHandlers() const;
+    void setUriHandlers(const QJsonObject &uriHandlers);
 
     bool isValid() const;
 

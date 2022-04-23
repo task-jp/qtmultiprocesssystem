@@ -11,6 +11,7 @@
 #include <QtMultiProcessSystem/QMpsWatchDogManager>
 #include <QtMultiProcessSystem/QMpsApplicationFactory>
 #include <QtMultiProcessSystem/QMpsApplication>
+#include <QtMultiProcessSystem/QMpsUriHandler>
 
 int main(int argc, char *argv[])
 {
@@ -66,6 +67,7 @@ int main(int argc, char *argv[])
     if (!application.isValid()) {
         qFatal("%s not found in %s", qUtf8Printable(role), qUtf8Printable(category));
     }
+    qDebug() << application;
     app.setApplicationName(role);
 
     QString appManType = QLatin1String("inprocess");
@@ -122,6 +124,12 @@ int main(int argc, char *argv[])
         context->setContextProperty("watchDogManager", watchDogManager);
     } else if (watManType.toLower() != "none") {
         qFatal("WatchDog Manager backend '%s' not found in %s", qUtf8Printable(watManType), qUtf8Printable(QMpsWatchDogManagerFactory::keys().join(", ")));
+    }
+
+    auto uriHandler = new QMpsUriHandler(application, &app, type);
+    if (uriHandler->init()) {
+        qDebug() << application;
+        context->setContextProperty("uriHandler", uriHandler);
     }
 
     QUrl url;
