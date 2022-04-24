@@ -12,7 +12,7 @@ Main {
         }
     }
 
-    property var application: applicationManager.findByKey('main')
+    property var application: applicationManager.findByID(0)
     SystemdWatchDog {
         id: systemd
     }
@@ -62,9 +62,9 @@ Main {
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(application.key)
             var parent = root.findParent(application)
             var item = chromeComponent.createObject(parent, {"source": url})
-            console.debug(application.key, url, item)
             if (!application.area) {
                 root.apps[application.id] = item
+                item.item.application = application
                 item.item.enabled = true
             }
         }

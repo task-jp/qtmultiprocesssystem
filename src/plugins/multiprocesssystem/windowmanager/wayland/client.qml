@@ -10,5 +10,6 @@ Window {
     Main {
         id: main
         anchors.fill: parent
+        application: applicationManager.findByKey(Qt.application.name)
     }
 }
