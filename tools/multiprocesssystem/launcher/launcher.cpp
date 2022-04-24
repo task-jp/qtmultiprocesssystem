@@ -126,10 +126,9 @@ int main(int argc, char *argv[])
         qFatal("WatchDog Manager backend '%s' not found in %s", qUtf8Printable(watManType), qUtf8Printable(QMpsWatchDogManagerFactory::keys().join(", ")));
     }
 
-    auto uriHandler = new QMpsUriHandler(application, &app, type);
-    if (uriHandler->init()) {
-        qDebug() << application;
-        context->setContextProperty("uriHandler", uriHandler);
+    if (type == QMpsAbstractManagerFactory::Server) {
+        auto uriHandler = new QMpsUriHandler(&app, type);
+        uriHandler->init();
     }
 
     QUrl url;

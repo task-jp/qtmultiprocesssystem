@@ -9,9 +9,9 @@ public:
 
 QMpsUriHandler *QMpsUriHandler::Private::server = nullptr;
 
-QMpsUriHandler::QMpsUriHandler(const QMpsApplication &application, QObject *parent, Type type)
+QMpsUriHandler::QMpsUriHandler(QObject *parent, Type type)
     : QMpsIpcInterface(parent, type)
-    , d(new Private {application})
+    , d(new Private)
 {
     switch (type) {
     case Server:
@@ -39,6 +39,7 @@ QMpsUriHandler::QMpsUriHandler(const QMpsApplication &application, QObject *pare
         });
         break;
     }
+    init();
 }
 
 QMpsUriHandler::~QMpsUriHandler() = default;
@@ -46,6 +47,13 @@ QMpsUriHandler::~QMpsUriHandler() = default;
 QMpsApplication QMpsUriHandler::application() const
 {
     return d->application;
+}
+
+void QMpsUriHandler::setApplication(const QMpsApplication &application)
+{
+    if (d->application == application) return;
+    d->application = application;
+    emit applicationChanged(application);
 }
 
 void QMpsUriHandler::open(const QString &uri)

@@ -82,7 +82,7 @@ public:
                 value = QDateTime::fromString(qdbus_cast<QString>(argument), Qt::ISODateWithMs);
                 break;
             case QMetaType::QJsonObject:
-                value = QJsonDocument::fromJson(qdbus_cast<QString>(argument).toUtf8()).object();
+                value = QJsonDocument::fromJson(qdbus_cast<QByteArray>(argument)).object();
                 break;
             default:
                 qWarning() << type << key << value << "not supported";

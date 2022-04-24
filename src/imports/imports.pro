@@ -1,3 +1,6 @@
 TEMPLATE = subdirs
-SUBDIRS = watchdog \
-    applicationmanager
+SUBDIRS = \
+    applicationmanager \
+    urihandler \
+    watchdog
+

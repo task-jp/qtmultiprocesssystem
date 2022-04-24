@@ -33,7 +33,8 @@ private:
             QMetaObject::invokeMethod(this, #s, __VA_ARGS__); \
             break; \
         case Client: \
-            QMetaObject::invokeMethod(proxy(), #c, __VA_ARGS__); \
+            if (proxy() || init()) \
+                QMetaObject::invokeMethod(proxy(), #c, __VA_ARGS__); \
             break; \
         } \
     }()
@@ -46,7 +47,8 @@ private:
             ret = d->n; \
             break; \
         case Client: \
-            ret = proxy()->property(#n).value<t>(); \
+            if (proxy()) \
+                ret = proxy()->property(#n).value<t>(); \
             break; \
         } \
         return ret; \
@@ -61,7 +63,8 @@ private:
             emit n##Changed(n); \
             break; \
         case Client: \
-            proxy()->setProperty(#n, QVariant::fromValue(n)); \
+            if (proxy() || init()) \
+                proxy()->setProperty(#n, QVariant::fromValue(n)); \
             break; \
         } \
     }()

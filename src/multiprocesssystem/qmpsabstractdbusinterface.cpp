@@ -127,5 +127,5 @@ QMpsAbstractDBusInterface::~QMpsAbstractDBusInterface() = default;
 
 bool QMpsAbstractDBusInterface::init()
 {
-    return d->init();
+    return proxy() || d->init();
 }
