@@ -145,8 +145,8 @@ WaylandCompositor {
             if (current.id in root.apps)
                 root.apps[current.id].enabled = false
             applicationManager.current = application
-            if (app.id in root.apps)
-                root.apps[app.id].enabled = true
+            if (application.id in root.apps)
+                root.apps[application.id].enabled = true
         }
     }
 }

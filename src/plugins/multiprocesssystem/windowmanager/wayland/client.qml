@@ -11,5 +11,13 @@ Window {
         id: main
         anchors.fill: parent
         application: applicationManager.findByKey(Qt.application.name)
+        Component.onCompleted: {
+            var args = []
+            for (var i = 2; i < Qt.application.arguments.length; i++) {
+                args.push(Qt.application.arguments[i])
+            }
+            if (typeof main.activated === 'function')
+                main.activated(args)
+        }
     }
 }
