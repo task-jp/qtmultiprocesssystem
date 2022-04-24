@@ -14,6 +14,8 @@ public:
     explicit QMpsUriHandler(QObject *parent = nullptr, Type type = Client);
     ~QMpsUriHandler() override;
 
+    bool init() override;
+
     QMpsApplication application() const;
 
 public Q_SLOTS:

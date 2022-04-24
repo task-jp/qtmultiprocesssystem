@@ -1,8 +1,11 @@
 #include "qmpsurihandler.h"
+#include "qmpsapplicationmanager.h"
+#include <QtGui/QDesktopServices>
 
 class QMpsUriHandler::Private
 {
 public:
+    QMpsApplicationManager applicationManager;
     QMpsApplication application;
     static QMpsUriHandler *server;
 };
@@ -13,28 +16,46 @@ QMpsUriHandler::QMpsUriHandler(QObject *parent, Type type)
     : QMpsIpcInterface(parent, type)
     , d(new Private)
 {
+    auto handle = [](const QMpsApplication &application, const QString &uri) {
+        const auto uriHandlers = application.uriHandlers();
+        for (auto it = uriHandlers.constBegin(); it != uriHandlers.constEnd(); ++it) {
+            const auto key = it.key();
+            const auto value = it.value().toString();
+            if (value == QStringLiteral("scheme")) {
+                if (uri.startsWith(key)) {
+                    return true;
+                }
+            } else if (value == QStringLiteral("regexp")) {
+                QRegularExpression regexp(key);
+                if (regexp.match(uri).hasMatch()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
     switch (type) {
     case Server:
         Private::server = this;
+        connect(this, &QMpsUriHandler::doOpen, this, [this, &handle](const QString &uri) {
+            const auto apps = d->applicationManager.applications();
+            bool handled = false;
+            for (const auto &app : apps) {
+                if (handle(app, uri)) {
+                    handled = true;
+                    d->applicationManager.exec(app, {uri});
+                }
+            }
+            if (!handled) {
+                QDesktopServices::openUrl(QUrl(uri));
+            }
+        });
         break;
     case Client:
-        connect(this, &QMpsUriHandler::doOpen, this, [this](const QString &uri) {
-            const auto uriHandlers = d->application.uriHandlers();
-            for (auto it = uriHandlers.constBegin(); it != uriHandlers.constEnd(); ++it) {
-                const auto key = it.key();
-                const auto value = it.value().toString();
-                if (value == QStringLiteral("scheme")) {
-                    if (uri.startsWith(key)) {
-                        emit requested(uri);
-                        break;
-                    }
-                } else if (value == QStringLiteral("regexp")) {
-                    QRegularExpression regexp(key);
-                    if (regexp.match(uri).hasMatch()) {
-                        emit requested(uri);
-                        break;
-                    }
-                }
+        connect(this, &QMpsUriHandler::doOpen, this, [this, &handle](const QString &uri) {
+            if (handle(d->application, uri)) {
+                emit requested(uri);
             }
         });
         break;
@@ -43,6 +64,13 @@ QMpsUriHandler::QMpsUriHandler(QObject *parent, Type type)
 }
 
 QMpsUriHandler::~QMpsUriHandler() = default;
+
+bool QMpsUriHandler::init()
+{
+    if (!QMpsIpcInterface::init())
+        return false;
+    return d->applicationManager.init();
+}
 
 QMpsApplication QMpsUriHandler::application() const
 {

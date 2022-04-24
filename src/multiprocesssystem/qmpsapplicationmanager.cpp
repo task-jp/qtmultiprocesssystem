@@ -35,9 +35,6 @@ QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
     case Client:
         break;
     }
-    connect(this, &QMpsApplicationManager::currentChanged, this, [](const QMpsApplication &application) {
-        qDebug() << application.key();
-    });
 }
 
 QMpsApplicationManager::~QMpsApplicationManager() = default;
