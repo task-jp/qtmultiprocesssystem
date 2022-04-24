@@ -24,14 +24,14 @@ public:
 public Q_SLOTS:
     void setApplications(const QList<QMpsApplication> &applications);
     void setCurrent(const QMpsApplication &current);
-    void exec(const QMpsApplication &application);
+    void exec(const QMpsApplication &application, const QStringList &arguments = {});
     void start();
 
 Q_SIGNALS:
     void applicationsChanged(const QList<QMpsApplication> &applications);
     void currentChanged(const QMpsApplication &current);
-    void activated(const QMpsApplication &application);
-    void doExec(const QMpsApplication &application);
+    void activated(const QMpsApplication &application, const QStringList &arguments = {});
+    void doExec(const QMpsApplication &application, const QStringList &arguments);
 
 protected:
     QMpsAbstractIpcInterface *server() const override;

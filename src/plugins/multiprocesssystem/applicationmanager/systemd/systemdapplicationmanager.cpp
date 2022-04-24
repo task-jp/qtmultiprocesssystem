@@ -20,9 +20,9 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
     : QMpsApplicationManager(parent, type)
     , d(new Private)
 {
-    connect(this, &SystemdApplicationManager::doExec, this, [this](const QMpsApplication &application) {
+    connect(this, &SystemdApplicationManager::doExec, this, [this](const QMpsApplication &application, const QStringList &arguments) {
         if (d->processMap.contains(application)) {
-            emit activated(application);
+            emit activated(application, arguments);
         } else {
             QString name = QString("%1_%2.service").arg(d->category).arg(application.key());
             QDBusObjectPath path;
@@ -57,7 +57,7 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
                 qDebug() << mo->method(i).name();
 #endif
             qDebug() << unit->property("LoadState") << unit->property("ActiveState") << unit->property("SubState");
-            emit activated(application);
+            emit activated(application, arguments);
         }
     });
 }

@@ -87,10 +87,11 @@ QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
     return ret;
 }
 
-void QMpsApplicationManager::exec(const QMpsApplication &application)
+void QMpsApplicationManager::exec(const QMpsApplication &application, const QStringList &arguments)
 {
     const auto arg1 = Q_ARG(QMpsApplication, application);
-    QMpsAbstractIpcInterfaceCall(doExec, exec, arg1);
+    const auto arg2 = Q_ARG(QStringList, arguments);
+    QMpsAbstractIpcInterfaceCall(doExec, exec, arg1, arg2);
 }
 
 void QMpsApplicationManager::start()

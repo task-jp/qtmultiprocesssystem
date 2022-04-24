@@ -13,14 +13,14 @@ InProcessApplicationManager::InProcessApplicationManager(QObject *parent, Type t
     : QMpsApplicationManager(parent, type)
     , d(new Private)
 {
-    connect(this, &InProcessApplicationManager::doExec, this, [this](const QMpsApplication &application) {
+    connect(this, &InProcessApplicationManager::doExec, this, [this](const QMpsApplication &application, const QStringList &arguments) {
         if (d->processMap.contains(application)) {
-            emit activated(application);
+            emit activated(application, arguments);
         } else {
             auto object = QMpsApplicationFactory::load(d->category + "/" + application.key(), this);
             if (object) {
                 d->processMap.insert(application, object);
-                emit activated(application);
+                emit activated(application, arguments);
             } else {
                 qWarning() << "launching" << application.key() << "in" << d->category << "failed";
             }

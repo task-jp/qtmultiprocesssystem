@@ -45,9 +45,9 @@ Main {
     property var apps: ({})
     Connections {
         target: applicationManager
-        function onActivated(application) {
+        function onActivated(application, args) {
             var current = applicationManager.current
-            if (application === current)
+            if (application.id === current.id)
                 return
             if (!application.area) {
                 if (current.id in root.apps) {
@@ -61,11 +61,13 @@ Main {
             }
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(application.key)
             var parent = root.findParent(application)
-            var item = chromeComponent.createObject(parent, {"source": url})
+            var item = chromeComponent.createObject(parent, {"source": url}).item
             if (!application.area) {
                 root.apps[application.id] = item
-                item.item.application = application
-                item.item.enabled = true
+                item.application = application
+                item.enabled = true
+                if (typeof item.activated === 'function')
+                    item.activated(args)
             }
         }
     }

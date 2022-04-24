@@ -14,14 +14,16 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
     : QMpsApplicationManager(parent, type)
     , d(new Private)
 {
-    connect(this, &QProcessApplicationManager::doExec, this, [this](const QMpsApplication &application) {
+    connect(this, &QProcessApplicationManager::doExec, this, [this](const QMpsApplication &application, const QStringList &arguments) {
         if (d->processMap.contains(application)) {
-            emit activated(application);
+            emit activated(application, arguments);
         } else {
             auto process = new QProcess(this);
             process->setObjectName(application.key());
             process->setProgram(QCoreApplication::instance()->applicationFilePath());
             QStringList args {application.key()};
+            if (!arguments.isEmpty())
+                args.append(arguments);
             process->setArguments(args);
             connect(process, &QProcess::readyReadStandardOutput, this, [this]() {
                 auto process = qobject_cast<QProcess *>(sender());
@@ -59,7 +61,7 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
             connect(process, &QProcess::destroyed, [this, application]() { d->processMap.remove(application); });
             if (process->waitForStarted()) {
                 d->processMap.insert(application, process);
-                emit activated(application);
+                emit activated(application, arguments);
             } else {
                 qWarning() << process->errorString();
             }
