@@ -98,7 +98,7 @@ bool QMpsAbstractDBusInterface::Private::init()
                 continue;
             auto findSignal = [this](const QByteArray &methodSignature) {
                 const auto mo = q->proxy()->metaObject();
-                for (int i = mo->methodOffset(); i < mo->methodCount(); i++) {
+                for (int i = 0; i < mo->methodCount(); i++) {
                     const auto mm = mo->method(i);
                     if (mm.methodType() != QMetaMethod::Signal)
                         continue;
