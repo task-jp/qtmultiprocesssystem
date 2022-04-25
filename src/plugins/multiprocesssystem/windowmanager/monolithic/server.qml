@@ -49,7 +49,7 @@ Main {
             var current = applicationManager.current
             if (application.id === current.id)
                 return
-            if (!application.area) {
+            if (!application.systemUI) {
                 if (current.id in root.apps) {
                     root.apps[current.id].enabled = false
                 }

@@ -136,8 +136,6 @@ WaylandCompositor {
             var current = applicationManager.current
             if (application.id === current.id)
                 return
-            if (application.area)
-                return
 
             if (!current.valid && !application.systemUI)
                 return
