@@ -3,5 +3,8 @@
 
     "id": 103,
     "key": "weather",
-    "name": "Weather"
+    "name": {
+        "default": "Weather",
+        "ja": "天気"
+    }
 }

@@ -1,5 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtMultiProcessSystem.ApplicationManager 1.15
 import '../common/'
 
 AbstractMain {
@@ -8,32 +9,20 @@ AbstractMain {
     RowLayout {
         anchors.fill: parent
 
-        ListModel {
-            id: shortcut
-            ListElement {
-                key: 'menu'
-                name: 'Menu'
-            }
-            ListElement {
-                key: 'navi'
-                name: 'Navi'
-            }
-            ListElement {
-                key: 'music'
-                name: 'Music'
-            }
-        }
-
         Repeater {
-            model: shortcut
+            model: ApplicationManagerModel {
+                manager: applicationManager
+                filters: ['menu', 'navi', 'music']
+            }
             Button {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                text: model.name
+                text: model.i18nName
                 font.pixelSize: height / 4
                 highlighted: applicationManager.current.key === model.key
                 onClicked: {
                     var application = applicationManager.findByKey(model.key)
+                    console.debug(model.key, applicationManager.current.key)
                     applicationManager.exec(application)
                 }
             }

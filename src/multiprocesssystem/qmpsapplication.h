@@ -13,7 +13,8 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(bool valid READ isValid)
     Q_PROPERTY(int id READ id WRITE setID)
     Q_PROPERTY(QString key READ key WRITE setKey)
-    Q_PROPERTY(QString name READ name WRITE setName)
+    Q_PROPERTY(QJsonObject name READ name WRITE setName)
+    Q_PROPERTY(QString i18nName READ i18nName)
     Q_PROPERTY(QColor theme READ theme WRITE setTheme)
     Q_PROPERTY(QUrl icon READ icon WRITE setIcon)
     Q_PROPERTY(QString area READ area WRITE setArea)
@@ -37,8 +38,9 @@ public:
     QString key() const;
     void setKey(const QString &key);
 
-    QString name() const;
-    void setName(const QString &name);
+    QJsonObject name() const;
+    void setName(const QJsonObject &name);
+    QString i18nName() const;
 
     QColor theme() const;
     void setTheme(const QColor &theme);

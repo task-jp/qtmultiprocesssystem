@@ -5,13 +5,32 @@
 ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
     : QAbstractListModel(parent)
 {
-    connect(this, &ApplicationManagerModel::applicationManagerChanged, this, [this](QMpsApplicationManager *applicationManager) {
-        for (const auto &application : applicationManager->applications()) {
-            if (!application.isSystemUI()) {
-                appsForMenu.append(application);
+    auto updateList = [this] () {
+        if (!applicationManager)
+            return;
+        if (!appsForMenu.isEmpty()) {
+            beginRemoveRows(QModelIndex(), 0, appsForMenu.length() - 1);
+            appsForMenu.clear();
+            endRemoveRows();
+        }
+        if (filters.isEmpty()) {
+            for (const auto &application : applicationManager->applications()) {
+                if (!application.isSystemUI()) {
+                    appsForMenu.append(application);
+                }
+            }
+        } else {
+            for (const auto &key : filters) {
+                appsForMenu.append(applicationManager->findByKey(key));
             }
         }
-    });
+        if (!appsForMenu.isEmpty()) {
+            beginInsertRows(QModelIndex(), 0, appsForMenu.length() - 1);
+            endInsertRows();
+        }
+    };
+    connect(this, &ApplicationManagerModel::applicationManagerChanged, updateList);
+    connect(this, &ApplicationManagerModel::filtersChanged, updateList);
 }
 
 QHash<int, QByteArray> ApplicationManagerModel::roleNames() const

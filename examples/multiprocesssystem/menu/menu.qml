@@ -18,7 +18,7 @@ AbstractMain {
         delegate: Button {
             width: root.width / 3
             height: width
-            text: model.name
+            text: model.i18nName
             font.pixelSize: height / 6
             onClicked: {
                 console.debug('applicationManager.current.key', applicationManager.current.key)

@@ -3,5 +3,8 @@
 
     "id": 110,
     "key": "settings",
-    "name": "Settings"
+    "name": {
+        "default": "Settings",
+        "ja": "設定"
+    }
 }

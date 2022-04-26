@@ -3,5 +3,8 @@
 
     "id": 101,
     "key": "navi",
-    "name": "Navi"
+    "name": {
+        "default": "Navi",
+        "ja": "ナビ"
+    }
 }

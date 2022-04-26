@@ -3,5 +3,8 @@
 
     "id": 102,
     "key": "music",
-    "name": "Music"
+    "name": {
+        "default": "Music",
+        "ja": "音楽"
+    }
 }

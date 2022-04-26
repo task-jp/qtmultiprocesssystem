@@ -3,5 +3,8 @@
 
     "id": 104,
     "key": "radio",
-    "name": "Radio"
+    "name": {
+        "default": "Radio",
+        "ja": "ラジオ"
+    }
 }

@@ -3,7 +3,6 @@
 
     "id": 0,
     "key": "system",
-    "name": "System",
     "area": "compositor",
     "systemUI": true
 }

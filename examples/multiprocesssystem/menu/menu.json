@@ -3,7 +3,9 @@
 
     "id": 100,
     "key": "menu",
-    "name": "Menu",
-    "autoStart": true,
-    "systemUI": true
+    "name": {
+        "default": "Menu",
+        "ja": "メニュー"
+    },
+    "autoStart": true
 }

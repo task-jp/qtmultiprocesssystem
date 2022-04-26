@@ -8,7 +8,7 @@ class QMpsApplication::Private : public QSharedData
 public:
     int id = -1;
     QString key = QLatin1String("main");
-    QString name;
+    QJsonObject name;
     QColor theme;
     QUrl icon;
     QString area;
@@ -61,15 +61,21 @@ void QMpsApplication::setKey(const QString &key)
     d->key = key;
 }
 
-QString QMpsApplication::name() const
+QJsonObject QMpsApplication::name() const
 {
     return d->name;
 }
 
-void QMpsApplication::setName(const QString &name)
+void QMpsApplication::setName(const QJsonObject &name)
 {
     if (this->name() == name) return;
     d->name = name;
+}
+
+QString QMpsApplication::i18nName() const
+{
+    // TODO: get lang from somewhere
+    return d->name.contains("ja") ? d->name.value("ja").toString() : d->name.value("default").toString();
 }
 
 QColor QMpsApplication::theme() const
