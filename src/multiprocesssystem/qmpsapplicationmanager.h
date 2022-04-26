@@ -30,7 +30,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void applicationsChanged(const QList<QMpsApplication> &applications);
     void currentChanged(const QMpsApplication &current);
-    void activated(const QMpsApplication &application, const QStringList &arguments = {});
+    void activated(const QMpsApplication &application, const QStringList &arguments);
     void doExec(const QMpsApplication &application, const QStringList &arguments);
 
 protected:

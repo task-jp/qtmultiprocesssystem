@@ -87,7 +87,6 @@ WaylandCompositor {
                 if (!item)
                     return
                 toplevel.sendConfigure(Qt.size(item.width, item.height), [])
-                activator.onActivated(applicationManager.findByKey(toplevel.title))
                 item.handleResized.connect(function(width, height) {
                     if (width < 0 || height < 0)
                         return
@@ -132,19 +131,25 @@ WaylandCompositor {
     Connections {
         id: activator
         target: applicationManager
-        function onActivated(application) {
+        function onActivated(application, args) {
             var current = applicationManager.current
+            console.debug(current)
+            console.debug(application)
             if (application.id === current.id)
                 return
 
-            if (!current.valid && !application.systemUI)
+            if (!application.valid || application.area)
                 return
 
+            console.debug(application.key, application.systemUI)
             if (current.id in root.apps)
                 root.apps[current.id].enabled = false
             applicationManager.current = application
-            if (application.id in root.apps)
+            if (application.id in root.apps) {
                 root.apps[application.id].enabled = true
+                if (typeof root.apps[application.id].activated === 'function')
+                    root.apps[application.id].activated(args)
+            }
         }
     }
 }

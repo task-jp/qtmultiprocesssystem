@@ -226,7 +226,18 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
                 property.writeOnGadget(&ret, QDateTime::fromString(value.toString(), Qt::ISODateWithMs));
                 break;
             case QMetaType::QJsonObject:
-                property.writeOnGadget(&ret, value.toObject());
+                switch (value.type()) {
+                case QJsonValue::Object:
+                    property.writeOnGadget(&ret, value.toObject());
+                    break;
+                case QJsonValue::String:
+                    property.writeOnGadget(&ret, QJsonObject {{"default", value.toString() }});
+                    break;
+                default:
+                    qWarning() << type << key << value << "not supported";
+                    break;
+                }
+
                 break;
             default:
                 qWarning() << type << key << value << "not supported";
