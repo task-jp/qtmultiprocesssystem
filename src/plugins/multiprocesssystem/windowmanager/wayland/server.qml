@@ -55,7 +55,7 @@ WaylandCompositor {
         var parent = main.findParent(app)
         var item = chromeComponent.createObject(parent, { "shellSurface": surface, "application": app } )
         root.apps[app.id] = item
-        if (!app.systemUI) {
+        if (!app.area) {
             item.enabled = (applicationManager.current.key === key)
         }
 
@@ -133,15 +133,12 @@ WaylandCompositor {
         target: applicationManager
         function onActivated(application, args) {
             var current = applicationManager.current
-            console.debug(current)
-            console.debug(application)
             if (application.id === current.id)
                 return
 
-            if (!application.valid || application.area)
+            if (application.area)
                 return
 
-            console.debug(application.key, application.systemUI)
             if (current.id in root.apps)
                 root.apps[current.id].enabled = false
             applicationManager.current = application

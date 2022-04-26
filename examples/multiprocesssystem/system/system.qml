@@ -7,7 +7,7 @@ Window {
     width: layout.width * layout.scale
     height: layout.height * layout.scale
     visible: true
-    title: '%1 - %2'.arg(Qt.application.name).arg(applicationManager.current.name)
+    title: '%1 - %2'.arg(Qt.application.name).arg(applicationManager.current.i18nName)
 
     Skin {
         anchors.centerIn: layout
