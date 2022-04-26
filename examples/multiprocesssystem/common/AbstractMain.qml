@@ -7,7 +7,6 @@ Item {
     visible: enabled
 
     property var application: applicationManager.findByKey(Qt.application.name)
-    onApplicationChanged: console.debug(application)
     SystemdWatchDog {
         id: systemd
     }
