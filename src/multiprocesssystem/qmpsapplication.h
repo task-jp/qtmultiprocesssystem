@@ -6,10 +6,12 @@
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
 #include <QtGui/QColor>
+#include <QtQml/qqml.h>
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
 {
     Q_GADGET
+    QML_NAMED_ELEMENT(Application)
     Q_PROPERTY(bool valid READ isValid)
     Q_PROPERTY(int id READ id WRITE setID)
     Q_PROPERTY(QString key READ key WRITE setKey)
@@ -18,9 +20,6 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(QColor theme READ theme WRITE setTheme)
     Q_PROPERTY(QUrl icon READ icon WRITE setIcon)
     Q_PROPERTY(QString area READ area WRITE setArea)
-    Q_PROPERTY(bool systemUI READ isSystemUI WRITE setSystemUI)
-    Q_PROPERTY(bool autoStart READ isAutoStart WRITE setAutoStart)
-    Q_PROPERTY(bool daemon READ isDaemon WRITE setDaemon)
     Q_PROPERTY(QJsonObject uri_handlers READ uriHandlers WRITE setUriHandlers)
     Q_PROPERTY(Attributes attributes READ attributes WRITE setAttributes)
 public:
@@ -61,15 +60,6 @@ public:
 
     QString area() const;
     void setArea(const QString &area);
-
-    bool isSystemUI() const;
-    void setSystemUI(bool systemUI);
-
-    bool isAutoStart() const;
-    void setAutoStart(bool autoStart);
-
-    bool isDaemon() const;
-    void setDaemon(bool daemon);
 
     QJsonObject uriHandlers() const;
     void setUriHandlers(const QJsonObject &uriHandlers);

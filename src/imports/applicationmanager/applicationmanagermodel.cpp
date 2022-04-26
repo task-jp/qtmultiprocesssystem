@@ -15,7 +15,7 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
         }
         if (filters.isEmpty()) {
             for (const auto &application : applicationManager->applications()) {
-                if (!application.isSystemUI()) {
+                if (!(application.attributes() & QMpsApplication::SystemUI)) {
                     appsForMenu.append(application);
                 }
             }

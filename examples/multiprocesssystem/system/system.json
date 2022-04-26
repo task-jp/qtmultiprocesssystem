@@ -4,5 +4,5 @@
     "id": 0,
     "key": "system",
     "area": "compositor",
-    "systemUI": true
+    "attributes": ["SystemUI"]
 }

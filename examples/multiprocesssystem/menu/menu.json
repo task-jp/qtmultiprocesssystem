@@ -7,6 +7,5 @@
         "default": "Menu",
         "ja": "メニュー"
     },
-    "attributes": ["AutoStart"],
-    "autoStart": true
+    "attributes": ["AutoStart", "SystemUI"]
 }

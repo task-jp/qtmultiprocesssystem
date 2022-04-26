@@ -4,6 +4,5 @@
     "id": 2,
     "key": "footer",
     "area": "footer",
-    "autoStart": true,
-    "systemUI": true
+    "attributes": ["AutoStart", "SystemUI"]
 }

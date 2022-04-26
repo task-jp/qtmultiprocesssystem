@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     }
 
     QUrl url;
-    if (application.isDaemon()) {
+    if ((application.attributes() & QMpsApplication::Daemon)) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role));
     } else {
         qDebug() << application;

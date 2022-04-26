@@ -4,6 +4,5 @@
     "id": 1,
     "key": "header",
     "area": "header",
-    "autoStart": true,
-    "systemUI": true
+    "attributes": ["AutoStart", "SystemUI"]
 }

@@ -9,14 +9,11 @@ class QMpsApplication::Private : public QSharedData
 {
 public:
     int id = -1;
-    QString key = QLatin1String("main");
+    QString key;
     QJsonObject name;
     QColor theme;
     QUrl icon;
     QString area;
-    bool systemUI = false;
-    bool autoStart = false;
-    bool daemon = false;
     QJsonObject uriHandlers;
     Attributes attributes = None;
 };
@@ -112,39 +109,6 @@ void QMpsApplication::setArea(const QString &area)
 {
     if (this->area() == area) return;
     d->area = area;
-}
-
-bool QMpsApplication::isSystemUI() const
-{
-    return d->systemUI;
-}
-
-void QMpsApplication::setSystemUI(bool systemUI)
-{
-    if (this->isSystemUI() == systemUI) return;
-    d->systemUI = systemUI;
-}
-
-bool QMpsApplication::isAutoStart() const
-{
-    return d->autoStart;
-}
-
-void QMpsApplication::setAutoStart(bool autoStart)
-{
-    if (this->isAutoStart() == autoStart) return;
-    d->autoStart = autoStart;
-}
-
-bool QMpsApplication::isDaemon() const
-{
-    return d->daemon;
-}
-
-void QMpsApplication::setDaemon(bool daemon)
-{
-    if (this->isDaemon() == daemon) return;
-    d->daemon = daemon;
 }
 
 QJsonObject QMpsApplication::uriHandlers() const

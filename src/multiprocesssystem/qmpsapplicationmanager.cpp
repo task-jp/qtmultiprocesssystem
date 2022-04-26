@@ -94,7 +94,7 @@ void QMpsApplicationManager::exec(const QMpsApplication &application, const QStr
 void QMpsApplicationManager::start()
 {
     for (const auto &app : applications()) {
-        if (app.isAutoStart()) {
+        if (app.attributes() & QMpsApplication::AutoStart) {
             exec(app);
         }
     }
