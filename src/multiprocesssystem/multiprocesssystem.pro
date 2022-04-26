@@ -45,6 +45,10 @@ qtHaveModule(dbus) {
     SOURCES += qmpsabstractdbusinterface.cpp
 }
 
+CONFIG += qmltypes
+QML_IMPORT_NAME = QtMultiProcessSystem
+IMPORT_VERSION = 1.$$QT_MINOR_VERSION
+
 CONFIG += git_build
 MODULE_PLUGIN_TYPES = \
     multiprocesssystem/applicationmanager \
