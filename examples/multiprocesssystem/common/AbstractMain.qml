@@ -1,5 +1,4 @@
 import QtQuick 2.15
-import QtMultiProcessSystem 1.15 as MPS
 import QtMultiProcessSystem.WatchDog 1.15
 
 Item {
@@ -7,7 +6,8 @@ Item {
     anchors.fill: parent
     visible: enabled
 
-    property MPS.Application application: applicationManager.findByKey(Qt.application.name)
+    property var application: applicationManager.findByKey(Qt.application.name)
+    onApplicationChanged: console.debug(application)
     SystemdWatchDog {
         id: systemd
     }
