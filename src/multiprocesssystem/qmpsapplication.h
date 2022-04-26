@@ -22,7 +22,18 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(bool autoStart READ isAutoStart WRITE setAutoStart)
     Q_PROPERTY(bool daemon READ isDaemon WRITE setDaemon)
     Q_PROPERTY(QJsonObject uri_handlers READ uriHandlers WRITE setUriHandlers)
+    Q_PROPERTY(Attributes attributes READ attributes WRITE setAttributes)
 public:
+    enum Attribute {
+        None = 0x00,
+        SystemUI = 0x01,
+        AutoStart = 0x02,
+        Daemon = 0x04,
+        FullScreen = 0x08,
+    };
+    Q_DECLARE_FLAGS(Attributes, Attribute)
+    Q_FLAG(Attributes)
+
     QMpsApplication();
     QMpsApplication(const QMpsApplication &);
     ~QMpsApplication();
@@ -63,6 +74,9 @@ public:
     QJsonObject uriHandlers() const;
     void setUriHandlers(const QJsonObject &uriHandlers);
 
+    Attributes attributes() const;
+    void setAttributes(Attributes attributes);
+
     bool isValid() const;
 
     static QMpsApplication fromJson(const QJsonObject &json);
@@ -71,6 +85,9 @@ private:
     class Private;
     QSharedDataPointer<Private> d;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(QMpsApplication::Attributes)
+
 
 MULTIPROCESSSYSTEM_EXPORT QDataStream &operator<<(QDataStream &out, const QMpsApplication &application);
 MULTIPROCESSSYSTEM_EXPORT QDataStream &operator>>(QDataStream &in, QMpsApplication &application);

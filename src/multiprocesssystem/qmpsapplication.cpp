@@ -1,6 +1,8 @@
 #include "qmpsapplication.h"
 
+#include <QtCore/QJsonArray>
 #include <QtCore/QJsonDocument>
+#include <QtCore/QMetaEnum>
 #include <QtCore/QMetaProperty>
 
 class QMpsApplication::Private : public QSharedData
@@ -16,6 +18,7 @@ public:
     bool autoStart = false;
     bool daemon = false;
     QJsonObject uriHandlers;
+    Attributes attributes = None;
 };
 
 QMpsApplication::QMpsApplication() : d(new Private)
@@ -155,6 +158,17 @@ void QMpsApplication::setUriHandlers(const QJsonObject &uriHandlers)
     d->uriHandlers = uriHandlers;
 }
 
+QMpsApplication::Attributes QMpsApplication::attributes() const
+{
+    return d->attributes;
+}
+
+void QMpsApplication::setAttributes(Attributes attributes)
+{
+    if (this->attributes() == attributes) return;
+    d->attributes = attributes;
+}
+
 bool QMpsApplication::isValid() const
 {
     return d->id > -1;
@@ -163,8 +177,9 @@ bool QMpsApplication::isValid() const
 QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
 {
     QMpsApplication ret;
-    for (int i = 0; i < ret.staticMetaObject.propertyCount(); i++) {
-        const auto property = ret.staticMetaObject.property(i);
+    const auto mo = QMpsApplication::staticMetaObject;
+    for (int i = 0; i < mo.propertyCount(); i++) {
+        const auto property = mo.property(i);
         const auto key = QString::fromLatin1(property.name());
         if (json.contains(key)) {
             const int type = property.type();
@@ -174,7 +189,29 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
                 property.writeOnGadget(&ret, value.toBool());
                 break;
             case QVariant::Int:
-                property.writeOnGadget(&ret, value.toInt());
+                switch (value.type()) {
+                case QJsonValue::Double:
+                    property.writeOnGadget(&ret, value.toInt());
+                    break;
+                case QJsonValue::Array: {
+                    // Special case for flags
+                    int attrs = None;
+                    const auto array = value.toArray();
+                    QMetaEnum e = mo.enumerator(mo.indexOfEnumerator("Attributes"));
+                    for (const auto &v : array) {
+                        const auto name = v.toString();
+                        for (int i = 0; i < e.keyCount(); i++) {
+                            if (name == QString::fromUtf8(e.key(i))) {
+                                attrs |= e.value(i);
+                            }
+                        }
+                    }
+                    property.writeOnGadget(&ret, attrs);
+                    break; }
+                default:
+                    qWarning() << type << key << value << "not supported";
+                    break;
+                }
                 break;
             case QVariant::String:
                 property.writeOnGadget(&ret, value.toString());

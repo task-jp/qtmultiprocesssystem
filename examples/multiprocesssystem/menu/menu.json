@@ -7,5 +7,6 @@
         "default": "Menu",
         "ja": "メニュー"
     },
+    "attributes": ["AutoStart"],
     "autoStart": true
 }
