@@ -1,6 +1,7 @@
 ﻿import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtWayland.Compositor 1.15
+import QtMultiProcessSystem 1.15 as MPS
 import QtMultiProcessSystem.Internal 1.0
 import QtMultiProcessSystem.WatchDog 1.15
 
@@ -137,6 +138,9 @@ WaylandCompositor {
                 return
 
             if (application.area)
+                return
+
+            if (application.attributes & MPS.Application.Daemon)
                 return
 
             if (current.id in root.apps)

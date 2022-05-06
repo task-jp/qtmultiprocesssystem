@@ -1,4 +1,5 @@
 import QtQuick 2.15
+import QtMultiProcessSystem 1.15 as MPS
 import QtMultiProcessSystem.Internal 1.0
 import QtMultiProcessSystem.WatchDog 1.15
 
@@ -49,7 +50,7 @@ Main {
             var current = applicationManager.current
             if (application.id === current.id)
                 return
-            if (!application.area) {
+            if (!application.area && !(application.attributes & MPS.Application.Daemon)) {
                 if (current.id in root.apps) {
                     root.apps[current.id].enabled = false
                 }
@@ -62,7 +63,7 @@ Main {
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(application.key)
             var parent = root.findParent(application)
             var item = chromeComponent.createObject(parent, {"source": url}).item
-            if (!application.area) {
+            if (!application.area && !(application.attributes & MPS.Application.Daemon)) {
                 root.apps[application.id] = item
                 item.application = application
                 item.enabled = true
