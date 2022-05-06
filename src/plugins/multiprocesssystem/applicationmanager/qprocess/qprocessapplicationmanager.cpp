@@ -47,7 +47,6 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
                     std::cerr << process->objectName().toStdString() << " " << line.toStdString() << std::endl;
             });
             qDebug() << "starting" << application.key();
-            process->start();
             connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), process, &QProcess::deleteLater);
             connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this](int exitCode, QProcess::ExitStatus exitStatus) {
                 const auto process = qobject_cast<QProcess *>(sender());
@@ -59,11 +58,13 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
             });
             connect(process, &QProcess::destroyed, process, &QProcess::terminate);
             connect(process, &QProcess::destroyed, [this, application]() { d->processMap.remove(application); });
+            process->start();
             if (process->waitForStarted()) {
                 d->processMap.insert(application, process);
                 emit activated(application, arguments);
             } else {
-                qWarning() << process->errorString();
+                qWarning() << process->program() << process->arguments() << process->errorString();
+                qFatal("aaa");
             }
         }
     });
