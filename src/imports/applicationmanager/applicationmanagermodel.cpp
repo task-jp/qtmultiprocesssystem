@@ -15,9 +15,11 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
         }
         if (filters.isEmpty()) {
             for (const auto &application : applicationManager->applications()) {
-                if (!(application.attributes() & QMpsApplication::SystemUI)) {
-                    appsForMenu.append(application);
-                }
+                if (application.attributes() & QMpsApplication::SystemUI)
+                    continue;
+                if (application.attributes() & QMpsApplication::Daemon)
+                    continue;
+                appsForMenu.append(application);
             }
         } else {
             for (const auto &key : filters) {
