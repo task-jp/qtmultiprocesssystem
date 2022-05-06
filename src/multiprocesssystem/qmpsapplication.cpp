@@ -8,7 +8,7 @@
 class QMpsApplication::Private : public QSharedData
 {
 public:
-    int id = -1;
+    int id = INT_MAX;
     QString key;
     QJsonObject name;
     QColor theme;
@@ -135,7 +135,7 @@ void QMpsApplication::setAttributes(Attributes attributes)
 
 bool QMpsApplication::isValid() const
 {
-    return d->id > -1;
+    return d->id != INT_MAX;
 }
 
 QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
