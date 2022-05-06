@@ -16,7 +16,7 @@ public:
 private:
     QMpsAbstractDBusInterface *q = nullptr;
     const QMetaObject *mo = nullptr;
-    const QString service;
+    QString service;
     QString path;
     QString interface;
 };
@@ -35,13 +35,20 @@ bool QMpsAbstractDBusInterface::Private::init()
     }
 
     mo = q->metaObject();
-    for (int i = mo->classInfoOffset(); i < mo->classInfoCount(); i++) {
+    for (int i = 0; i < mo->classInfoCount(); i++) {
         const auto classInfo = mo->classInfo(i);
-        if (QByteArray("D-Bus Interface") == classInfo.name()) {
-            interface = QString::fromUtf8(classInfo.value());
+        if (QByteArray("D-Bus Service") == classInfo.name()) {
+            service = QString::fromUtf8(classInfo.value());
         }
         if (QByteArray("D-Bus Path") == classInfo.name()) {
             path = QString::fromUtf8(classInfo.value());
+        }
+        if (i < mo->classInfoOffset())
+            continue;
+
+        // interface should be declared in the instanciated class
+        if (QByteArray("D-Bus Interface") == classInfo.name()) {
+            interface = QString::fromUtf8(classInfo.value());
         }
     }
     if (interface.isNull()) {
