@@ -3,9 +3,18 @@
 
 #if defined(QT_DBUS_LIB)
 #include "qmpsabstractdbusinterface.h"
-#define QMpsIpcInterface QMpsAbstractDBusInterface
+class MULTIPROCESSSYSTEM_EXPORT QMpsIpcInterface : public QMpsAbstractDBusInterface {
+public:
+    QMpsIpcInterface(QObject *parent = nullptr, Type type = Client)
+        : QMpsAbstractDBusInterface(parent, type) {}
+};
 #else
 #include "qmpsabstractipcinterface.h"
+class MULTIPROCESSSYSTEM_EXPORT QMpsIpcInterface : public QMpsAbstractIpcInterface {
+public:
+    QMpsIpcInterface(QObject *parent = nullptr, Type type = Client)
+        : QMpsAbstractIpcInterface(parent, type) {}
+};
 #endif
 
 #define QMpsIpcInterfaceCall QMpsAbstractIpcInterfaceCall
