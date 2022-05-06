@@ -39,7 +39,9 @@ bool QMpsAbstractDBusInterface::Private::init()
         const auto classInfo = mo->classInfo(i);
         if (QByteArray("D-Bus Interface") == classInfo.name()) {
             interface = QString::fromUtf8(classInfo.value());
-            break;
+        }
+        if (QByteArray("D-Bus Path") == classInfo.name()) {
+            path = QString::fromUtf8(classInfo.value());
         }
     }
     if (interface.isNull()) {
@@ -50,7 +52,9 @@ bool QMpsAbstractDBusInterface::Private::init()
     while (mo->superClass()->className() != q->staticMetaObject.className()) {
         mo = mo->superClass();
     }
-    path = QStringLiteral("/%1").arg(QString::fromLatin1(mo->className()).mid(1 /* Q */));
+
+    if (path.isNull())
+        path = QStringLiteral("/%1").arg(QString::fromLatin1(mo->className()).mid(1 /* assuming Q */));
 
     switch (q->type()) {
     case Server: {
