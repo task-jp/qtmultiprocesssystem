@@ -160,7 +160,15 @@ int main(int argc, char *argv[])
         if (type == QMpsAbstractManagerFactory::Server)
             applicationManager->start();
     }, Qt::QueuedConnection);
+
+    QObject::connect(&engine, &QQmlApplicationEngine::quit,
+                     [&](){
+        applicationManager->setApplicationStatus(application, "stopped");
+    });
+
     engine.load(url);
+
+    applicationManager->setApplicationStatus(application, "started");
 
     return app.exec();
 }

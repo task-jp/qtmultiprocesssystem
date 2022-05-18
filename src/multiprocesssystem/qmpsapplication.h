@@ -22,6 +22,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(QString area READ area WRITE setArea)
     Q_PROPERTY(QJsonObject uri_handlers READ uriHandlers WRITE setUriHandlers)
     Q_PROPERTY(Attributes attributes READ attributes WRITE setAttributes)
+    Q_PROPERTY(QString status READ status WRITE setStatus)
 public:
     enum Attribute {
         None = 0x00,
@@ -66,6 +67,9 @@ public:
 
     Attributes attributes() const;
     void setAttributes(Attributes attributes);
+
+    QString status() const;
+    void setStatus(const QString &status);
 
     bool isValid() const;
 

@@ -6,6 +6,7 @@
 class SystemdApplicationManager : public QMpsApplicationManager
 {
     Q_OBJECT
+    Q_CLASSINFO("D-Bus Interface", "local.ApplicationManager")
 public:
     explicit SystemdApplicationManager(QObject *parent, Type type);
     ~SystemdApplicationManager() override;

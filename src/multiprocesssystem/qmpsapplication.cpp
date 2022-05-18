@@ -16,6 +16,7 @@ public:
     QString area;
     QJsonObject uriHandlers;
     Attributes attributes = None;
+    QString status = QStringLiteral("none");
 };
 
 QMpsApplication::QMpsApplication() : d(new Private)
@@ -131,6 +132,17 @@ void QMpsApplication::setAttributes(Attributes attributes)
 {
     if (this->attributes() == attributes) return;
     d->attributes = attributes;
+}
+
+QString QMpsApplication::status() const
+{
+    return d->status;
+}
+
+void QMpsApplication::setStatus(const QString &status)
+{
+    if (this->status() == status) return;
+    d->status = status;
 }
 
 bool QMpsApplication::isValid() const

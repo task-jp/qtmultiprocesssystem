@@ -35,6 +35,19 @@ QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
     case Client:
         break;
     }
+
+    if (type == Server) {
+        connect(this, &QMpsApplicationManager::doSetApplicationStatus,
+                this, [this](const QMpsApplication &application, const QString &status) {
+            if (!d->applications.contains(application)) return;
+            int index = d->applications.indexOf(application);
+            QMpsApplication &app = d->applications[index];
+            if (app.status() == status) return;
+            qDebug() << "Status" << app.key() << app.status() << "==>" << status;
+            app.setStatus(status);
+            emit applicationStatusChanged(app, status);
+        });
+    }
 }
 
 QMpsApplicationManager::~QMpsApplicationManager() = default;
@@ -82,6 +95,35 @@ QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
         }
     }
     return ret;
+}
+
+QString QMpsApplicationManager::applicationStatus(const QMpsApplication &application) const
+{
+    QString ret;
+    for (const auto &app : applications()) {
+        if (app.id() == application.id()) {
+            ret = app.status();
+            break;
+        }
+    }
+    return ret;
+}
+
+QString QMpsApplicationManager::applicationStatusByKey(const QString &key) const
+{
+    return applicationStatus(findByKey(key));
+}
+
+void QMpsApplicationManager::setApplicationStatus(const QMpsApplication &application, const QString &status)
+{
+    const auto arg1 = Q_ARG(QMpsApplication, application);
+    const auto arg2 = Q_ARG(QString, status);
+    QMpsAbstractIpcInterfaceCall(doSetApplicationStatus, setApplicationStatus, arg1, arg2);
+}
+
+void QMpsApplicationManager::setApplicationStatusByKey(const QString &key, const QString &status)
+{
+    setApplicationStatus(findByKey(key), status);
 }
 
 void QMpsApplicationManager::exec(const QMpsApplication &application, const QStringList &arguments)

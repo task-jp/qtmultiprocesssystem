@@ -15,6 +15,9 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
     , d(new Private)
 {
     connect(this, &QProcessApplicationManager::doExec, this, [this](const QMpsApplication &application, const QStringList &arguments) {
+        if (!application.isValid()) {
+            return;
+        }
         if (d->processMap.contains(application)) {
             emit activated(application, arguments);
         } else {
@@ -48,16 +51,18 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
             });
             qDebug() << "starting" << application.key();
             connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), process, &QProcess::deleteLater);
-            connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this](int exitCode, QProcess::ExitStatus exitStatus) {
+            connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), this, [this, application](int exitCode, QProcess::ExitStatus exitStatus) {
                 const auto process = qobject_cast<QProcess *>(sender());
                 if (exitStatus == QProcess::NormalExit) {
                     qDebug() << process->objectName() << "exited with" << exitCode;
                 } else {
                     qWarning() << process->objectName() << "crashed with" << exitCode;
                 }
+                setApplicationStatus(application, QStringLiteral("destroyed"));
             });
             connect(process, &QProcess::destroyed, process, &QProcess::terminate);
             connect(process, &QProcess::destroyed, [this, application]() { d->processMap.remove(application); });
+            setApplicationStatus(application, QStringLiteral("created"));
             process->start();
             if (process->waitForStarted()) {
                 d->processMap.insert(application, process);
@@ -65,6 +70,16 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
             } else {
                 qWarning() << process->program() << process->arguments() << process->errorString();
                 qFatal("aaa");
+            }
+        }
+    });
+
+    connect(this, &QProcessApplicationManager::applicationStatusChanged,
+            this, [this](const QMpsApplication &application, const QString &status) {
+        if (status == QStringLiteral("destroyed")) {
+            if (d->processMap.contains(application)) {
+                qDebug() << "remove process" << application.key();
+                d->processMap.remove(application);
             }
         }
     });
