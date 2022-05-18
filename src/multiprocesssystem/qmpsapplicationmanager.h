@@ -20,18 +20,24 @@ public:
 
     Q_INVOKABLE QMpsApplication findByID(int id) const;
     Q_INVOKABLE QMpsApplication findByKey(const QString &key) const;
+    Q_INVOKABLE QString applicationStatus(const QMpsApplication &application) const;
+    Q_INVOKABLE QString applicationStatusByKey(const QString &key) const;
 
 public Q_SLOTS:
     void setApplications(const QList<QMpsApplication> &applications);
     void setCurrent(const QMpsApplication &current);
     void exec(const QMpsApplication &application, const QStringList &arguments = {});
     void start();
+    void setApplicationStatus(const QMpsApplication &application, const QString &status);
+    void setApplicationStatusByKey(const QString &key, const QString &status);
 
 Q_SIGNALS:
     void applicationsChanged(const QList<QMpsApplication> &applications);
     void currentChanged(const QMpsApplication &current);
+    void applicationStatusChanged(const QMpsApplication &application, const QString &status);
     void activated(const QMpsApplication &application, const QStringList &arguments);
     void doExec(const QMpsApplication &application, const QStringList &arguments);
+    void doSetApplicationStatus(const QMpsApplication &application, const QString &status);
 
 protected:
     QMpsAbstractIpcInterface *server() const override;

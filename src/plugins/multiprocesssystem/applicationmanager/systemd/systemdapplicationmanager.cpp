@@ -21,6 +21,9 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
     , d(new Private)
 {
     connect(this, &SystemdApplicationManager::doExec, this, [this](const QMpsApplication &application, const QStringList &arguments) {
+        if (!application.isValid()) {
+            return;
+        }
         if (d->processMap.contains(application)) {
             emit activated(application, arguments);
         } else {
@@ -58,6 +61,16 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
 #endif
             qDebug() << unit->property("LoadState") << unit->property("ActiveState") << unit->property("SubState");
             emit activated(application, arguments);
+        }
+    });
+
+    connect(this, &SystemdApplicationManager::applicationStatusChanged,
+            this, [this](const QMpsApplication &application, const QString &status) {
+        if (status == QStringLiteral("destroyed")) {
+            if (d->processMap.contains(application)) {
+                qDebug() << "remove process" << application.key();
+                d->processMap.remove(application);
+            }
         }
     });
 }
