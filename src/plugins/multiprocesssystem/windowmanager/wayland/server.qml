@@ -123,8 +123,10 @@ WaylandCompositor {
         enabled: typeof watchDogManager !== 'undefined'
         target: enabled ? watchDogManager : null
         function onInactiveChanged(method, application, inactive, msecs) {
-            var item = root.apps[application.id]
-            item.busy = inactive
+            if (application.id in root.apps) {
+                var item = root.apps[application.id]
+                item.busy = inactive
+            }
         }
     }
 

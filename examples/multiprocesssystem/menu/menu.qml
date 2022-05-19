@@ -35,4 +35,12 @@ AbstractMain {
             }
         }
     }
+
+    Connections {
+        target: applicationManager
+        function onKilled(application) {
+            if (applicationManager.current.id === application.id)
+                applicationManager.exec(root.application)
+        }
+    }
 }

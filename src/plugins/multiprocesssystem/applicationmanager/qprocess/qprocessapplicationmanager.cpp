@@ -74,6 +74,19 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
         }
     });
 
+    connect(this, &QProcessApplicationManager::doKill, this, [this](const QMpsApplication &application) {
+        if (!application.isValid()) {
+            return;
+        }
+        if (d->processMap.contains(application)) {
+            auto process = d->processMap.take(application);
+            process->terminate();
+            process->deleteLater();
+            setApplicationStatus(application, QStringLiteral("destroyed"));
+            emit killed(application);
+        }
+    });
+
     connect(this, &QProcessApplicationManager::applicationStatusChanged,
             this, [this](const QMpsApplication &application, const QString &status) {
         if (status == QStringLiteral("destroyed")) {

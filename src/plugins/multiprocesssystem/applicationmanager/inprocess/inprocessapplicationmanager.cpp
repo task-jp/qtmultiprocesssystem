@@ -31,6 +31,17 @@ InProcessApplicationManager::InProcessApplicationManager(QObject *parent, Type t
             }
         }
     });
+    connect(this, &InProcessApplicationManager::doKill, this, [this](const QMpsApplication &application) {
+        if (!application.isValid()) {
+            return;
+        }
+        if (d->processMap.contains(application)) {
+            auto object = d->processMap.take(application);
+            object->deleteLater();
+            setApplicationStatus(application, "destroyed");
+            emit killed(application);
+        }
+    });
 }
 
 InProcessApplicationManager::~InProcessApplicationManager() = default;

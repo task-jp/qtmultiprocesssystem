@@ -37,6 +37,7 @@ Q_SIGNALS:
     void currentChanged(const QMpsApplication &current);
     void applicationStatusChanged(const QMpsApplication &application, const QString &status);
     void activated(const QMpsApplication &application, const QStringList &arguments);
+    void killed(const QMpsApplication &application);
     void doExec(const QMpsApplication &application, const QStringList &arguments);
     void doKill(const QMpsApplication &application);
     void doSetApplicationStatus(const QMpsApplication &application, const QString &status);

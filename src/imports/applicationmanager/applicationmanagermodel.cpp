@@ -29,9 +29,9 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
             endInsertRows();
         }
     };
-    connect(this, &ApplicationManagerModel::applicationManagerChanged, [this](QMpsApplicationManager* applicationManager) {
+    connect(this, &ApplicationManagerModel::applicationManagerChanged, this, [this](QMpsApplicationManager* applicationManager) {
         if (applicationManager) {
-            connect(applicationManager, &QMpsApplicationManager::applicationStatusChanged, [this](const QMpsApplication &application, const QString &status) {
+            connect(applicationManager, &QMpsApplicationManager::applicationStatusChanged, this, [this](const QMpsApplication &application, const QString &status) {
                 for (int i = 0; i < appsForMenu.length(); i++) {
                     if (appsForMenu.at(i) == application) {
                         appsForMenu[i].setStatus(status);
@@ -43,9 +43,9 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
             });
         }
     });
-    connect(this, &ApplicationManagerModel::applicationManagerChanged, updateList);
-    connect(this, &ApplicationManagerModel::excludeAttributesChanged, updateList);
-    connect(this, &ApplicationManagerModel::filtersChanged, updateList);
+    connect(this, &ApplicationManagerModel::applicationManagerChanged, this, updateList);
+    connect(this, &ApplicationManagerModel::excludeAttributesChanged, this, updateList);
+    connect(this, &ApplicationManagerModel::filtersChanged, this, updateList);
 }
 
 QHash<int, QByteArray> ApplicationManagerModel::roleNames() const

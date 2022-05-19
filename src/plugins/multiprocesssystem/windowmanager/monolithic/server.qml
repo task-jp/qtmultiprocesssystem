@@ -71,5 +71,10 @@ Main {
                     item.activated(args)
             }
         }
+        function onKilled(application) {
+            var item = root.apps[application.id]
+            item.parent.destroy()
+            delete root.apps[application.id]
+        }
     }
 }
