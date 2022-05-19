@@ -53,10 +53,9 @@ int main(int argc, char *argv[])
     auto applications = QMpsApplicationFactory::apps(category + "/");
     if (applications.isEmpty())
         qFatal("no application found in %s", qUtf8Printable(category));
-    qDebug() << category << "contains applications below.";
+
     QMpsApplication application;
     for (const auto &a : qAsConst(applications)) {
-        qDebug() << a;
         if (a.key() == role) {
             application = a;
         } else if (a.id() == 0 && role.isEmpty()) {
@@ -64,10 +63,17 @@ int main(int argc, char *argv[])
             application = a;
         }
     }
+    if (application.id() == 0) {
+        qDebug() << category << "contains applications below.";
+        for (const auto &a : qAsConst(applications)) {
+            qDebug() << a;
+        }
+    }
+
     if (!application.isValid()) {
         qFatal("%s not found in %s", qUtf8Printable(role), qUtf8Printable(category));
     }
-    qDebug() << application;
+    qDebug() << "launching" << application;
     app.setApplicationName(role);
 
     QString appManType = QLatin1String("inprocess");
@@ -135,7 +141,7 @@ int main(int argc, char *argv[])
     if ((application.attributes() & QMpsApplication::Daemon)) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role));
     } else {
-        qDebug() << application;
+        qDebug() << "GuiApplication" << application;
         if (application.area() == QStringLiteral("compositor")) {
             url = QUrl(QStringLiteral("qrc:/multiprocesssystem/server.qml"));
         } else {
