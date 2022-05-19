@@ -141,6 +141,12 @@ void QMpsApplicationManager::exec(const QMpsApplication &application, const QStr
     QMpsAbstractIpcInterfaceCall(doExec, exec, arg1, arg2);
 }
 
+void QMpsApplicationManager::kill(const QMpsApplication &application)
+{
+    const auto arg1 = Q_ARG(QMpsApplication, application);
+    QMpsAbstractIpcInterfaceCall(doKill, kill, arg1);
+}
+
 void QMpsApplicationManager::start()
 {
     for (const auto &app : applications()) {

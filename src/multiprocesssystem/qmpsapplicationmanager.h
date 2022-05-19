@@ -27,6 +27,7 @@ public Q_SLOTS:
     void setApplications(const QList<QMpsApplication> &applications);
     void setCurrent(const QMpsApplication &current);
     void exec(const QMpsApplication &application, const QStringList &arguments = {});
+    void kill(const QMpsApplication &application);
     void start();
     void setApplicationStatus(const QMpsApplication &application, const QString &status);
     void setApplicationStatusByKey(const QString &key, const QString &status);
@@ -37,6 +38,7 @@ Q_SIGNALS:
     void applicationStatusChanged(const QMpsApplication &application, const QString &status);
     void activated(const QMpsApplication &application, const QStringList &arguments);
     void doExec(const QMpsApplication &application, const QStringList &arguments);
+    void doKill(const QMpsApplication &application);
     void doSetApplicationStatus(const QMpsApplication &application, const QString &status);
 
 protected:
