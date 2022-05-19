@@ -21,9 +21,6 @@ WaylandCompositor {
             visible: enabled
             property var application
             onSurfaceDestroyed: {
-                if (applicationManager.current.id === item.application.id) {
-                    applicationManager.exec(applicationManager.findByKey('home'))
-                }
                 delete root.apps[item.application.id]
                 destroy()
             }
