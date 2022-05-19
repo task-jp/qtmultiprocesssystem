@@ -21,7 +21,7 @@ QMpsApplicationManager *QMpsApplicationManager::Private::server = nullptr;
 
 QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
     : QMpsIpcInterface(parent, type)
-    , d(new Private)
+    , d(type == Server ? new Private : nullptr)
 {
 #if defined(QT_DBUS_LIB)
     qDBusRegisterMetaType<QMpsApplication>();

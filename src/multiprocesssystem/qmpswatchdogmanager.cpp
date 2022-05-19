@@ -10,7 +10,7 @@ QMpsWatchDogManager *QMpsWatchDogManager::Private::server = nullptr;
 
 QMpsWatchDogManager::QMpsWatchDogManager(QObject *parent, Type type)
     : QMpsIpcInterface(parent, type)
-    , d(new Private)
+    , d(type == Server ? new Private : nullptr)
 {
     switch (type) {
     case Server:
