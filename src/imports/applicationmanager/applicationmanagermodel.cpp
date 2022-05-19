@@ -15,9 +15,7 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
         }
         if (filters.isEmpty()) {
             for (const auto &application : applicationManager->applications()) {
-                if (application.attributes() & QMpsApplication::SystemUI)
-                    continue;
-                if (application.attributes() & QMpsApplication::Daemon)
+                if (application.attributes() & excludeAttributes)
                     continue;
                 appsForMenu.append(application);
             }
@@ -46,6 +44,7 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
         }
     });
     connect(this, &ApplicationManagerModel::applicationManagerChanged, updateList);
+    connect(this, &ApplicationManagerModel::excludeAttributesChanged, updateList);
     connect(this, &ApplicationManagerModel::filtersChanged, updateList);
 }
 

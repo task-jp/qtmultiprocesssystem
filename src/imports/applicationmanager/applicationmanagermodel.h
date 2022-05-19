@@ -10,6 +10,7 @@ class ApplicationManagerModel : public QAbstractListModel
     Q_OBJECT
     QML_ELEMENT
     Q_PROPERTY(QMpsApplicationManager *manager MEMBER applicationManager NOTIFY applicationManagerChanged)
+    Q_PROPERTY(QMpsApplication::Attributes excludeAttributes MEMBER excludeAttributes NOTIFY excludeAttributesChanged)
     Q_PROPERTY(QStringList filters MEMBER filters NOTIFY filtersChanged)
 public:
     explicit ApplicationManagerModel(QObject *parent = nullptr);
@@ -20,10 +21,12 @@ public:
 
 signals:
     void applicationManagerChanged(QMpsApplicationManager* applicationManager);
+    void excludeAttributesChanged(QMpsApplication::Attributes excludeAttributes);
     void filtersChanged(const QStringList &filters);
 
 private:
     QMpsApplicationManager *applicationManager = nullptr;
+    QMpsApplication::Attributes excludeAttributes = QMpsApplication::SystemUI| QMpsApplication::Daemon;
     QStringList filters;
     QList<QMpsApplication> appsForMenu;
 };
