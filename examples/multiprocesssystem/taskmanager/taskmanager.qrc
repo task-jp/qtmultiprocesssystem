@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/multiprocesssystem/taskmanager">
+        <file>taskmanager.qml</file>
+        <file>ProcessButton.qml</file>
+    </qresource>
+</RCC>
