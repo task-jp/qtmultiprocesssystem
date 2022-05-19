@@ -100,11 +100,19 @@ QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
 QString QMpsApplicationManager::applicationStatus(const QMpsApplication &application) const
 {
     QString ret;
-    for (const auto &app : applications()) {
-        if (app.id() == application.id()) {
-            ret = app.status();
-            break;
+    switch (type()) {
+    case Server:
+        for (const auto &app : applications()) {
+            if (app.id() == application.id()) {
+                ret = app.status();
+                break;
+            }
         }
+        break;
+    case Client:
+        if (proxy())
+            QMetaObject::invokeMethod(proxy(), "applicationStatus", Q_RETURN_ARG(QString, ret), Q_ARG(QMpsApplication, application));
+        break;
     }
     return ret;
 }
