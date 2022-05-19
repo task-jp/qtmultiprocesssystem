@@ -31,6 +31,20 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
             endInsertRows();
         }
     };
+    connect(this, &ApplicationManagerModel::applicationManagerChanged, [this](QMpsApplicationManager* applicationManager) {
+        if (applicationManager) {
+            connect(applicationManager, &QMpsApplicationManager::applicationStatusChanged, [this](const QMpsApplication &application, const QString &status) {
+                for (int i = 0; i < appsForMenu.length(); i++) {
+                    if (appsForMenu.at(i) == application) {
+                        appsForMenu[i].setStatus(status);
+                        auto idx = index(i, 0);
+                        emit dataChanged(idx, idx, {roleNames().key("status")});
+                        break;
+                    }
+                }
+            });
+        }
+    });
     connect(this, &ApplicationManagerModel::applicationManagerChanged, updateList);
     connect(this, &ApplicationManagerModel::filtersChanged, updateList);
 }
