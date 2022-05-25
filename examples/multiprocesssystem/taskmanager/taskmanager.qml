@@ -41,8 +41,8 @@ AbstractMain {
                 Layout.fillWidth: false
                 Layout.preferredWidth: height
                 status: model.status
-                onLaunch: applicationManager.exec(applicationManager.findByID(model.id))
-                onKill: applicationManager.kill(applicationManager.findByID(model.id))
+                onLaunch: applicationManager.exec(applicationManager.findByKey(model.key))
+                onKill: applicationManager.kill(applicationManager.findByKey(model.key))
             }
         }
     }

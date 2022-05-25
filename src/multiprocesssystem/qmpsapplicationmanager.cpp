@@ -73,18 +73,6 @@ void QMpsApplicationManager::setCurrent(const QMpsApplication &current)
     QMpsIpcInterfaceSetter(current);
 }
 
-QMpsApplication QMpsApplicationManager::findByID(int id) const
-{
-    QMpsApplication ret;
-    for (const auto &app : applications()) {
-        if (app.id() == id) {
-            ret = app;
-            break;
-        }
-    }
-    return ret;
-}
-
 QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
 {
     QMpsApplication ret;
@@ -103,7 +91,7 @@ QString QMpsApplicationManager::applicationStatus(const QMpsApplication &applica
     switch (type()) {
     case Server:
         for (const auto &app : applications()) {
-            if (app.id() == application.id()) {
+            if (app.key() == application.key()) {
                 ret = app.status();
                 break;
             }

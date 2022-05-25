@@ -13,7 +13,6 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_GADGET
     QML_NAMED_ELEMENT(Application)
     Q_PROPERTY(bool valid READ isValid)
-    Q_PROPERTY(int id READ id WRITE setID)
     Q_PROPERTY(QString key READ key WRITE setKey)
     Q_PROPERTY(QJsonObject name READ name WRITE setName)
     Q_PROPERTY(QString i18nName READ i18nName)
@@ -30,6 +29,7 @@ public:
         AutoStart = 0x02,
         Daemon = 0x04,
         FullScreen = 0x08,
+        Root = 0x8000,
     };
     Q_DECLARE_FLAGS(Attributes, Attribute)
     Q_FLAG(Attributes)
@@ -42,9 +42,6 @@ public:
     bool operator==(const QMpsApplication &other) const;
     inline bool operator!=(const QMpsApplication &other) const
     { return !operator==(other); }
-
-    int id() const;
-    void setID(int id);
 
     QString key() const;
     void setKey(const QString &key);

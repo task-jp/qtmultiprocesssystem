@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/header" ],
 
-    "id": 1,
     "key": "header",
     "area": "header",
     "attributes": ["AutoStart", "SystemUI"]

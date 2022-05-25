@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/menu" ],
 
-    "id": 100,
     "key": "menu",
     "name": {
         "default": "Menu",

@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/weather" ],
 
-    "id": 103,
     "key": "weather",
     "name": {
         "default": "Weather",

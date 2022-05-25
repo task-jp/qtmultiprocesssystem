@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/taskmanager" ],
 
-    "id": 111,
     "key": "taskmanager",
     "name": {
         "default": "Task Manager",
