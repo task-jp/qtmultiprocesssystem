@@ -21,7 +21,7 @@ WaylandCompositor {
             visible: enabled
             property var application
             onSurfaceDestroyed: {
-                delete root.apps[item.application.id]
+                delete root.apps[item.application.key]
                 destroy()
             }
             onWidthChanged: handleResized(width, height)
@@ -52,7 +52,7 @@ WaylandCompositor {
         var app = applicationManager.findByKey(key)
         var parent = main.findParent(app)
         var item = chromeComponent.createObject(parent, { "shellSurface": surface, "application": app } )
-        root.apps[app.id] = item
+        root.apps[app.key] = item
         if (!app.area) {
             item.enabled = (applicationManager.current.key === key)
         }
@@ -107,11 +107,11 @@ WaylandCompositor {
         running: typeof watchDogManager !== 'undefined'
         onTriggered: {
             systemdWatchDog.pang()
-            for (var id in apps) {
-                var item = root.apps[id]
+            for (var key in apps) {
+                var item = root.apps[key]
                 var client = item.shellSurface.surface.client
                 var serial = shell.ping(client)
-                xdgWatchDog.ping(applicationManager.findByID(id), serial)
+                xdgWatchDog.ping(applicationManager.findByKey(key), serial)
             }
         }
     }
@@ -120,8 +120,8 @@ WaylandCompositor {
         enabled: typeof watchDogManager !== 'undefined'
         target: enabled ? watchDogManager : null
         function onInactiveChanged(method, application, inactive, msecs) {
-            if (application.id in root.apps) {
-                var item = root.apps[application.id]
+            if (application.key in root.apps) {
+                var item = root.apps[application.key]
                 item.busy = inactive
             }
         }
@@ -133,7 +133,7 @@ WaylandCompositor {
         target: applicationManager
         function onActivated(application, args) {
             var current = applicationManager.current
-            if (application.id === current.id)
+            if (application.key === current.key)
                 return
 
             if (application.area)
@@ -142,13 +142,13 @@ WaylandCompositor {
             if (application.attributes & MPS.Application.Daemon)
                 return
 
-            if (current.id in root.apps)
-                root.apps[current.id].enabled = false
+            if (current.key in root.apps)
+                root.apps[current.key].enabled = false
             applicationManager.current = application
-            if (application.id in root.apps) {
-                root.apps[application.id].enabled = true
-                if (typeof root.apps[application.id].activated === 'function')
-                    root.apps[application.id].activated(args)
+            if (application.key in root.apps) {
+                root.apps[application.key].enabled = true
+                if (typeof root.apps[application.key].activated === 'function')
+                    root.apps[application.key].activated(args)
             }
         }
     }

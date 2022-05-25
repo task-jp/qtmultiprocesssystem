@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/footer" ],
 
-    "id": 2,
     "key": "footer",
     "area": "footer",
     "attributes": ["AutoStart", "SystemUI"]

@@ -11,7 +11,7 @@ Window {
         id: main
         anchors.fill: parent
         application: applicationManager.findByKey(Qt.application.name)
-        enabled: application.area || applicationManager.current.id === application.id
+        enabled: application.area || applicationManager.current.key === application.key
         Component.onCompleted: {
             var args = []
             for (var i = 2; i < Qt.application.arguments.length; i++) {

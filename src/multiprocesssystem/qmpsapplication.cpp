@@ -8,7 +8,6 @@
 class QMpsApplication::Private : public QSharedData
 {
 public:
-    int id = INT_MAX;
     QString key;
     QJsonObject name;
     QColor theme;
@@ -37,18 +36,7 @@ QMpsApplication::~QMpsApplication() = default;
 bool QMpsApplication::operator==(const QMpsApplication &other) const
 {
     if (d == other.d) return true;
-    return d->id == other.d->id;
-}
-
-int QMpsApplication::id() const
-{
-    return d->id;
-}
-
-void QMpsApplication::setID(int id)
-{
-    if (this->id() == id) return;
-    d->id = id;
+    return d->key == other.d->key;
 }
 
 QString QMpsApplication::key() const
@@ -147,7 +135,7 @@ void QMpsApplication::setStatus(const QString &status)
 
 bool QMpsApplication::isValid() const
 {
-    return d->id != INT_MAX;
+    return !d->key.isNull();
 }
 
 QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
@@ -307,7 +295,7 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
 
 uint qHash(const QMpsApplication &application, uint seed)
 {
-    return qHash(application.id(), seed);
+    return qHash(application.key(), seed);
 }
 
 #if defined(QT_DBUS_LIB)

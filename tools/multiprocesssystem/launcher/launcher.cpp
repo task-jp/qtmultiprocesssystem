@@ -58,12 +58,12 @@ int main(int argc, char *argv[])
     for (const auto &a : qAsConst(applications)) {
         if (a.key() == role) {
             application = a;
-        } else if (a.id() == 0 && role.isEmpty()) {
+        } else if ((a.attributes() & QMpsApplication::Root) != 0 && role.isEmpty()) {
             role = a.key();
             application = a;
         }
     }
-    if (application.id() == 0) {
+    if ((application.attributes() & QMpsApplication::Root) != 0) {
         qDebug() << category << "contains applications below.";
         for (const auto &a : qAsConst(applications)) {
             qDebug() << a;

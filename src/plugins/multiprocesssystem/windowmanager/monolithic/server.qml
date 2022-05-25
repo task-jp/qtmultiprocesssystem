@@ -48,15 +48,15 @@ Main {
         target: applicationManager
         function onActivated(application, args) {
             var current = applicationManager.current
-            if (application.id === current.id)
+            if (application.key === current.key)
                 return
             if (!application.area && !(application.attributes & MPS.Application.Daemon)) {
-                if (current.id in root.apps) {
-                    root.apps[current.id].enabled = false
+                if (current.key in root.apps) {
+                    root.apps[current.key].enabled = false
                 }
                 applicationManager.current = application
-                if (application.id in root.apps) {
-                    root.apps[application.id].enabled = true
+                if (application.key in root.apps) {
+                    root.apps[application.key].enabled = true
                     return
                 }
             }
@@ -64,7 +64,7 @@ Main {
             var parent = root.findParent(application)
             var item = chromeComponent.createObject(parent, {"source": url}).item
             if (!application.area && !(application.attributes & MPS.Application.Daemon)) {
-                root.apps[application.id] = item
+                root.apps[application.key] = item
                 item.application = application
                 item.enabled = true
                 if (typeof item.activated === 'function')
@@ -72,9 +72,9 @@ Main {
             }
         }
         function onKilled(application) {
-            var item = root.apps[application.id]
+            var item = root.apps[application.key]
             item.parent.destroy()
-            delete root.apps[application.id]
+            delete root.apps[application.key]
         }
     }
 }

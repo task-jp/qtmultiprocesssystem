@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/radio" ],
 
-    "id": 104,
     "key": "radio",
     "name": {
         "default": "Radio",

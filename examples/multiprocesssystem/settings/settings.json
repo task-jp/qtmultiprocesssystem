@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/settings" ],
 
-    "id": 110,
     "key": "settings",
     "name": {
         "default": "Settings",

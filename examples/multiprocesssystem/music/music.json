@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/music" ],
 
-    "id": 102,
     "key": "music",
     "name": {
         "default": "Music",

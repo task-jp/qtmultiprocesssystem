@@ -18,7 +18,6 @@ public:
     QList<QMpsApplication> applications() const;
     QMpsApplication current() const;
 
-    Q_INVOKABLE QMpsApplication findByID(int id) const;
     Q_INVOKABLE QMpsApplication findByKey(const QString &key) const;
     Q_INVOKABLE QString applicationStatus(const QMpsApplication &application) const;
     Q_INVOKABLE QString applicationStatusByKey(const QString &key) const;

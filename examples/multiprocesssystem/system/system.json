@@ -1,8 +1,7 @@
 {
     "Keys": [ "example/system" ],
 
-    "id": 0,
     "key": "system",
     "area": "compositor",
-    "attributes": ["SystemUI"]
+    "attributes": ["SystemUI", "Root"]
 }

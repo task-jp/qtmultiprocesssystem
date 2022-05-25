@@ -1,7 +1,6 @@
 {
     "Keys": [ "example/navi" ],
 
-    "id": 101,
     "key": "navi",
     "name": {
         "default": "Navi",

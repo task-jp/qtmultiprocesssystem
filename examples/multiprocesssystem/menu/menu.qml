@@ -39,7 +39,7 @@ AbstractMain {
     Connections {
         target: applicationManager
         function onKilled(application) {
-            if (applicationManager.current.id === application.id)
+            if (applicationManager.current.key === application.key)
                 applicationManager.exec(root.application)
         }
     }
