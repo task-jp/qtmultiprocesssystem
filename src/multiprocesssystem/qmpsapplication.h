@@ -14,6 +14,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     QML_NAMED_ELEMENT(Application)
     Q_PROPERTY(bool valid READ isValid)
     Q_PROPERTY(QString key READ key WRITE setKey)
+    Q_PROPERTY(QString role READ role WRITE setRole)
     Q_PROPERTY(QJsonObject name READ name WRITE setName)
     Q_PROPERTY(QString i18nName READ i18nName)
     Q_PROPERTY(QColor theme READ theme WRITE setTheme)
@@ -46,6 +47,9 @@ public:
     QString key() const;
     void setKey(const QString &key);
 
+    QString role() const;
+    void setRole(const QString &role);
+
     QJsonObject name() const;
     void setName(const QJsonObject &name);
     QString i18nName() const;
@@ -70,7 +74,7 @@ public:
 
     bool isValid() const;
 
-    static QMpsApplication fromJson(const QJsonObject &json);
+    static QList<QMpsApplication> fromJson(const QJsonObject &json);
 
 private:
     class Private;

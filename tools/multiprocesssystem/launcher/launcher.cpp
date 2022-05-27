@@ -45,9 +45,9 @@ int main(int argc, char *argv[])
     }
     qputenv("QT_MULTIPROCESSSYSTEM_APPLICATION_CATEGORY", category.toUtf8());
 
-    QString role;
+    QString key;
     if (!args.isEmpty()) {
-        role = args.first();
+        key = args.first();
     }
 
     auto applications = QMpsApplicationFactory::apps(category + "/");
@@ -56,13 +56,14 @@ int main(int argc, char *argv[])
 
     QMpsApplication application;
     for (const auto &a : qAsConst(applications)) {
-        if (a.key() == role) {
+        if (a.key() == key) {
             application = a;
-        } else if ((a.attributes() & QMpsApplication::Root) != 0 && role.isEmpty()) {
-            role = a.key();
+        } else if ((a.attributes() & QMpsApplication::Root) != 0 && key.isEmpty()) {
+            key = a.key();
             application = a;
         }
     }
+
     if ((application.attributes() & QMpsApplication::Root) != 0) {
         qDebug() << category << "contains applications below.";
         for (const auto &a : qAsConst(applications)) {
@@ -71,10 +72,13 @@ int main(int argc, char *argv[])
     }
 
     if (!application.isValid()) {
-        qFatal("%s not found in %s", qUtf8Printable(role), qUtf8Printable(category));
+        qFatal("%s not found in %s", qUtf8Printable(key), qUtf8Printable(category));
     }
     qDebug() << "launching" << application;
-    app.setApplicationName(role);
+    app.setApplicationName(key);
+
+    QString role;
+    role = application.role();
 
     QString appManType = QLatin1String("inprocess");
     if (parser.isSet(appManOption)) {
@@ -153,7 +157,7 @@ int main(int argc, char *argv[])
 
     qDebug() << url;
 
-    qDebug() << role << appManType << winManType << type;
+    qDebug() << key << role << appManType << winManType << type;
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [&](QObject *obj, const QUrl &objUrl) {
@@ -161,7 +165,7 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
         auto window = qobject_cast<QQuickWindow *>(obj);
         if (window) {
-            window->setTitle(role);
+            window->setTitle(key);
         }
         if (type == QMpsAbstractManagerFactory::Server)
             applicationManager->start();
