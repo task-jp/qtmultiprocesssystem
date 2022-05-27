@@ -104,7 +104,7 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
         if (status == QStringLiteral("destroyed")) {
             if (d->processMap.contains(application)) {
                 qDebug() << "remove process" << application.key();
-                d->processMap.remove(application);
+                delete d->processMap.take(application);
             }
         }
     });
