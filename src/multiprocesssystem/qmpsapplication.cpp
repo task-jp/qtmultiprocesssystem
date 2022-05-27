@@ -9,6 +9,7 @@ class QMpsApplication::Private : public QSharedData
 {
 public:
     QString key;
+    QString role;
     QJsonObject name;
     QColor theme;
     QUrl icon;
@@ -48,6 +49,16 @@ void QMpsApplication::setKey(const QString &key)
 {
     if (this->key() == key) return;
     d->key = key;
+}
+
+QString QMpsApplication::role() const
+{
+    return d->role;
+}
+void QMpsApplication::setRole(const QString &role)
+{
+    if (this->role() == role) return;
+    d->role = role;
 }
 
 QJsonObject QMpsApplication::name() const
@@ -138,9 +149,9 @@ bool QMpsApplication::isValid() const
     return !d->key.isNull();
 }
 
-QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
+QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
 {
-    QMpsApplication ret;
+    QMpsApplication app;
     const auto mo = QMpsApplication::staticMetaObject;
     for (int i = 0; i < mo.propertyCount(); i++) {
         const auto property = mo.property(i);
@@ -150,12 +161,12 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
             const auto value = json.value(key);
             switch (type) {
             case QVariant::Bool:
-                property.writeOnGadget(&ret, value.toBool());
+                property.writeOnGadget(&app, value.toBool());
                 break;
             case QVariant::Int:
                 switch (value.type()) {
                 case QJsonValue::Double:
-                    property.writeOnGadget(&ret, value.toInt());
+                    property.writeOnGadget(&app, value.toInt());
                     break;
                 case QJsonValue::Array: {
                     // Special case for flags
@@ -170,7 +181,7 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
                             }
                         }
                     }
-                    property.writeOnGadget(&ret, attrs);
+                    property.writeOnGadget(&app, attrs);
                     break; }
                 default:
                     qWarning() << type << key << value << "not supported";
@@ -178,24 +189,24 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
                 }
                 break;
             case QVariant::String:
-                property.writeOnGadget(&ret, value.toString());
+                property.writeOnGadget(&app, value.toString());
                 break;
             case QVariant::Color:
-                property.writeOnGadget(&ret, QColor(value.toString()));
+                property.writeOnGadget(&app, QColor(value.toString()));
                 break;
             case QVariant::Url:
-                property.writeOnGadget(&ret, QUrl(value.toString()));
+                property.writeOnGadget(&app, QUrl(value.toString()));
                 break;
             case QVariant::DateTime:
-                property.writeOnGadget(&ret, QDateTime::fromString(value.toString(), Qt::ISODateWithMs));
+                property.writeOnGadget(&app, QDateTime::fromString(value.toString(), Qt::ISODateWithMs));
                 break;
             case QMetaType::QJsonObject:
                 switch (value.type()) {
                 case QJsonValue::Object:
-                    property.writeOnGadget(&ret, value.toObject());
+                    property.writeOnGadget(&app, value.toObject());
                     break;
                 case QJsonValue::String:
-                    property.writeOnGadget(&ret, QJsonObject {{"default", value.toString() }});
+                    property.writeOnGadget(&app, QJsonObject {{"default", value.toString() }});
                     break;
                 default:
                     qWarning() << type << key << value << "not supported";
@@ -209,6 +220,25 @@ QMpsApplication QMpsApplication::fromJson(const QJsonObject &json)
             }
 //        } else {
 //            qWarning() << key << "not found in json";
+        }
+    }
+
+    if (app.role().isEmpty()) {
+        app.setRole(app.key());
+    }
+    QList<QMpsApplication> ret;
+    ret.append(app);
+
+    if (json.contains(QStringLiteral("alias"))) {
+        auto value = json.value(QStringLiteral("alias"));
+        if (value.type() == QJsonValue::Array) {
+            for (const QJsonValue &v : value.toArray()) {
+                if (v.type() == QJsonValue::String) {
+                    QString alias = v.toString();
+                    app.setKey(alias);
+                    ret.append(app);
+                }
+            }
         }
     }
     return ret;
