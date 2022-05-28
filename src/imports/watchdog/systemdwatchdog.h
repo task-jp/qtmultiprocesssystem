@@ -11,9 +11,14 @@ class SystemdWatchDog : public QObject
     Q_DISABLE_COPY(SystemdWatchDog)
 public:
     explicit SystemdWatchDog(QObject *parent = nullptr);
+    ~SystemdWatchDog() override;
 
 public slots:
     void pang();
+
+private:
+    class Private;
+    QScopedPointer<Private> d;
 };
 
 #endif // SYSTEMDWATCHDOG_H
