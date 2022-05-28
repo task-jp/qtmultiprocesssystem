@@ -107,6 +107,17 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
                 delete d->processMap.take(application);
             }
         }
+        if (status == QStringLiteral("created")) {
+            if (!d->processMap.contains(application)) {
+                qDebug() << "new process comes from outside" << application.key();
+                QString name = QString("%1_%2.service").arg(d->category).arg(application.key());
+                QDBusObjectPath path = d->getPath(name);
+                qDebug() << "register Systemd serivce" << path.path();
+
+                auto unit = d->getInterface(path);
+                d->processMap.insert(application, unit);
+            }
+        }
     });
 }
 
