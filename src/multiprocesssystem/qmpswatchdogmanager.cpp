@@ -1,8 +1,10 @@
 #include "qmpswatchdogmanager.h"
+#include "qmpsapplicationmanager.h"
 
 class QMpsWatchDogManager::Private
 {
 public:
+    QMpsApplicationManager applicationManager;
     static QMpsWatchDogManager *server;
 };
 
@@ -15,6 +17,14 @@ QMpsWatchDogManager::QMpsWatchDogManager(QObject *parent, Type type)
     switch (type) {
     case Server:
         Private::server = this;
+        d->applicationManager.init();
+        connect (&d->applicationManager, &QMpsApplicationManager::applicationStatusChanged,
+                 this, [this](const QMpsApplication &application, const QString &status) {
+            if (status == QStringLiteral("destroyed")) {
+                qDebug() << "WatchDogManager ejects" << application.key();
+                this->finished(application);
+            }
+        });
         break;
     case Client:
         break;
