@@ -4,6 +4,7 @@
 #include <QtCore/QJsonDocument>
 #include <QtCore/QMetaEnum>
 #include <QtCore/QMetaProperty>
+#include <QtCore/QLocale>
 
 class QMpsApplication::Private : public QSharedData
 {
@@ -74,8 +75,12 @@ void QMpsApplication::setName(const QJsonObject &name)
 
 QString QMpsApplication::i18nName() const
 {
-    // TODO: get lang from somewhere
-    return d->name.contains("ja") ? d->name.value("ja").toString() : d->name.value("default").toString();
+    const auto locale = QLocale::system();
+    for (const auto &lang : locale.uiLanguages()) {
+        if (d->name.contains(lang))
+            return d->name.value(lang).toString();
+    }
+    return d->name.value(QStringLiteral("default")).toString();
 }
 
 QColor QMpsApplication::theme() const
@@ -206,7 +211,7 @@ QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
                     property.writeOnGadget(&app, value.toObject());
                     break;
                 case QJsonValue::String:
-                    property.writeOnGadget(&app, QJsonObject {{"default", value.toString() }});
+                    property.writeOnGadget(&app, QJsonObject {{QStringLiteral("default"), value.toString() }});
                     break;
                 default:
                     qWarning() << type << key << value << "not supported";
