@@ -19,7 +19,10 @@ MouseArea {
 
     Text {
         id: text
-        anchors.centerIn: parent
+        anchors.fill: parent
+        horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+        wrapMode: Text.WordWrap
     }
 
     states: State {

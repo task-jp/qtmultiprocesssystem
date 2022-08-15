@@ -25,14 +25,6 @@ AbstractMain {
                 var application = applicationManager.findByKey(model.key)
                 applicationManager.exec(application)
             }
-            Text {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                text: model.status
-                font.pixelSize: parent.font.pixelSize
-                horizontalAlignment: Text.AlignHCenter
-            }
         }
     }
 
