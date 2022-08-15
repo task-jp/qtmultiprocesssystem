@@ -11,16 +11,18 @@ Window {
 
     Skin {
         anchors.centerIn: layout
-        anchors.horizontalCenterOffset: -layout.width * 0.047
-        anchors.verticalCenterOffset: layout.height * 0.067
+        anchors.horizontalCenterOffset: -layout.width * 0.065
+        anchors.verticalCenterOffset: layout.height * 0.089
         scale: layout.scale * 4.4
+        visible: Qt.platform.pluginName !== 'eglfs'
     }
 
     ColumnLayout {
         id: layout
         width: 1080
         height: 1920
-        scale: 0.3
+        scale: Math.min(Screen.width / layout.width, Screen.height / layout.height) * (Qt.platform.pluginName === 'eglfs' ? 1 : 0.8)
+        antialiasing: true
         anchors.centerIn: parent
         spacing: 0
 
