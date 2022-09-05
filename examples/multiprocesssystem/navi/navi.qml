@@ -6,14 +6,67 @@ import '../common/'
 AbstractMain {
     id: root
 
-    property bool followme: positionSource.valid
-    PositionSource{
-        id: positionSource
-        active: followme
+    property bool northUp: false
+    property var koenjiDepot: QtPositioning.coordinate(35.7061748, 139.650941)
+    property var currentCoordinate: root.koenjiDepot
+    property real direction: 0.25
 
-        onPositionChanged: {
-            map.center = positionSource.position.coordinate
-        }
+    Binding on currentCoordinate {
+        when: positionSource.valid && positionSource.position.latitudeValid && positionSource.position.longitudeValid
+        value: positionSource.position.coordinate
+    }
+    Binding on direction {
+        when: positionSource.valid && positionSource.position.directionValid
+        value: positionSource.position.direction
+    }
+
+    StateGroup {
+        states: [
+            State {
+                when: root.northUp
+                PropertyChanges {
+                    target: map
+                    tilt: 60
+                    fieldOfView: 120
+                    bearing: root.direction * 360
+                    zoomLevel: 19
+                    center: root.currentCoordinate
+                }
+                PropertyChanges {
+                    target: routeView
+                    autoFitViewport: false
+                }
+                PropertyChanges {
+                    target: car
+                    source: 'car-rear.svg'
+                }
+            }
+        ]
+
+        transitions: [
+            Transition {
+                NumberAnimation {
+                    properties: 'tilt, fieldOfView, zoomLevel'
+                    duration: 1500
+                    easing.type: Easing.InOutExpo
+                }
+                RotationAnimation {
+                    properties: 'bearing'
+                    duration: 1500
+                    easing.type: Easing.InOutExpo
+                }
+                CoordinateAnimation {
+                    properties: 'center'
+                    duration: 1500
+                    easing.type: Easing.InOutExpo
+                }
+            }
+        ]
+    }
+
+    PositionSource {
+        id: positionSource
+        active: true
     }
 
     Map {
@@ -36,11 +89,6 @@ AbstractMain {
             query: RouteQuery {
                 id: routeQuery
             }
-            onStatusChanged: {
-                if (status == RouteModel.Ready) {
-                } else if (status == RouteModel.Error) {
-                }
-            }
         }
 
         MapItemView {
@@ -51,8 +99,9 @@ AbstractMain {
         }
 
         MapImageItem {
-            coordinate: QtPositioning.coordinate(35.7061748, 139.650941)
-            source: 'car-rear.svg'
+            id: car
+            coordinate: root.koenjiDepot
+            source: 'car.svg'
             align: Item.Center
         }
 
@@ -68,23 +117,40 @@ AbstractMain {
             MapRoute {
                 route: model.routeData
                 line.color: "green"
-                line.width: 15
+                line.width: 25
                 smooth: true
-                opacity: 0.8
+                opacity: 0.5
             }
         }
 
         Component.onCompleted: {
             routeQuery.clearWaypoints()
 
-            var koenjiDepot = QtPositioning.coordinate(35.7061748, 139.650941)
-            routeQuery.addWaypoint(koenjiDepot)
+            routeQuery.addWaypoint(root.koenjiDepot)
             routeQuery.addWaypoint(QtPositioning.coordinate(35.6900898, 139.6985957))
             routeQuery.travelModes = RouteQuery.CarTravel
             routeQuery.routeOptimizations = RouteQuery.FastestRoute
             routeModel.update();
             map.fitViewportToMapItems()
-//            map.setBearing(50, QtPositioning.coordinate(35.6528839, 139.7798186))
+        }
+    }
+
+    Rectangle {
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        width: 200
+        height: 200
+        color: 'red'
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.northUp = !root.northUp
+//                if (root.northUp) {
+////                    map.pan()
+//                } else {
+//                    map.fitViewportToMapItems()
+//                }
+            }
         }
     }
 }
