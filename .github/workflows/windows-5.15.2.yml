@@ -1,4 +1,4 @@
-name: CI
+name: Qt 5.15.2 on Windows
 
 on:
   push:
