@@ -1,0 +1,33 @@
+name: MSBuild
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v3
+      with:
+        version: '5.15.2'
+        host: 'windows'
+        target: 'desktop'
+        arch: 'win64_msvc2019_64'
+
+    - name: qmake
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: qmake
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nmake
