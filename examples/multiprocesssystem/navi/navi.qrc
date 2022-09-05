@@ -1,5 +1,9 @@
 <RCC>
     <qresource prefix="/multiprocesssystem/navi">
         <file>navi.qml</file>
+        <file>MapImageItem.qml</file>
+        <file>car-rear.svg</file>
+        <file>car.svg</file>
+        <file>map-pin.svg</file>
     </qresource>
 </RCC>
