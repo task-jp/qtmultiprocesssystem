@@ -29,7 +29,7 @@ AbstractMain {
                     tilt: 60
                     fieldOfView: 120
                     bearing: root.direction * 360
-                    zoomLevel: 19
+                    zoomLevel: 20
                     center: root.currentCoordinate
                 }
                 PropertyChanges {
