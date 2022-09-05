@@ -95,7 +95,6 @@ AbstractMain {
             id: routeView
             model: routeModel
             delegate: routeDelegate
-            autoFitViewport: true
         }
 
         MapImageItem {
