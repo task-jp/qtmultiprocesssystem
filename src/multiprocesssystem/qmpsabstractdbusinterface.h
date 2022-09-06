@@ -5,6 +5,7 @@
 
 #include <QtCore/QDateTime>
 #include <QtCore/QJsonDocument>
+#include <QtCore/QJsonObject>
 #include <QtCore/QMetaProperty>
 #include <QtCore/QMetaType>
 #include <QtDBus/QDBusArgument>
