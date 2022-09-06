@@ -28,6 +28,6 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: qmake
 
-    - name: Build
+    - name: make
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: nmake
+      run: make
