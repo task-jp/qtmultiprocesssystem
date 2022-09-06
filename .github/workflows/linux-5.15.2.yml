@@ -38,3 +38,6 @@ jobs:
 
       - name: make
         run: make
+
+      - name: make sub-examples
+        run: make sub-examples
