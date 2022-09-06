@@ -9,6 +9,7 @@
 #include <QtCore/QMetaProperty>
 #include <QtCore/QMetaType>
 #include <QtDBus/QDBusArgument>
+#include <QtGui/QColor>
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsAbstractDBusInterface : public QMpsAbstractIpcInterface
 {
