@@ -34,10 +34,13 @@ jobs:
           target: 'desktop'
         
       - name: qmake
+        working-directory: ${{env.GITHUB_WORKSPACE}}
         run: qmake
 
       - name: make
+        working-directory: ${{env.GITHUB_WORKSPACE}}
         run: make
 
       - name: make sub-examples
+        working-directory: ${{env.GITHUB_WORKSPACE}}
         run: make sub-examples
