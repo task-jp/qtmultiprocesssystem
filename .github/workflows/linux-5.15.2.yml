@@ -33,12 +33,8 @@ jobs:
           host: 'linux'
           target: 'desktop'
         
-      # Runs a single command using the runners shell
       - name: qmake
         run: qmake
 
-      # Runs a set of commands using the runners shell
       - name: make
-        run: |
-          make -j $(nproc),
-          make
+        run: make
