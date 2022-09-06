@@ -16,8 +16,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Setup MSVC Developer Command Prompt
-      uses: TheMrMilchmann/setup-msvc-dev@v2.0.0
+    - name: setup-msbuild
+      uses: microsoft/setup-msbuild@v1
+ 
+    #- name: Setup MSVC Developer Command Prompt
+    #  uses: TheMrMilchmann/setup-msvc-dev@v2.0.0
+    #  with:
+    #    arch: x64
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
