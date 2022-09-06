@@ -31,3 +31,7 @@ jobs:
     - name: make
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: make
+
+    - name: make sub-examples
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: make sub-examples
