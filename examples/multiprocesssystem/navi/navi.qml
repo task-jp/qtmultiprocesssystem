@@ -95,6 +95,7 @@ AbstractMain {
             id: routeView
             model: routeModel
             delegate: routeDelegate
+            autoFitViewport: true
         }
 
         MapImageItem {
@@ -116,7 +117,7 @@ AbstractMain {
             MapRoute {
                 route: model.routeData
                 line.color: "green"
-                line.width: 25
+                line.width: 15
                 smooth: true
                 opacity: 0.5
             }
@@ -130,7 +131,6 @@ AbstractMain {
             routeQuery.travelModes = RouteQuery.CarTravel
             routeQuery.routeOptimizations = RouteQuery.FastestRoute
             routeModel.update();
-            map.fitViewportToMapItems()
         }
     }
 
@@ -144,11 +144,6 @@ AbstractMain {
             anchors.fill: parent
             onClicked: {
                 root.northUp = !root.northUp
-//                if (root.northUp) {
-////                    map.pan()
-//                } else {
-//                    map.fitViewportToMapItems()
-//                }
             }
         }
     }
