@@ -14,7 +14,7 @@ QMpsUriHandler *QMpsUriHandler::Private::server = nullptr;
 
 QMpsUriHandler::QMpsUriHandler(QObject *parent, Type type)
     : QMpsIpcInterface(parent, type)
-    , d(type == Server ? new Private : nullptr)
+    , d(new Private)
 {
     auto handle = [](const QMpsApplication &application, const QString &uri) {
         const auto uriHandlers = application.uriHandlers();
@@ -69,7 +69,14 @@ bool QMpsUriHandler::init()
 {
     if (!QMpsIpcInterface::init())
         return false;
-    return d->applicationManager.init();
+    switch (type()) {
+    case Server:
+        if (!d->applicationManager.init())
+            return false;
+    default:
+        break;
+    }
+    return true;
 }
 
 QMpsApplication QMpsUriHandler::application() const
