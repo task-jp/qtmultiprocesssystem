@@ -10,7 +10,7 @@ private:
     QMpsAbstractIpcInterface *q = nullptr;
 
 public:
-    Type type;
+    Type type = Unknown;
     QObject *proxy = nullptr;
 };
 
@@ -29,14 +29,12 @@ QMpsAbstractIpcInterface::~QMpsAbstractIpcInterface() = default;
 
 QMpsAbstractIpcInterface::Type QMpsAbstractIpcInterface::type() const
 {
-//    return d ? d->type : Unknown;
-    return d->type;
+    return d ? d->type : Unknown;
 }
 
 QObject *QMpsAbstractIpcInterface::proxy() const
 {
-//    return d ? d->proxy : nullptr;
-    return d->proxy;
+    return d ? d->proxy : nullptr;
 }
 
 void QMpsAbstractIpcInterface::setProxy(QObject *proxy)

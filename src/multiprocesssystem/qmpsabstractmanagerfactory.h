@@ -8,6 +8,7 @@ class QMpsAbstractManagerFactory
 {
 public:
     enum Type {
+        Unknown,
         Server,
         Client,
     };
