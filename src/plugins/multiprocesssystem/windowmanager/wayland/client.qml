@@ -7,6 +7,15 @@ Window {
     visible: true
     color: 'transparent'
 
+    Binding on width {
+        when: main.implicitWidth > 0
+        value: main.implicitWidth
+    }
+    Binding on height {
+        when: main.implicitHeight > 0
+        value: main.implicitHeight
+    }
+
     Main {
         id: main
         anchors.fill: parent
