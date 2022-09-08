@@ -36,6 +36,9 @@ QMpsUriHandler::QMpsUriHandler(QObject *parent, Type type)
     };
 
     switch (type) {
+    case Unknown:
+        qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+        break;
     case Server:
         Private::server = this;
         connect(this, &QMpsUriHandler::doOpen, this, [this, &handle](const QString &uri) {

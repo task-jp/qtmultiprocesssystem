@@ -29,6 +29,9 @@ QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
 #endif
 
     switch (type) {
+    case Unknown:
+        qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+        break;
     case Server:
         Private::server = this;
         break;
@@ -89,6 +92,9 @@ QString QMpsApplicationManager::applicationStatus(const QMpsApplication &applica
 {
     QString ret;
     switch (type()) {
+    case Unknown:
+        qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+        break;
     case Server:
         for (const auto &app : applications()) {
             if (app.key() == application.key()) {

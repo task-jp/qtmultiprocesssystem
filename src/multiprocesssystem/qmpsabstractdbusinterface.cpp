@@ -64,6 +64,9 @@ bool QMpsAbstractDBusInterface::Private::init()
         path = QStringLiteral("/%1").arg(QString::fromLatin1(mo->className()).mid(1 /* assuming Q */));
 
     switch (q->type()) {
+    case Unknown:
+        qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+        break;
     case Server: {
         const auto registeredServiceNames = connection.interface()->registeredServiceNames();
         if (!registeredServiceNames.isValid()) {

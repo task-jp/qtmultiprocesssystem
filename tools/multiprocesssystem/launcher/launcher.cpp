@@ -90,12 +90,16 @@ int main(int argc, char *argv[])
     QMpsApplicationManager *applicationManager = nullptr;
     if (QMpsApplicationManagerFactory::keys().contains(appManType.toLower())) {
         switch (type) {
+        case QMpsAbstractManagerFactory::Unknown:
+            qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+            break;
         case QMpsAbstractManagerFactory::Server:
             applicationManager = QMpsApplicationManagerFactory::create(appManType, &app, type);
             applicationManager->setApplications(applications);
             break;
         case QMpsAbstractManagerFactory::Client:
             applicationManager = new QMpsApplicationManager(&app, type);
+            break;
         }
         applicationManager->init();
         context->setContextProperty("applicationManager", applicationManager);
@@ -124,11 +128,15 @@ int main(int argc, char *argv[])
     QMpsWatchDogManager *watchDogManager = nullptr;
     if (QMpsWatchDogManagerFactory::keys().contains(watManType.toLower())) {
         switch (type) {
+        case QMpsAbstractManagerFactory::Unknown:
+            qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+            break;
         case QMpsAbstractManagerFactory::Server:
             watchDogManager = QMpsWatchDogManagerFactory::create(watManType, &app, type);
             break;
         case QMpsAbstractManagerFactory::Client:
             watchDogManager = new QMpsWatchDogManager(&app, type);
+            break;
         }
         watchDogManager->init();
         context->setContextProperty("watchDogManager", watchDogManager);

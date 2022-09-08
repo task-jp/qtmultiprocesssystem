@@ -29,6 +29,9 @@ private:
 #define QMpsAbstractIpcInterfaceCall(s, c, ...) \
     [this, __VA_ARGS__]() { \
         switch (type()) { \
+        case Unknown: \
+            qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__); \
+            break; \
         case Server: \
             QMetaObject::invokeMethod(this, #s, __VA_ARGS__); \
             break; \
@@ -43,6 +46,9 @@ private:
     [this]() { \
         t ret = v; \
         switch (type()) { \
+        case Unknown: \
+            qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__); \
+            break; \
         case Server: \
             ret = d->n; \
             break; \
@@ -57,6 +63,9 @@ private:
 #define QMpsAbstractIpcInterfaceSetter(n) \
     [this, &n]() { \
         switch (type()) { \
+        case Unknown: \
+            qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__); \
+            break; \
         case Server: \
             if (d->n == n) return; \
             d->n = n; \

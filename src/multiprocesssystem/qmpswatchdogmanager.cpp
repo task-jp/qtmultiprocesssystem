@@ -15,6 +15,9 @@ QMpsWatchDogManager::QMpsWatchDogManager(QObject *parent, Type type)
     , d(type == Server ? new Private : nullptr)
 {
     switch (type) {
+    case Unknown:
+        qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+        break;
     case Server:
         Private::server = this;
         d->applicationManager.init();
