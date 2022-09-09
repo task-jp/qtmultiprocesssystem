@@ -13,7 +13,7 @@ Main {
         }
     }
 
-    property var application: applicationManager.findByID(0)
+    property var application: applicationManager.findByKey(Qt.application.name)
     SystemdWatchDog {
         id: systemd
     }
