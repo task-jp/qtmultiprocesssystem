@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Qt 6.4.0 on Linux
+name: Qt 5 on Linux
 
 # Controls when the workflow will run
 on:
@@ -29,14 +29,18 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
-          version: '6.3.*'
+          version: '5.*'
           host: 'linux'
           target: 'desktop'
         
-      - name: configure
+      - name: qmake
         working-directory: ${{env.GITHUB_WORKSPACE}}
-        run: cmake -DQT_BUILD_EXAMPLES:BOOL=ON
+        run: qmake
 
       - name: make
         working-directory: ${{env.GITHUB_WORKSPACE}}
-        run: cmake --build .
+        run: make
+
+      - name: make sub-examples
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: make sub-examples

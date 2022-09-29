@@ -1,4 +1,4 @@
-name: Qt 5.15.2 on macOS
+name: Qt 5 on macOS
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '5.15.2'
+        version: '5.*'
         host: 'mac'
         target: 'desktop'
         arch: 'clang_64'
