@@ -162,7 +162,11 @@ QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
         const auto property = mo.property(i);
         const auto key = QString::fromLatin1(property.name());
         if (json.contains(key)) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const int type = property.type();
+#else
+            const int type = property.typeId();
+#endif
             const auto value = json.value(key);
             switch (type) {
             case QVariant::Bool:
@@ -173,6 +177,7 @@ QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
                 case QJsonValue::Double:
                     property.writeOnGadget(&app, value.toInt());
                     break;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
                 case QJsonValue::Array: {
                     // Special case for flags
                     int attrs = None;
@@ -188,6 +193,7 @@ QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
                     }
                     property.writeOnGadget(&app, attrs);
                     break; }
+#endif
                 default:
                     qWarning() << type << key << value << "not supported";
                     break;
@@ -220,6 +226,23 @@ QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
 
                 break;
             default:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                if (type == qMetaTypeId<QMpsApplication::Attributes>()) {
+                    QMpsApplication::Attributes attrs = None;
+                    const auto array = value.toArray();
+                    QMetaEnum e = mo.enumerator(mo.indexOfEnumerator("Attributes"));
+                    for (const auto &v : array) {
+                        const auto name = v.toString();
+                        for (int i = 0; i < e.keyCount(); i++) {
+                            if (name == QString::fromUtf8(e.key(i))) {
+                                attrs |= static_cast<QMpsApplication::Attribute>(e.value(i));
+                            }
+                        }
+                    }
+                    property.writeOnGadget(&app, QVariant::fromValue(attrs));
+                    break;
+                }
+#endif
                 qWarning() << type << key << value << "not supported";
                 break;
             }
@@ -284,7 +307,11 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
         const auto property = mo.property(i);
         if (!property.isWritable())
             continue;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
         const int type = property.type();
+#else
+        const int type = property.typeId();
+#endif
         const auto key = QString::fromLatin1(property.name());
         const auto value = property.readOnGadget(&application);
         if (first)

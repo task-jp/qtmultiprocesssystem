@@ -1,0 +1,3 @@
+add_subdirectory(applicationmanager)
+add_subdirectory(watchdogmanager)
+add_subdirectory(windowmanager)

@@ -8,6 +8,7 @@ class QMonolithicWindowManagerPlugin : public QMpsWindowManagerPlugin
 public:
     QMpsWindowManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, QObject *parent = nullptr) override
     {
+        Q_UNUSED(type)
         if (key.compare(QLatin1String("monolithic"), Qt::CaseInsensitive))
             return nullptr;
         return new QMpsWindowManager(parent);

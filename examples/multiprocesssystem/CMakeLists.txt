@@ -1,0 +1,16 @@
+add_subdirectory(footer)
+add_subdirectory(header)
+add_subdirectory(menu)
+add_subdirectory(settings)
+add_subdirectory(system)
+add_subdirectory(taskmanager)
+add_subdirectory(weather)
+
+if(TARGET Qt::Location)
+    add_subdirectory(navi)
+endif()
+
+if(TARGET Qt::Multimedia)
+    add_subdirectory(music)
+    add_subdirectory(radio)
+endif()

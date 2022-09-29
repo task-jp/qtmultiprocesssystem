@@ -1,0 +1,5 @@
+add_subdirectory(inprocess)
+add_subdirectory(qprocess)
+if(TARGET Qt::DBus)
+    add_subdirectory(systemd)
+endif()

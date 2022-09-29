@@ -14,10 +14,15 @@ Q_GLOBAL_STATIC_WITH_ARGS(QFactoryLoader, loader,
 QList<QMpsApplication> QMpsApplicationFactory::apps(const QString &prefix)
 {
     QList<QMpsApplication> ret;
-    for (const auto &app : loader()->metaData()) {
-        const auto metaData = app.value(QLatin1String("MetaData")).toObject();
-        const auto keys = metaData.value(QLatin1String("Keys"));
-        for (const auto &key : keys.toArray()) {
+    const auto metaDataList = loader()->metaData();
+    for (int i = 0; i < metaDataList.length(); i++) {
+#if QT_VERSION < QT_VERSION_CHECK(6, 3, 0)
+        const auto metaData = metaDataList.at(i).value(QStringLiteral("MetaData")).toObject();
+#else
+        const auto metaData = metaDataList.at(i).value(QtPluginMetaDataKeys::MetaData).toJsonValue().toObject();
+#endif
+        const auto keys = metaData.value(QLatin1String("Keys")).toArray();
+        for (const auto &key : keys) {
             if (key.toString().startsWith(prefix)) {
                 ret.append(QMpsApplication::fromJson(metaData));
                 break;

@@ -11,6 +11,10 @@
 #include <QtDBus/QDBusArgument>
 #include <QtGui/QColor>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include "qmpsapplication.h"
+#endif
+
 class MULTIPROCESSSYSTEM_EXPORT QMpsAbstractDBusInterface : public QMpsAbstractIpcInterface
 {
     Q_OBJECT
@@ -26,7 +30,11 @@ public:
         const auto mo = gadget.staticMetaObject;
         for (int i = 0; i < mo.propertyCount(); i++) {
             auto property = mo.property(i);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const int type = property.type();
+#else
+            const int type = property.typeId();
+#endif
             const auto key = QString::fromLatin1(property.name());
             const auto value = property.readOnGadget(&gadget);
             switch (type) {
@@ -46,6 +54,12 @@ public:
                 argument << QJsonDocument(value.toJsonObject()).toJson(QJsonDocument::Compact);
                 break;
             default:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                if (type == qMetaTypeId<QMpsApplication::Attributes>()) {
+                    argument << value.toInt();
+                    break;
+                }
+#endif
                 qWarning() << type << key << value << "not supported";
                 break;
             }
@@ -61,7 +75,11 @@ public:
         const auto mo = gadget.staticMetaObject;
         for (int i = 0; i < mo.propertyCount(); i++) {
             const auto property = mo.property(i);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             const int type = property.type();
+#else
+            const int type = property.typeId();
+#endif
             const auto key = QString::fromLatin1(property.name());
             QVariant value;
             switch (type) {
@@ -87,6 +105,12 @@ public:
                 value = QJsonDocument::fromJson(qdbus_cast<QByteArray>(argument)).object();
                 break;
             default:
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+                if (type == qMetaTypeId<QMpsApplication::Attributes>()) {
+                    value = qdbus_cast<int>(argument);
+                    break;
+                }
+#endif
                 qWarning() << type << key << value << "not supported";
                 break;
             }
