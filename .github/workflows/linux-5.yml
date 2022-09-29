@@ -33,7 +33,7 @@ jobs:
           host: 'linux'
           target: 'desktop'
         
-      - name: qmake
+      - name: configure
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: qmake
 
