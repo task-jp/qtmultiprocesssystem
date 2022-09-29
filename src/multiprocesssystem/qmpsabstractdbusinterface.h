@@ -38,16 +38,16 @@ public:
             const auto key = QString::fromLatin1(property.name());
             const auto value = property.readOnGadget(&gadget);
             switch (type) {
-            case QVariant::Bool:
+            case QMetaType::Bool:
                 argument << value.toBool();
                 break;
-            case QVariant::Int:
+            case QMetaType::Int:
                 argument << value.toInt();
                 break;
-            case QVariant::String:
-            case QVariant::Color:
-            case QVariant::Url:
-            case QVariant::DateTime:
+            case QMetaType::QString:
+            case QMetaType::QColor:
+            case QMetaType::QUrl:
+            case QMetaType::QDateTime:
                 argument << value.toString();
                 break;
             case QMetaType::QJsonObject:
@@ -83,22 +83,22 @@ public:
             const auto key = QString::fromLatin1(property.name());
             QVariant value;
             switch (type) {
-            case QVariant::Bool:
+            case QMetaType::Bool:
                 value = qdbus_cast<bool>(argument);
                 break;
-            case QVariant::Int:
+            case QMetaType::Int:
                 value = qdbus_cast<int>(argument);
                 break;
-            case QVariant::String:
+            case QMetaType::QString:
                 value = qdbus_cast<QString>(argument);
                 break;
-            case QVariant::Color:
+            case QMetaType::QColor:
                 value = QColor(qdbus_cast<QString>(argument));
                 break;
-            case QVariant::Url:
+            case QMetaType::QUrl:
                 value = QUrl(qdbus_cast<QString>(argument));
                 break;
-            case QVariant::DateTime:
+            case QMetaType::QDateTime:
                 value = QDateTime::fromString(qdbus_cast<QString>(argument), Qt::ISODateWithMs);
                 break;
             case QMetaType::QJsonObject:
