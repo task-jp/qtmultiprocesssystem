@@ -1,4 +1,4 @@
-qt_internal_add_tool(qmpslauncher
+qt_internal_add_app(qmpslauncher
     SOURCES
         launcher.cpp
     LIBRARIES
