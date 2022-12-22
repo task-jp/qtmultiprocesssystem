@@ -70,6 +70,15 @@ QMpsApplication QMpsApplicationManager::current() const
     return QMpsIpcInterfaceGetter(QMpsApplication, QMpsApplication(), current);
 }
 
+void QMpsApplicationManager::setApplicationArguments(const QMpsApplication &application, const QStringList &arguments)
+{
+    if (!d->applications.contains(application)) return;
+    int index = d->applications.indexOf(application);
+    QMpsApplication &app = d->applications[index];
+    app.setArguments(arguments.join(' '));
+    qDebug() << "Arguments" << app.key() << arguments;
+}
+
 void QMpsApplicationManager::setCurrent(const QMpsApplication &current)
 {
     qDebug() << current.key();

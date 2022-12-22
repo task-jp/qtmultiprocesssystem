@@ -17,6 +17,7 @@ public:
 
     QList<QMpsApplication> applications() const;
     QMpsApplication current() const;
+    void setApplicationArguments(const QMpsApplication &application, const QStringList &arguments);
 
     Q_INVOKABLE QMpsApplication findByKey(const QString &key) const;
     Q_INVOKABLE QString applicationStatus(const QMpsApplication &application) const;
