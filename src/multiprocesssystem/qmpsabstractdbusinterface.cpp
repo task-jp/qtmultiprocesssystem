@@ -2,6 +2,7 @@
 #include <QtCore/QMetaClassInfo>
 
 #include <QtCore/QDebug>
+#include <QtCore/QTimer>
 #include <QtDBus/QDBusConnection>
 #include <QtDBus/QDBusConnectionInterface>
 #include <QtDBus/QDBusInterface>
@@ -12,6 +13,8 @@ class QMpsAbstractDBusInterface::Private
 public:
     Private(QMpsAbstractDBusInterface *parent);
     bool init();
+    bool connectToServer();
+    void connectSignals();
 
 private:
     QMpsAbstractDBusInterface *q = nullptr;
@@ -19,6 +22,7 @@ private:
     QString service;
     QString path;
     QString interface;
+    QDBusConnection connection = QDBusConnection::sessionBus();
 };
 
 QMpsAbstractDBusInterface::Private::Private(QMpsAbstractDBusInterface *parent)
@@ -28,7 +32,6 @@ QMpsAbstractDBusInterface::Private::Private(QMpsAbstractDBusInterface *parent)
 
 bool QMpsAbstractDBusInterface::Private::init()
 {
-    QDBusConnection connection = QDBusConnection::sessionBus();
     if (!connection.isConnected()) {
         qWarning() << "Cannot connect to the D-Bus session bus";
         return false;
@@ -93,43 +96,57 @@ bool QMpsAbstractDBusInterface::Private::init()
         if (q->server()) {
             // same process mode
             q->setProxy(q->server());
+            connectSignals();
         } else {
             // other process mode
             qDebug() << "Client" << service << path << interface;
-            auto iface = new QDBusInterface(service, path, interface, connection, q);
-            if (iface->isValid()) {
-                q->setProxy(iface);
-            } else {
-                qWarning() << iface->lastError();
-                delete iface;
+            if (!connectToServer())
                 return false;
-            }
-        }
-
-        for (int i = mo->methodOffset(); i < mo->methodCount(); i++) {
-            const auto signal2 = mo->method(i);
-            if (signal2.methodType() != QMetaMethod::Signal)
-                continue;
-            auto findSignal = [this](const QByteArray &methodSignature) {
-                const auto mo = q->proxy()->metaObject();
-                for (int i = 0; i < mo->methodCount(); i++) {
-                    const auto mm = mo->method(i);
-                    if (mm.methodType() != QMetaMethod::Signal)
-                        continue;
-                    if (mm.methodSignature() == methodSignature)
-                        return mm;
-                }
-                qWarning() << methodSignature << "not found in" << q->proxy();
-                return QMetaMethod();
-            };
-            const auto signal1 = findSignal(signal2.methodSignature());
-            if (signal1.isValid()) {
-                connect(q->proxy(), signal1, q, signal2, Qt::UniqueConnection);
-            }
         }
         break;
     }
     return true;
+}
+
+bool QMpsAbstractDBusInterface::Private::connectToServer()
+{
+    auto iface = new QDBusInterface(service, path, interface, connection, q);
+    if (iface->isValid()) {
+        q->setProxy(iface);
+        connectSignals();
+        qDebug() << "Connected" << service << path << interface;
+        return true;
+    } else {
+        qWarning() << iface->lastError();
+        delete iface;
+        QTimer::singleShot(1000, q, [this] {connectToServer();});
+        return false;
+    }
+}
+
+void QMpsAbstractDBusInterface::Private::connectSignals()
+{
+    for (int i = mo->methodOffset(); i < mo->methodCount(); i++) {
+        const auto signal2 = mo->method(i);
+        if (signal2.methodType() != QMetaMethod::Signal)
+            continue;
+        auto findSignal = [this](const QByteArray &methodSignature) {
+            const auto mo = q->proxy()->metaObject();
+            for (int i = 0; i < mo->methodCount(); i++) {
+                const auto mm = mo->method(i);
+                if (mm.methodType() != QMetaMethod::Signal)
+                    continue;
+                if (mm.methodSignature() == methodSignature)
+                    return mm;
+            }
+            qWarning() << methodSignature << "not found in" << q->proxy();
+            return QMetaMethod();
+        };
+        const auto signal1 = findSignal(signal2.methodSignature());
+        if (signal1.isValid()) {
+            connect(q->proxy(), signal1, q, signal2, Qt::UniqueConnection);
+        }
+    }
 }
 
 QMpsAbstractDBusInterface::QMpsAbstractDBusInterface(QObject *parent, Type type)
