@@ -18,11 +18,14 @@ jobs:
 
     - name: setup-msbuild
       uses: microsoft/setup-msbuild@v1
- 
+
     - name: Setup MSVC Developer Command Prompt
       uses: TheMrMilchmann/setup-msvc-dev@v2.0.0
       with:
         arch: x64
+
+    - name: Setup Ninja
+      uses: ashutoshvarma/setup-ninja@master
 
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
@@ -34,7 +37,7 @@ jobs:
 
     - name: configure
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      run: cmake -DQT_BUILD_EXAMPLES:BOOL=ON
+      run: cmake -DQT_BUILD_EXAMPLES:BOOL=ON -G Ninja .
 
     - name: make
       working-directory: ${{env.GITHUB_WORKSPACE}}
