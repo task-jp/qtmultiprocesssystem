@@ -33,13 +33,13 @@ jobs:
         arch: 'win64_msvc2019_64'
 
     - name: configure
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ${{ github.workspace }}
       run: qmake
 
     - name: make
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ${{ github.workspace }}
       run: nmake
 
     - name: make sub-examples
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ${{ github.workspace }}
       run: nmake sub-examples

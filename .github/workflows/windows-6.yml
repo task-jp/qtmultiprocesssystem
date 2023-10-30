@@ -36,9 +36,9 @@ jobs:
         arch: 'win64_msvc2019_64'
 
     - name: configure
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ${{ github.workspace }}
       run: cmake -DQT_BUILD_EXAMPLES:BOOL=ON -G Ninja .
 
     - name: make
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ${{ github.workspace }}
       run: cmake --build .
