@@ -34,9 +34,9 @@ jobs:
           target: 'desktop'
         
       - name: configure
-        working-directory: ${{env.GITHUB_WORKSPACE}}
+        working-directory: ${{ github.workspace }}
         run: cmake -DQT_BUILD_EXAMPLES:BOOL=ON
 
       - name: make
-        working-directory: ${{env.GITHUB_WORKSPACE}}
+        working-directory: ${{ github.workspace }}
         run: cmake --build .

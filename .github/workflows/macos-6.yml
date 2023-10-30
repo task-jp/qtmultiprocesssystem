@@ -25,9 +25,9 @@ jobs:
         arch: 'clang_64'
 
     - name: configure
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ${{ github.workspace }}
       run: cmake -DQT_BUILD_EXAMPLES:BOOL=ON
 
     - name: make
-      working-directory: ${{env.GITHUB_WORKSPACE}}
+      working-directory: ${{ github.workspace }}
       run: cmake --build .
