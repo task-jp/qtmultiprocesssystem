@@ -18,6 +18,7 @@ public:
     QJsonObject uriHandlers;
     Attributes attributes = None;
     QString status = QStringLiteral("none");
+    QString arguments = QStringLiteral("");
 };
 
 QMpsApplication::QMpsApplication() : d(new Private)
@@ -147,6 +148,17 @@ void QMpsApplication::setStatus(const QString &status)
 {
     if (this->status() == status) return;
     d->status = status;
+}
+
+QString QMpsApplication::arguments() const
+{
+    return d->arguments;
+}
+
+void QMpsApplication::setArguments(const QString &arguments)
+{
+    if (d->arguments == arguments) return;
+    d->arguments = arguments;
 }
 
 bool QMpsApplication::isValid() const
