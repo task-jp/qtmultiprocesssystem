@@ -14,6 +14,7 @@ public:
     QJsonObject name;
     QColor theme;
     QUrl icon;
+    QUrl splash;
     QString area;
     QJsonObject uriHandlers;
     Attributes attributes = None;
@@ -103,6 +104,17 @@ void QMpsApplication::setIcon(const QUrl &icon)
 {
     if (this->icon() == icon) return;
     d->icon = icon;
+}
+
+QUrl QMpsApplication::splash() const
+{
+    return d->splash;
+}
+
+void QMpsApplication::setSplash(const QUrl &splash)
+{
+    if (this->splash() == splash) return;
+    d->splash = splash;
 }
 
 QString QMpsApplication::area() const
