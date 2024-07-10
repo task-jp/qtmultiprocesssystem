@@ -76,6 +76,13 @@ int main(int argc, char *argv[])
     }
     qDebug() << "launching" << application;
     app.setApplicationName(key);
+    QJsonObject organization = application.organization();
+    if (organization.keys().contains(QStringLiteral("name"))) {
+        app.setOrganizationName(organization.value("name").toString());
+    }
+    if (organization.keys().contains(QStringLiteral("domain"))) {
+        app.setOrganizationDomain(organization.value("domain").toString());
+    }
 
     QString role;
     role = application.role();

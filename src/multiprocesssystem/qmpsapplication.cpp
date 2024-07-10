@@ -18,6 +18,7 @@ public:
     QJsonObject uriHandlers;
     Attributes attributes = None;
     QString status = QStringLiteral("none");
+    QJsonObject organization;
 };
 
 QMpsApplication::QMpsApplication() : d(new Private)
@@ -147,6 +148,17 @@ void QMpsApplication::setStatus(const QString &status)
 {
     if (this->status() == status) return;
     d->status = status;
+}
+
+QJsonObject QMpsApplication::organization() const
+{
+    return d->organization;
+}
+
+void QMpsApplication::setOrganization(const QJsonObject &organization)
+{
+    if (this->organization() == organization) return;
+    d->organization = organization;
 }
 
 bool QMpsApplication::isValid() const
