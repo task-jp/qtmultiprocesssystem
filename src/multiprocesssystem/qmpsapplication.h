@@ -19,6 +19,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(QString i18nName READ i18nName)
     Q_PROPERTY(QColor theme READ theme WRITE setTheme)
     Q_PROPERTY(QUrl icon READ icon WRITE setIcon)
+    Q_PROPERTY(QUrl splash READ splash WRITE setSplash)
     Q_PROPERTY(QString area READ area WRITE setArea)
     Q_PROPERTY(QJsonObject uri_handlers READ uriHandlers WRITE setUriHandlers)
     Q_PROPERTY(Attributes attributes READ attributes WRITE setAttributes)
@@ -59,6 +60,9 @@ public:
 
     QUrl icon() const;
     void setIcon(const QUrl &icon);
+
+    QUrl splash() const;
+    void setSplash(const QUrl &splash);
 
     QString area() const;
     void setArea(const QString &area);
