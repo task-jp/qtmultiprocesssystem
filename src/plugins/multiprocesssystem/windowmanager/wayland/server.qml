@@ -56,6 +56,7 @@ WaylandCompositor {
         if (!app.area) {
             item.enabled = (applicationManager.current.key === key)
         }
+        item.forceActiveFocus()
 
         return item
     }
@@ -149,6 +150,12 @@ WaylandCompositor {
                 root.apps[application.key].enabled = true
                 if (typeof root.apps[application.key].activated === 'function')
                     root.apps[application.key].activated(args)
+            }
+        }
+        function onCurrentChanged(application) {
+            var current = applicationManager.current
+            if (current.key in root.apps) {
+                root.apps[current.key].forceActiveFocus()
             }
         }
     }
