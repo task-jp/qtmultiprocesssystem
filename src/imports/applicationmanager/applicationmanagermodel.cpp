@@ -17,7 +17,9 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
             for (const auto &application : applicationManager->applications()) {
                 if (application.attributes() & excludeAttributes)
                     continue;
-                appsForMenu.append(application);
+                if (includeAttributes == QMpsApplication::None
+                    || application.attributes() & includeAttributes)
+                    appsForMenu.append(application);
             }
         } else {
             for (const auto &key : filters) {
@@ -45,6 +47,7 @@ ApplicationManagerModel::ApplicationManagerModel(QObject *parent)
     });
     connect(this, &ApplicationManagerModel::applicationManagerChanged, this, updateList);
     connect(this, &ApplicationManagerModel::excludeAttributesChanged, this, updateList);
+    connect(this, &ApplicationManagerModel::includeAttributesChanged, this, updateList);
     connect(this, &ApplicationManagerModel::filtersChanged, this, updateList);
 }
 
