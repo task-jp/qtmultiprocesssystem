@@ -17,6 +17,7 @@ public:
     bool init() override;
 
     QMpsApplication application() const;
+    Q_INVOKABLE QVariantMap parse(const QString &uri);
 
 public Q_SLOTS:
     void setApplication(const QMpsApplication &application);
