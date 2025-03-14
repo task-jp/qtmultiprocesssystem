@@ -19,6 +19,7 @@ public:
     QJsonObject uriHandlers;
     Attributes attributes = None;
     QString status = QStringLiteral("none");
+    qint64 processID = -1;
     QJsonObject organization;
 };
 
@@ -173,6 +174,17 @@ void QMpsApplication::setOrganization(const QJsonObject &organization)
     d->organization = organization;
 }
 
+qint64 QMpsApplication::processID() const
+{
+    return d->processID;
+}
+
+void QMpsApplication::setProcessID(qint64 processID)
+{
+    if (this->processID() == processID) return;
+    d->processID = processID;
+}
+
 bool QMpsApplication::isValid() const
 {
     return !d->key.isNull();
@@ -222,6 +234,9 @@ QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
                     qWarning() << type << key << value << "not supported";
                     break;
                 }
+                break;
+            case QVariant::LongLong:
+                property.writeOnGadget(&app, value.toInt());
                 break;
             case QVariant::String:
                 property.writeOnGadget(&app, value.toString());
@@ -350,6 +365,9 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
             break;
         case QVariant::Int:
             debug << value.toInt();
+            break;
+        case QVariant::LongLong:
+            debug << value.toLongLong();
             break;
         case QVariant::String:
             debug << value.toString();

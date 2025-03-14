@@ -188,11 +188,13 @@ int main(int argc, char *argv[])
 
     QObject::connect(&engine, &QQmlApplicationEngine::quit,
                      [&](){
+        applicationManager->setApplicationProcessID(application, -1);
         applicationManager->setApplicationStatus(application, "stopped");
     });
 
     engine.load(url);
 
+    applicationManager->setApplicationProcessID(application, app.applicationPid());
     applicationManager->setApplicationStatus(application, "started");
 
     return app.exec();
