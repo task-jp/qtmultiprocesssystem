@@ -24,6 +24,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(QJsonObject uri_handlers READ uriHandlers WRITE setUriHandlers)
     Q_PROPERTY(Attributes attributes READ attributes WRITE setAttributes)
     Q_PROPERTY(QString status READ status WRITE setStatus)
+    Q_PROPERTY(qint64 processID READ processID WRITE setProcessID)
     Q_PROPERTY(QJsonObject organization READ organization WRITE setOrganization)
 public:
     enum Attribute {
@@ -79,6 +80,9 @@ public:
 
     QJsonObject organization() const;
     void setOrganization(const QJsonObject &organization);
+
+    qint64 processID() const;
+    void setProcessID(qint64 processID);
 
     bool isValid() const;
 

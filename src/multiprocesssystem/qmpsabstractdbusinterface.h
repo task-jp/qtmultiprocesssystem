@@ -44,6 +44,9 @@ public:
             case QMetaType::Int:
                 argument << value.toInt();
                 break;
+            case QMetaType::LongLong:
+                argument << value.toLongLong();
+                break;
             case QMetaType::QString:
             case QMetaType::QColor:
             case QMetaType::QUrl:
@@ -88,6 +91,9 @@ public:
                 break;
             case QMetaType::Int:
                 value = qdbus_cast<int>(argument);
+                break;
+            case QMetaType::LongLong:
+                value = qdbus_cast<qint64>(argument);
                 break;
             case QMetaType::QString:
                 value = qdbus_cast<QString>(argument);

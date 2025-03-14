@@ -50,6 +50,16 @@ QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
             app.setStatus(status);
             emit applicationStatusChanged(app, status);
         });
+        connect(this, &QMpsApplicationManager::doSetApplicationProcessID,
+                this, [this](const QMpsApplication &application, qint64 processID) {
+            if (!d->applications.contains(application)) return;
+            int index = d->applications.indexOf(application);
+            QMpsApplication &app = d->applications[index];
+            if (app.processID() == processID) return;
+            qDebug() << "ProcessID" << app.key() << app.processID() << "==>" << processID;
+            app.setProcessID(processID);
+            emit applicationProcessIDChanged(app, processID);
+        });
     }
 }
 
@@ -116,6 +126,34 @@ QString QMpsApplicationManager::applicationStatusByKey(const QString &key) const
     return applicationStatus(findByKey(key));
 }
 
+qint64 QMpsApplicationManager::applicationProcessID(const QMpsApplication &application) const
+{
+    qint64 ret = -1;
+    switch (type()) {
+    case Unknown:
+        qFatal("Unknown type at %s(%d)", Q_FUNC_INFO, __LINE__);
+        break;
+    case Server:
+        for (const auto &app : applications()) {
+            if (app.key() == application.key()) {
+                ret = app.processID();
+                break;
+            }
+        }
+        break;
+    case Client:
+        if (proxy())
+            QMetaObject::invokeMethod(proxy(), "applicationProcessID", Q_RETURN_ARG(qint64, ret), Q_ARG(QMpsApplication, application));
+        break;
+    }
+    return ret;
+}
+
+qint64 QMpsApplicationManager::applicationProcessIDByKey(const QString &key) const
+{
+    return applicationProcessID(findByKey(key));
+}
+
 void QMpsApplicationManager::setApplicationStatus(const QMpsApplication &application, const QString &status)
 {
     const auto arg1 = Q_ARG(QMpsApplication, application);
@@ -126,6 +164,18 @@ void QMpsApplicationManager::setApplicationStatus(const QMpsApplication &applica
 void QMpsApplicationManager::setApplicationStatusByKey(const QString &key, const QString &status)
 {
     setApplicationStatus(findByKey(key), status);
+}
+
+void QMpsApplicationManager::setApplicationProcessID(const QMpsApplication &application, qint64 processID)
+{
+    const auto arg1 = Q_ARG(QMpsApplication, application);
+    const auto arg2 = Q_ARG(qint64, processID);
+    QMpsAbstractIpcInterfaceCall(doSetApplicationProcessID, setApplicationProcessID, arg1, arg2);
+}
+
+void QMpsApplicationManager::setApplicationProcessIDByKey(const QString &key, qint64 processID)
+{
+    setApplicationProcessID(findByKey(key), processID);
 }
 
 void QMpsApplicationManager::exec(const QMpsApplication &application, const QStringList &arguments)
