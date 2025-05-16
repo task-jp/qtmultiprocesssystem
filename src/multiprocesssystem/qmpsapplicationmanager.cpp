@@ -60,6 +60,10 @@ QMpsApplicationManager::QMpsApplicationManager(QObject *parent, Type type)
             app.setProcessID(processID);
             emit applicationProcessIDChanged(app, processID);
         });
+        connect(this, &QMpsApplicationManager::currentChanged,
+                this, [this](const QMpsApplication &current) {
+            emit currentKeyChanged(current.key());
+        });
     }
 }
 
@@ -84,6 +88,11 @@ void QMpsApplicationManager::setCurrent(const QMpsApplication &current)
 {
     qDebug() << current.key();
     QMpsIpcInterfaceSetter(current);
+}
+
+QString QMpsApplicationManager::currentKey() const
+{
+    return current().key();
 }
 
 QMpsApplication QMpsApplicationManager::findByKey(const QString &key) const
