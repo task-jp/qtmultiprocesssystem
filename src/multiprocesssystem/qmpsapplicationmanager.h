@@ -11,12 +11,14 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManager : public QMpsIpcInterface
     Q_CLASSINFO("D-Bus Interface", "local.ApplicationManager")
     Q_PROPERTY(QList<QMpsApplication> applications READ applications WRITE setApplications NOTIFY applicationsChanged)
     Q_PROPERTY(QMpsApplication current READ current WRITE setCurrent NOTIFY currentChanged)
+    Q_PROPERTY(QString currentKey READ currentKey NOTIFY currentKeyChanged FINAL)
 public:
     explicit QMpsApplicationManager(QObject *parent = nullptr, Type type = Client);
     ~QMpsApplicationManager() override;
 
     QList<QMpsApplication> applications() const;
     QMpsApplication current() const;
+    QString currentKey() const;
 
     Q_INVOKABLE QMpsApplication findByKey(const QString &key) const;
     Q_INVOKABLE QString applicationStatus(const QMpsApplication &application) const;
@@ -38,6 +40,7 @@ public Q_SLOTS:
 Q_SIGNALS:
     void applicationsChanged(const QList<QMpsApplication> &applications);
     void currentChanged(const QMpsApplication &current);
+    void currentKeyChanged(const QString &currentKey);
     void applicationStatusChanged(const QMpsApplication &application, const QString &status);
     void applicationProcessIDChanged(const QMpsApplication &application, qint64 processID);
     void activated(const QMpsApplication &application, const QStringList &arguments);
@@ -46,6 +49,7 @@ Q_SIGNALS:
     void doKill(const QMpsApplication &application);
     void doSetApplicationStatus(const QMpsApplication &application, const QString &status);
     void doSetApplicationProcessID(const QMpsApplication &application, qint64 processID);
+
 
 protected:
     QMpsAbstractIpcInterface *server() const override;
