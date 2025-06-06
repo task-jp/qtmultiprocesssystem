@@ -204,7 +204,13 @@ void QMpsApplicationManager::start()
 {
     for (const auto &app : applications()) {
         if (app.attributes() & QMpsApplication::AutoStart) {
-            exec(app);
+            if (app.attributes() & QMpsApplication::NoActivateOnAutoStart) {
+                QStringList args;
+                args << QStringLiteral("--no-activate");
+                exec(app, args);
+            } else {
+                exec(app);
+            }
         }
     }
 }
