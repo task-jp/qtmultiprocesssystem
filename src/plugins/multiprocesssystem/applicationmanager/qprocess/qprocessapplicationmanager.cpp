@@ -66,7 +66,9 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
             process->start();
             if (process->waitForStarted()) {
                 d->processMap.insert(application, process);
-                emit activated(application, arguments);
+                if (!arguments.contains("--no-activate")) {
+                    emit activated(application, arguments);
+                }
             } else {
                 qWarning() << process->program() << process->arguments() << process->errorString();
                 qFatal("aaa");

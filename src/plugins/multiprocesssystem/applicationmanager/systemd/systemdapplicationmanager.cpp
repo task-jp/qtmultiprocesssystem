@@ -75,7 +75,9 @@ SystemdApplicationManager::SystemdApplicationManager(QObject *parent, Type type)
                 qDebug() << mo->method(i).name();
 #endif
             qDebug() << unit->property("LoadState") << unit->property("ActiveState") << unit->property("SubState");
-            emit activated(application, arguments);
+            if (!arguments.contains("--no-activate")) {
+                emit activated(application, arguments);
+            }
         }
     });
 

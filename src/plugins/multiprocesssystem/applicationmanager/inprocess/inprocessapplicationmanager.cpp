@@ -25,7 +25,9 @@ InProcessApplicationManager::InProcessApplicationManager(QObject *parent, Type t
                 d->processMap.insert(application, object);
                 setApplicationStatus(application, "created");
                 setApplicationStatus(application, "started");
-                emit activated(application, arguments);
+                if (!arguments.contains("--no-activate")) {
+                    emit activated(application, arguments);
+                }
             } else {
                 qWarning() << "launching" << application.key() << "in" << d->category << "failed";
             }
