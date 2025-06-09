@@ -33,6 +33,7 @@ public:
         AutoStart = 0x02,
         Daemon = 0x04,
         FullScreen = 0x08,
+        BackgroundOnAutoStart = 0x10,
         Root = 0x8000,
     };
     Q_DECLARE_FLAGS(Attributes, Attribute)

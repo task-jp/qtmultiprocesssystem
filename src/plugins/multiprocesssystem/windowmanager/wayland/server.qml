@@ -143,6 +143,9 @@ WaylandCompositor {
             if (application.attributes & MPS.Application.Daemon)
                 return
 
+            if (args.includes("--background"))
+                return
+
             if (current.key in root.apps)
                 root.apps[current.key].enabled = false
             applicationManager.current = application
