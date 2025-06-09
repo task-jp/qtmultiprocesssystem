@@ -51,13 +51,19 @@ Main {
             if (application.key === current.key)
                 return
             if (!application.area && !(application.attributes & MPS.Application.Daemon)) {
-                if (current.key in root.apps) {
-                    root.apps[current.key].enabled = false
-                }
-                applicationManager.current = application
-                if (application.key in root.apps) {
-                    root.apps[application.key].enabled = true
-                    return
+                if (args.includes("--background")) {
+                    if (application.key in root.apps) {
+                        return
+                    }
+                } else {
+                    if (current.key in root.apps) {
+                        root.apps[current.key].enabled = false
+                    }
+                    applicationManager.current = application
+                    if (application.key in root.apps) {
+                        root.apps[application.key].enabled = true
+                        return
+                    }
                 }
             }
             var url = 'qrc:/multiprocesssystem/%1/%1.qml'.arg(application.key)
@@ -66,9 +72,14 @@ Main {
             if (!application.area && !(application.attributes & MPS.Application.Daemon)) {
                 root.apps[application.key] = item
                 item.application = application
-                item.enabled = true
+                if (args.includes("--background")) {
+                    item.enabled = false
+                } else {
+                    item.enabled = true
+                }
                 if (typeof item.activated === 'function')
                     item.activated(args)
+                }
             }
         }
         function onKilled(application) {

@@ -204,7 +204,13 @@ void QMpsApplicationManager::start()
 {
     for (const auto &app : applications()) {
         if (app.attributes() & QMpsApplication::AutoStart) {
-            exec(app);
+            if (app.attributes() & QMpsApplication::BackgroundOnAutoStart) {
+                QStringList args;
+                args << QStringLiteral("--background");
+                exec(app, args);
+            } else {
+                exec(app);
+            }
         }
     }
 }
