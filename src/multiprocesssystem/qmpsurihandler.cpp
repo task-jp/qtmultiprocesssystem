@@ -1,6 +1,8 @@
 #include "qmpsurihandler.h"
 #include "qmpsapplicationmanager.h"
 #include <QtGui/QDesktopServices>
+#include <QUrl>
+#include <QUrlQuery>
 
 class QMpsUriHandler::Private
 {
@@ -85,6 +87,28 @@ bool QMpsUriHandler::init()
 QMpsApplication QMpsUriHandler::application() const
 {
     return d->application;
+}
+
+QVariantMap QMpsUriHandler::parse(const QString &uri)
+{
+    QVariantMap ret;
+    QUrl url(uri);
+    ret.insert(QStringLiteral("scheme"), url.scheme());
+    ret.insert(QStringLiteral("authority"), url.authority());
+    ret.insert(QStringLiteral("host"), url.host());
+    ret.insert(QStringLiteral("path"), url.path());
+    if (url.hasQuery()) {
+        ret.insert(QStringLiteral("query"), url.query());
+        QVariantMap params;
+        QUrlQuery query(url.query());
+        foreach (auto q, query.queryItems()) {
+            params.insert(q.first, q.second);
+        }
+        if (!params.isEmpty()) {
+            ret.insert(QStringLiteral("queryitems"), params);
+        }
+    }
+    return ret;
 }
 
 void QMpsUriHandler::setApplication(const QMpsApplication &application)
