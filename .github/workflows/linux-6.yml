@@ -36,6 +36,7 @@ jobs:
           version: ${{ matrix.qt_version }}
           host: 'linux'
           target: 'desktop'
+          arch: 'linux_gcc_64'
         
       - name: configure
         working-directory: ${{ github.workspace }}
