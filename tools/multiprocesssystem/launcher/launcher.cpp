@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
         qFatal("no application found in %s", qUtf8Printable(category));
 
     QMpsApplication application;
-    for (const auto &a : qAsConst(applications)) {
+    for (const auto &a : std::as_const(applications)) {
         if (a.key() == key) {
             application = a;
         } else if ((a.attributes() & QMpsApplication::Root) != 0 && key.isEmpty()) {
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 
     if ((application.attributes() & QMpsApplication::Root) != 0) {
         qDebug() << category << "contains applications below.";
-        for (const auto &a : qAsConst(applications)) {
+        for (const auto &a : std::as_const(applications)) {
             qDebug() << a;
         }
     }
@@ -157,6 +157,9 @@ int main(int argc, char *argv[])
     }
 
     QUrl url;
+    // Load plugin first to make QRC resources available
+    QMpsApplicationFactory::load(category + "/" + role, &app);
+
     if ((application.attributes() & QMpsApplication::Daemon)) {
         url = QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role));
     } else {
@@ -168,7 +171,6 @@ int main(int argc, char *argv[])
         }
         qmlRegisterType(QUrl(QStringLiteral("qrc:/multiprocesssystem/%1/%1.qml").arg(role)), "QtMultiProcessSystem.Internal", 1, 0, "Main");
     }
-    QMpsApplicationFactory::load(category + "/" + role, &app);
 
     qDebug() << url;
 
