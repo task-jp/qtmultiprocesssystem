@@ -42,7 +42,7 @@ jobs:
           arch: 'linux_gcc_64'
 
       - name: configure
-        run: cmake -S ${{ github.workspace }} -B build -DQT_BUILD_EXAMPLES:BOOL=ON -G Ninja
+        run: cmake -S ${{ github.workspace }} -B build -DQT_BUILD_EXAMPLES:BOOL=ON -DQT_GENERATE_SBOM:BOOL=OFF -G Ninja
 
       - name: make
         run: cmake --build build
