@@ -55,7 +55,11 @@ int main(int argc, char *argv[])
         qFatal("no application found in %s", qUtf8Printable(category));
 
     QMpsApplication application;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
     for (const auto &a : std::as_const(applications)) {
+#else
+    for (const auto &a : qAsConst(applications)) {
+#endif
         if (a.key() == key) {
             application = a;
         } else if ((a.attributes() & QMpsApplication::Root) != 0 && key.isEmpty()) {
@@ -66,7 +70,11 @@ int main(int argc, char *argv[])
 
     if ((application.attributes() & QMpsApplication::Root) != 0) {
         qDebug() << category << "contains applications below.";
+#if QT_VERSION >= QT_VERSION_CHECK(6, 6, 0)
         for (const auto &a : std::as_const(applications)) {
+#else
+        for (const auto &a : qAsConst(applications)) {
+#endif
             qDebug() << a;
         }
     }

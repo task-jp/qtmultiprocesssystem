@@ -9,6 +9,7 @@ class ApplicationManagerModel : public QAbstractListModel
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_ADDED_IN_VERSION(1, 0)
     Q_PROPERTY(QMpsApplicationManager *manager MEMBER applicationManager NOTIFY applicationManagerChanged)
     Q_PROPERTY(QMpsApplication::Attributes excludeAttributes MEMBER excludeAttributes NOTIFY excludeAttributesChanged)
     Q_PROPERTY(QMpsApplication::Attributes includeAttributes MEMBER includeAttributes NOTIFY includeAttributesChanged)

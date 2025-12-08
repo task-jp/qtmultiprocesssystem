@@ -8,6 +8,7 @@ class SystemdWatchDog : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_ADDED_IN_VERSION(1, 0)
     Q_DISABLE_COPY(SystemdWatchDog)
 public:
     explicit SystemdWatchDog(QObject *parent = nullptr);

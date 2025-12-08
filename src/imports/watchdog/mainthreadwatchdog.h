@@ -10,6 +10,7 @@ class MainThreadWatchDog : public QObject
 {
     Q_OBJECT
     QML_ELEMENT
+    QML_ADDED_IN_VERSION(1, 0)
     Q_PROPERTY(QMpsWatchDogManager *manager READ watchDogManager WRITE setWatchDogManager NOTIFY watchDogManagerChanged)
     Q_PROPERTY(QMpsApplication application READ application WRITE setApplication NOTIFY applicationChanged)
     Q_DISABLE_COPY(MainThreadWatchDog)

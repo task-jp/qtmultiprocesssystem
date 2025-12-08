@@ -2,6 +2,7 @@ qt_internal_add_qml_module(MultiProcessSystem
     URI "QtMultiProcessSystem"
     VERSION "${PROJECT_VERSION}"
     NO_UNITY_BUILD
+    NO_HEADERSCLEAN_CHECK
     PLUGIN_TYPES
         multiprocesssystem/applicationmanager
         multiprocesssystem/windowmanager

@@ -1,6 +1,7 @@
 qt_internal_add_qml_module(qtmultiprocesssystem_applicationmanager
     URI "QtMultiProcessSystem.ApplicationManager"
     VERSION "${PROJECT_VERSION}"
+    PAST_MAJOR_VERSIONS 1
     CLASS_NAME ApplicationManagerPlugin
     PLUGIN_TARGET qtmultiprocesssystem_applicationmanager
     NO_GENERATE_PLUGIN_SOURCE

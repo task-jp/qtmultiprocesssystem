@@ -12,6 +12,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
 {
     Q_GADGET
     QML_NAMED_ELEMENT(Application)
+    QML_ADDED_IN_VERSION(1, 0)
     Q_PROPERTY(bool valid READ isValid)
     Q_PROPERTY(QString key READ key WRITE setKey)
     Q_PROPERTY(QString role READ role WRITE setRole)

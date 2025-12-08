@@ -1,6 +1,7 @@
 qt_internal_add_qml_module(qtmultiprocesssystem_urihandler
     URI "QtMultiProcessSystem.UriHandler"
     VERSION "${PROJECT_VERSION}"
+    PAST_MAJOR_VERSIONS 1
     DESIGNER_SUPPORTED
     CLASS_NAME UriHandlerPlugin
     PLUGIN_TARGET qtmultiprocesssystem_urihandler

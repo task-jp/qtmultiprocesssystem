@@ -1,6 +1,7 @@
 qt_internal_add_qml_module(qtmultiprocesssystem_watchdog
     URI "QtMultiProcessSystem.WatchDog"
     VERSION "${PROJECT_VERSION}"
+    PAST_MAJOR_VERSIONS 1
     CLASS_NAME WatchDogPlugin
     PLUGIN_TARGET qtmultiprocesssystem_watchdog
     NO_GENERATE_PLUGIN_SOURCE
