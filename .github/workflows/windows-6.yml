@@ -13,6 +13,10 @@ jobs:
   build:
     runs-on: windows-latest
 
+    strategy:
+      matrix:
+        qt_version: ['6.8.*', '6.10.*']
+
     steps:
     - uses: actions/checkout@v3
 
@@ -30,10 +34,10 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: '6.3.*'
+        version: ${{ matrix.qt_version }}
         host: 'windows'
         target: 'desktop'
-        arch: 'win64_msvc2019_64'
+        arch: 'win64_msvc2022_64'
 
     - name: configure
       working-directory: ${{ github.workspace }}
