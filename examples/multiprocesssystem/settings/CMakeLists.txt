@@ -1,14 +1,48 @@
-qt_internal_add_plugin(SettingsPlugin
+# Copyright (C) 2024 Signal Slot Inc.
+# SPDX-License-Identifier: LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only
+
+cmake_minimum_required(VERSION 3.16)
+project(settings LANGUAGES CXX)
+
+set(CMAKE_AUTOMOC ON)
+
+find_package(Qt6 REQUIRED COMPONENTS Core Quick MultiProcessSystem)
+
+qt_add_plugin(SettingsPlugin
     OUTPUT_NAME settings
     PLUGIN_TYPE multiprocesssystem/application
-    SOURCES
-        settings.cpp
-    LIBRARIES
-        Qt::MultiProcessSystem
 )
 
-qt_add_resources(plugin_resource_files settings.qrc ../common/common.qrc)
-qt_internal_extend_target(SettingsPlugin
-    SOURCES
-        ${plugin_resource_files}
+target_sources(SettingsPlugin PRIVATE
+    settings.cpp
+)
+
+qt_add_resources(SettingsPlugin "settings"
+    PREFIX "/multiprocesssystem/settings"
+    FILES
+        settings.qml
+)
+
+qt_add_resources(SettingsPlugin "common"
+    PREFIX "/multiprocesssystem/common"
+    BASE "../common"
+    FILES
+        ../common/AbstractMain.qml
+        ../common/Button.qml
+)
+
+target_link_libraries(SettingsPlugin PRIVATE
+    Qt::Core
+    Qt::Quick
+    Qt::MultiProcessSystem
+)
+
+if(NOT DEFINED INSTALL_EXAMPLESDIR)
+    set(INSTALL_EXAMPLESDIR "examples")
+endif()
+
+set(INSTALL_EXAMPLEDIR "${INSTALL_EXAMPLESDIR}/multiprocesssystem/application")
+
+install(TARGETS SettingsPlugin
+    LIBRARY DESTINATION "${INSTALL_EXAMPLEDIR}"
 )
