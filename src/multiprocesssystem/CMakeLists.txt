@@ -1,6 +1,7 @@
 qt_internal_add_qml_module(MultiProcessSystem
     URI "QtMultiProcessSystem"
     VERSION "${PROJECT_VERSION}"
+    NO_UNITY_BUILD
     PLUGIN_TYPES
         multiprocesssystem/applicationmanager
         multiprocesssystem/windowmanager
@@ -31,7 +32,6 @@ qt_internal_add_qml_module(MultiProcessSystem
         Qt::Core Qt::Quick
     PRIVATE_MODULE_INTERFACE
         Qt::CorePrivate
-    GENERATE_CPP_EXPORTS
 )
 
 qt_internal_extend_target(MultiProcessSystem CONDITION TARGET Qt::DBus
