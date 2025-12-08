@@ -1,7 +1,7 @@
-import QtQuick 2.15
-import QtMultiProcessSystem 1.15 as MPS
-import QtMultiProcessSystem.Internal 1.0
-import QtMultiProcessSystem.WatchDog 1.15
+import QtQuick
+import QtMultiProcessSystem as MPS
+import QtMultiProcessSystem.Internal
+import QtMultiProcessSystem.WatchDog
 
 Main {
     id: root
@@ -79,7 +79,6 @@ Main {
                 }
                 if (typeof item.activated === 'function')
                     item.activated(args)
-                }
             }
         }
         function onKilled(application) {
