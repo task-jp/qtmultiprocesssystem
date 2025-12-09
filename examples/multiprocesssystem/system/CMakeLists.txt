@@ -21,6 +21,14 @@ qt_add_resources(SystemPlugin "system"
     PREFIX "/multiprocesssystem/system"
     FILES
         system.qml
+        Skin.qml
+        smartphone_hand.png
+)
+
+qt_add_resources(SystemPlugin "qtquickcontrols2"
+    PREFIX "/"
+    FILES
+        qtquickcontrols2.conf
 )
 
 qt_add_resources(SystemPlugin "common"

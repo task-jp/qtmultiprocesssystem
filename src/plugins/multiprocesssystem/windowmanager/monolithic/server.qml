@@ -1,7 +1,7 @@
-import QtQuick
-import QtMultiProcessSystem as MPS
-import QtMultiProcessSystem.Internal
-import QtMultiProcessSystem.WatchDog
+import QtQuick 2.15
+import QtMultiProcessSystem 1.0 as MPS
+import QtMultiProcessSystem.Internal 1.0
+import QtMultiProcessSystem.WatchDog 1.0
 
 Main {
     id: root
