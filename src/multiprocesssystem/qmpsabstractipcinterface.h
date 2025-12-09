@@ -1,9 +1,11 @@
 #ifndef QMPSABSTRACTIPCINTERFACE_H
 #define QMPSABSTRACTIPCINTERFACE_H
 
-#include "multiprocesssystem_global.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
 #include <QtCore/QObject>
-#include "qmpsabstractmanagerfactory.h"
+#include <QtMultiProcessSystem/qmpsabstractmanagerfactory.h>
+
+QT_BEGIN_NAMESPACE
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsAbstractIpcInterface : public QObject, public QMpsAbstractManagerFactory
 {
@@ -77,5 +79,7 @@ private:
             break; \
         } \
     }()
+
+QT_END_NAMESPACE
 
 #endif // QMPSABSTRACTIPCINTERFACE_H

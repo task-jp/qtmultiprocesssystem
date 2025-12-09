@@ -1,8 +1,10 @@
 #ifndef QMPSAPPLICATIONFACTORY_H
 #define QMPSAPPLICATIONFACTORY_H
 
-#include "multiprocesssystem_global.h"
-#include "qmpsapplication.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
+#include <QtMultiProcessSystem/qmpsapplication.h>
+
+QT_BEGIN_NAMESPACE
 
 class QMpsApplicationManager;
 
@@ -13,5 +15,7 @@ public:
     static QStringList keys();
     static QObject *load(const QString &key, QObject *parent = nullptr);
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSAPPLICATIONFACTORY_H

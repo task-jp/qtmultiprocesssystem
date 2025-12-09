@@ -1,9 +1,11 @@
 #ifndef QMPSWATCHDOG_H
 #define QMPSWATCHDOG_H
 
-#include "multiprocesssystem_global.h"
-#include "qmpswatchdogmanager.h"
-#include "qmpsapplication.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
+#include <QtMultiProcessSystem/qmpswatchdogmanager.h>
+#include <QtMultiProcessSystem/qmpsapplication.h>
+
+QT_BEGIN_NAMESPACE
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsWatchDog : public QObject
 {
@@ -32,5 +34,7 @@ private:
     class Private;
     QScopedPointer<Private> d;
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSWATCHDOG_H

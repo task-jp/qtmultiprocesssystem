@@ -1,7 +1,7 @@
 #ifndef QMPSABSTRACTDBUSINTERFACE_H
 #define QMPSABSTRACTDBUSINTERFACE_H
 
-#include "qmpsabstractipcinterface.h"
+#include <QtMultiProcessSystem/qmpsabstractipcinterface.h>
 
 #include <QtCore/QDateTime>
 #include <QtCore/QJsonDocument>
@@ -12,8 +12,10 @@
 #include <QtGui/QColor>
 
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-#include "qmpsapplication.h"
+#include <QtMultiProcessSystem/qmpsapplication.h>
 #endif
+
+QT_BEGIN_NAMESPACE
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsAbstractDBusInterface : public QMpsAbstractIpcInterface
 {
@@ -129,5 +131,7 @@ private:
     class Private;
     QScopedPointer<Private> d;
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSABSTRACTDBUSINTERFACE_H
