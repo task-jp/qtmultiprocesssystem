@@ -1,9 +1,11 @@
 #ifndef QMPSWINDOWMANAGERPLUGIN_H
 #define QMPSWINDOWMANAGERPLUGIN_H
 
-#include "multiprocesssystem_global.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
 #include <QtCore/QObject>
-#include "qmpsabstractmanagerfactory.h"
+#include <QtMultiProcessSystem/qmpsabstractmanagerfactory.h>
+
+QT_BEGIN_NAMESPACE
 
 class QMpsWindowManager;
 
@@ -18,5 +20,7 @@ public:
 
     virtual QMpsWindowManager *create(const QString &key, QMpsAbstractManagerFactory::Type type, QObject *parent = nullptr) = 0;
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSWINDOWMANAGERPLUGIN_H

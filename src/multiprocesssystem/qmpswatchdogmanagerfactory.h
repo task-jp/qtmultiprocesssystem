@@ -1,7 +1,9 @@
 #ifndef QMPSWATCHDOGMANAGERFACTORY_H
 #define QMPSWATCHDOGMANAGERFACTORY_H
 
-#include "qmpsabstractmanagerfactory.h"
+#include <QtMultiProcessSystem/qmpsabstractmanagerfactory.h>
+
+QT_BEGIN_NAMESPACE
 
 class QObject;
 class QMpsWatchDogManager;
@@ -12,5 +14,7 @@ public:
     static QStringList keys();
     static QMpsWatchDogManager *create(const QString &key, QObject *parent = nullptr, Type type = Client);
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSWATCHDOGMANAGERFACTORY_H

@@ -1,9 +1,11 @@
 #ifndef QMPSAPPLICATIONMANAGER_H
 #define QMPSAPPLICATIONMANAGER_H
 
-#include "multiprocesssystem_global.h"
-#include "qmpsipcinterface.h"
-#include "qmpsapplication.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
+#include <QtMultiProcessSystem/qmpsipcinterface.h>
+#include <QtMultiProcessSystem/qmpsapplication.h>
+
+QT_BEGIN_NAMESPACE
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplicationManager : public QMpsIpcInterface
 {
@@ -58,5 +60,7 @@ private:
     class Private;
     QScopedPointer<Private> d;
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSAPPLICATIONMANAGER_H

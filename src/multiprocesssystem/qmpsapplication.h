@@ -1,12 +1,14 @@
 #ifndef QMPSAPPLICATION_H
 #define QMPSAPPLICATION_H
 
-#include "multiprocesssystem_global.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
 #include <QtCore/QJsonObject>
 #include <QtCore/QObject>
 #include <QtCore/QUrl>
 #include <QtGui/QColor>
 #include <QtQml/qqml.h>
+
+QT_BEGIN_NAMESPACE
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
 {
@@ -113,5 +115,7 @@ Q_DECLARE_METATYPE(QList<QMpsApplication>)
 QDBusArgument &operator<<(QDBusArgument &argument, const QMpsApplication &application);
 const QDBusArgument &operator>>(const QDBusArgument &argument, QMpsApplication &application);
 #endif
+
+QT_END_NAMESPACE
 
 #endif // QMPSAPPLICATION_H

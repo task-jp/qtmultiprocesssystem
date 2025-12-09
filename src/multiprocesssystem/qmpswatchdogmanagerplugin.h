@@ -1,9 +1,11 @@
 #ifndef QMPSWATCHDOGMANAGERPLUGIN_H
 #define QMPSWATCHDOGMANAGERPLUGIN_H
 
-#include "multiprocesssystem_global.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
 #include <QtCore/QObject>
-#include "qmpsabstractipcinterface.h"
+#include <QtMultiProcessSystem/qmpsabstractipcinterface.h>
+
+QT_BEGIN_NAMESPACE
 
 class QMpsWatchDogManager;
 
@@ -18,5 +20,7 @@ public:
 
     virtual QMpsWatchDogManager *create(const QString &key, QObject *parent = nullptr, QMpsAbstractIpcInterface::Type type = QMpsAbstractIpcInterface::Client) = 0;
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSWATCHDOGMANAGERPLUGIN_H

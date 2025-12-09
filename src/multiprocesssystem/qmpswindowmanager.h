@@ -1,8 +1,10 @@
 #ifndef QMPSWINDOWMANAGER_H
 #define QMPSWINDOWMANAGER_H
 
-#include "multiprocesssystem_global.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
 #include <QtCore/QObject>
+
+QT_BEGIN_NAMESPACE
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsWindowManager : public QObject
 {
@@ -10,5 +12,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsWindowManager : public QObject
 public:
     explicit QMpsWindowManager(QObject *parent = nullptr);
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSWINDOWMANAGER_H

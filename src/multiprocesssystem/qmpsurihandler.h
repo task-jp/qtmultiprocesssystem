@@ -1,9 +1,11 @@
 #ifndef QMPSURIHANDLER_H
 #define QMPSURIHANDLER_H
 
-#include "multiprocesssystem_global.h"
-#include "qmpsipcinterface.h"
-#include "qmpsapplication.h"
+#include <QtMultiProcessSystem/multiprocesssystem_global.h>
+#include <QtMultiProcessSystem/qmpsipcinterface.h>
+#include <QtMultiProcessSystem/qmpsapplication.h>
+
+QT_BEGIN_NAMESPACE
 
 class MULTIPROCESSSYSTEM_EXPORT QMpsUriHandler : public QMpsIpcInterface
 {
@@ -36,5 +38,7 @@ private:
     class Private;
     QScopedPointer<Private> d;
 };
+
+QT_END_NAMESPACE
 
 #endif // QMPSURIHANDLER_H
