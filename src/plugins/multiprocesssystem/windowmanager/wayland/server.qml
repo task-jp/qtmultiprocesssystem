@@ -13,6 +13,16 @@ WaylandCompositor {
             id: main
         }
     }
+
+    QtTextInputMethodManager {}
+    TextInputManagerV3 {}
+
+    Component.onCompleted: {
+        if (main.hasOwnProperty("waylandCompositor")) {
+            main.waylandCompositor = root
+        }
+    }
+
     Component {
         id: chromeComponent
         ShellSurfaceItem {
