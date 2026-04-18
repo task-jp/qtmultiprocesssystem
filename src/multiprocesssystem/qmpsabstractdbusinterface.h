@@ -55,6 +55,9 @@ public:
             case QMetaType::QDateTime:
                 argument << value.toString();
                 break;
+            case QMetaType::QStringList:
+                argument << value.toStringList();
+                break;
             case QMetaType::QJsonObject:
                 argument << QJsonDocument(value.toJsonObject()).toJson(QJsonDocument::Compact);
                 break;
@@ -108,6 +111,9 @@ public:
                 break;
             case QMetaType::QDateTime:
                 value = QDateTime::fromString(qdbus_cast<QString>(argument), Qt::ISODateWithMs);
+                break;
+            case QMetaType::QStringList:
+                value = qdbus_cast<QStringList>(argument);
                 break;
             case QMetaType::QJsonObject:
                 value = QJsonDocument::fromJson(qdbus_cast<QByteArray>(argument)).object();
