@@ -12,6 +12,7 @@ public:
     QString key;
     QString role;
     QJsonObject name;
+    QStringList tags;
     QColor theme;
     QUrl icon;
     QUrl splash;
@@ -185,6 +186,18 @@ void QMpsApplication::setProcessID(qint64 processID)
     d->processID = processID;
 }
 
+QStringList QMpsApplication::tags() const
+{
+    return d->tags;
+}
+
+void QMpsApplication::setTags(const QStringList &tags)
+{
+    if (d->tags == tags)
+        return;
+    d->tags = tags;
+}
+
 bool QMpsApplication::isValid() const
 {
     return !d->key.isNull();
@@ -240,6 +253,20 @@ QList<QMpsApplication> QMpsApplication::fromJson(const QJsonObject &json)
                 break;
             case QVariant::String:
                 property.writeOnGadget(&app, value.toString());
+                break;
+            case QVariant::StringList: {
+                    QStringList list;
+                    if (value.type() == QJsonValue::Array) {
+                        const auto array = value.toArray();
+                        for (const auto &v : array) {
+                            if (v.type() == QJsonValue::String)
+                                list.append(v.toString());
+                        }
+                    } else if (value.type() == QJsonValue::String) {
+                        list.append(value.toString());
+                    }
+                    property.writeOnGadget(&app, list);
+                }
                 break;
             case QVariant::Color:
                 property.writeOnGadget(&app, QColor(value.toString()));
@@ -371,6 +398,9 @@ QDebug operator<<(QDebug debug, const QMpsApplication &application)
             break;
         case QVariant::String:
             debug << value.toString();
+            break;
+        case QVariant::StringList:
+            debug << value.toStringList();
             break;
         case QVariant::Color:
             debug << QColor(value.toString());
