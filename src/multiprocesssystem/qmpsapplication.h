@@ -4,6 +4,7 @@
 #include <QtMultiProcessSystem/multiprocesssystem_global.h>
 #include <QtCore/QJsonObject>
 #include <QtCore/QObject>
+#include <QtCore/QStringList>
 #include <QtCore/QUrl>
 #include <QtGui/QColor>
 #include <QtQml/qqml.h>
@@ -22,6 +23,7 @@ class MULTIPROCESSSYSTEM_EXPORT QMpsApplication
     Q_PROPERTY(QString role READ role WRITE setRole)
     Q_PROPERTY(QJsonObject name READ name WRITE setName)
     Q_PROPERTY(QString i18nName READ i18nName)
+    Q_PROPERTY(QStringList tags READ tags WRITE setTags)
     Q_PROPERTY(QColor theme READ theme WRITE setTheme)
     Q_PROPERTY(QUrl icon READ icon WRITE setIcon)
     Q_PROPERTY(QUrl splash READ splash WRITE setSplash)
@@ -62,6 +64,9 @@ public:
     QJsonObject name() const;
     void setName(const QJsonObject &name);
     QString i18nName() const;
+
+    QStringList tags() const;
+    void setTags(const QStringList &tags);
 
     QColor theme() const;
     void setTheme(const QColor &theme);
