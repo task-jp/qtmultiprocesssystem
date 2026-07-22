@@ -1,6 +1,13 @@
 #include <QtCore/QCommandLineParser>
 #include <QtGui/QGuiApplication>
 #include <QtQml/QQmlApplicationEngine>
+#include <QtCore/QSocketNotifier>
+
+#ifdef Q_OS_UNIX
+#include <csignal>
+#include <unistd.h>
+#include <sys/socket.h>
+#endif
 #include <QtQml/QQmlContext>
 #include <QtQuick/QQuickWindow>
 #include <QtMultiProcessSystem/QMpsApplicationManagerFactory>
@@ -13,11 +20,59 @@
 #include <QtMultiProcessSystem/QMpsApplication>
 #include <QtMultiProcessSystem/QMpsUriHandler>
 
+#ifdef Q_OS_UNIX
+// --- Graceful shutdown on SIGTERM/SIGINT -------------------------------------
+// systemd stop/restart delivers SIGTERM. Qt does not catch it by default, so the
+// process is killed immediately and NO destructors run. On eglfs_kms_egldevice
+// (Jetson/Tegra) that leaves the EGLStream/EGLOutput and the DRM plane latched,
+// and the next instance fails to present frames (blank screen or frozen image).
+// We convert the signal into a normal QCoreApplication::quit() via the self-pipe
+// trick so app.exec() returns and the eglfs/KMS/EGLStream teardown runs cleanly.
+static int qmpsSignalFd[2] = { -1, -1 };
+
+static void qmpsUnixSignalHandler(int)
+{
+    char c = 1;
+    // write() is async-signal-safe; the QSocketNotifier handles the rest.
+    ssize_t n = ::write(qmpsSignalFd[0], &c, sizeof(c));
+    Q_UNUSED(n);
+}
+
+static void qmpsInstallSignalHandlers()
+{
+    if (::socketpair(AF_UNIX, SOCK_STREAM, 0, qmpsSignalFd) != 0) {
+        qWarning("qmpslauncher: failed to create signal socketpair; graceful shutdown disabled");
+        return;
+    }
+
+    auto *notifier = new QSocketNotifier(qmpsSignalFd[1], QSocketNotifier::Read, qApp);
+    notifier->setEnabled(true);
+    QObject::connect(notifier, &QSocketNotifier::activated, qApp, []() {
+        char c;
+        ssize_t n = ::read(qmpsSignalFd[1], &c, sizeof(c));
+        Q_UNUSED(n);
+        qInfo("qmpslauncher: received termination signal, shutting down gracefully");
+        QCoreApplication::quit();
+    });
+
+    struct sigaction sa;
+    sa.sa_handler = qmpsUnixSignalHandler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_RESTART;
+    ::sigaction(SIGTERM, &sa, nullptr);
+    ::sigaction(SIGINT, &sa, nullptr);
+}
+#endif // Q_OS_UNIX
+
 int main(int argc, char *argv[])
 {
     qSetMessagePattern("[%{if-debug}D%{endif}%{if-info}I%{endif}%{if-warning}W%{endif}%{if-critical}C%{endif}%{if-fatal}F%{endif}] %{function}:%{line} - %{message}");
     QCoreApplication::setAttribute(Qt::AA_ShareOpenGLContexts, true);
     QGuiApplication app(argc, argv);
+
+#ifdef Q_OS_UNIX
+    qmpsInstallSignalHandlers();
+#endif
 
     QCommandLineParser parser;
     QCommandLineOption catManOption({{"c", "application-category"}, "Application Manager Category", "example"});
