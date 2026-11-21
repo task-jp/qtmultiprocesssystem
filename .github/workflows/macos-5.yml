@@ -11,7 +11,8 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-latest
+    # Qt 5.15 links the AGL framework, which the macOS 26 SDK no longer has.
+    runs-on: macos-15
 
     steps:
     - uses: actions/checkout@v3
