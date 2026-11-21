@@ -11,7 +11,8 @@ permissions:
 
 jobs:
   build:
-    runs-on: windows-latest
+    # The headers of Qt 5.15.2 do not compile with Visual Studio 2026 (stdext::make_checked_array_iterator is gone).
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v3

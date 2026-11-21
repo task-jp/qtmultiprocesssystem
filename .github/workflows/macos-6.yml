@@ -11,11 +11,17 @@ permissions:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
-        qt_version: ['6.8.*', '6.10.*']
+        include:
+          # Qt 6.8 links the AGL framework, which the macOS 26 SDK no longer has.
+          - qt_version: '6.8.*'
+            os: macos-15
+          - qt_version: '6.10.*'
+            os: macos-latest
 
     steps:
     - uses: actions/checkout@v3
