@@ -98,5 +98,23 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
     });
 }
 
-QProcessApplicationManager::~QProcessApplicationManager() = default;
+QProcessApplicationManager::~QProcessApplicationManager()
+{
+    // The processes are children of this object.  Left to ~QObject they would
+    // be destroyed after d, which their destroyed() handlers use, and killed
+    // while still running.  End them here: SIGTERM first, so that an
+    // application can shut down in order.
+    const auto processes = findChildren<QProcess *>(QString(), Qt::FindDirectChildrenOnly);
+    for (QProcess *process : processes) {
+        if (process->state() != QProcess::NotRunning)
+            process->terminate();
+    }
+    for (QProcess *process : processes) {
+        if (process->state() != QProcess::NotRunning && !process->waitForFinished(3000)) {
+            process->kill();
+            process->waitForFinished(1000);
+        }
+        delete process;
+    }
+}
 
