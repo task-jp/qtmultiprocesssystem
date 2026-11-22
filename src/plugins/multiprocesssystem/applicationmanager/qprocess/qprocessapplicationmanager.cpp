@@ -1,7 +1,10 @@
 #include "qprocessapplicationmanager.h"
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QEventLoop>
+#include <QtCore/QPointer>
 #include <QtCore/QProcess>
+#include <QtCore/QTimer>
 #include <iostream>
 
 class QProcessApplicationManager::Private
@@ -85,6 +88,41 @@ QProcessApplicationManager::QProcessApplicationManager(QObject *parent, Type typ
             setApplicationStatus(application, QStringLiteral("destroyed"));
             emit killed(application);
         }
+    });
+
+    // The applications end while this process still runs its event loop.
+    // One that is told to end closes its windows, and for that its window
+    // system must still answer: the client of a Wayland compositor that has
+    // stopped showing frames waits in its last frame forever, and would have
+    // to be killed (the destructor is too late for this: the event loop has
+    // returned and the windows are gone).
+    connect(QCoreApplication::instance(), &QCoreApplication::aboutToQuit, this, [this]() {
+        // A process that has finished is deleted while the loop below runs.
+        QList<QPointer<QProcess>> processes;
+        const auto children = findChildren<QProcess *>(QString(), Qt::FindDirectChildrenOnly);
+        for (QProcess *process : children)
+            processes.append(process);
+        const auto running = [processes]() {
+            for (const QPointer<QProcess> &process : processes) {
+                if (process && process->state() != QProcess::NotRunning)
+                    return true;
+            }
+            return false;
+        };
+        if (!running())
+            return;
+        QEventLoop loop;
+        for (QProcess *process : children) {
+            if (process->state() == QProcess::NotRunning)
+                continue;
+            connect(process, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished), &loop, [&loop, running]() {
+                if (!running())
+                    loop.quit();
+            }, Qt::QueuedConnection);
+            process->terminate();
+        }
+        QTimer::singleShot(3000, &loop, &QEventLoop::quit);
+        loop.exec();
     });
 
     connect(this, &QProcessApplicationManager::applicationStatusChanged,
